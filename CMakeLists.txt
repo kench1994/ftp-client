@@ -3,4 +3,4 @@ project(ftp_client_)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(ftp_client_ src/main.cpp)
+add_executable(ftp_client_ src/main.cpp src/ftp_client.cpp src/ftp_client.hpp)
