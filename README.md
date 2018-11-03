@@ -1,2 +1,2 @@
-# ftp-client-
+# ftp-client
 FTP client
