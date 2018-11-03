@@ -1,3 +1,9 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2018 Denis Kovalchuk
+ */
+
 #include "request_parser.hpp"
 #include <sstream>
 

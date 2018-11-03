@@ -1,3 +1,9 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2018 Denis Kovalchuk
+ */
+
 #include "request_handler.hpp"
 #include "request_parser.hpp"
 #include "requests.hpp"

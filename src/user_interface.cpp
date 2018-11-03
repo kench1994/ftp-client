@@ -1,3 +1,9 @@
+/**
+ * MIT License
+ *
+ * Copyright (c) 2018 Denis Kovalchuk
+ */
+
 #include "user_interface.hpp"
 #include <iostream>
 #include <string>
