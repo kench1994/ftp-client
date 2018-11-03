@@ -11,7 +11,3 @@ if(Boost_FOUND)
     add_executable(ftp_client src/main.cpp src/ftp_client.cpp src/ftp_client.hpp src/user_interface.cpp src/user_interface.hpp src/request_handler.cpp src/request_handler.hpp)
     target_link_libraries(ftp_client ${Boost_LIBRARIES})
 endif()
-
-
-
-
