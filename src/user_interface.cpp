@@ -17,7 +17,8 @@ void user_interface::run()
     {
         cout << "ftp> ";
         getline(cin, request);
-    } while (request_handler_.execute(request));
+    }
+    while (request_handler_.execute(request));
 }
 
 } // namespace frp
