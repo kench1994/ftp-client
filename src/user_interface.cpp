@@ -15,6 +15,5 @@ void user_interface::run()
     {
         cout << "ftp> ";
         getline(cin, request);
-        // TODO: parse and execute request
-    } while (true);
+    } while (request_handler_.execute(request));
 }
