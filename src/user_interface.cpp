@@ -21,4 +21,4 @@ void user_interface::run()
     while (request_handler_.execute(request));
 }
 
-} // namespace frp
+} // namespace ftp
