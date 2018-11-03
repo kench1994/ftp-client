@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[])
 {
-    user_interface ui;
+    ftp::user_interface ui;
     ui.run();
 
     return 0;

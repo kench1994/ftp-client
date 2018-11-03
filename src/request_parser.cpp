@@ -3,9 +3,12 @@
 
 using std::istringstream;
 
+namespace ftp
+{
+
 vector<string> request_parser::parse(const string & request)
 {
-    vector <string> parsed_request;
+    vector<string> parsed_request;
     istringstream iss(request);
 
     for (string parameter; iss >> parameter;)
@@ -15,3 +18,5 @@ vector<string> request_parser::parse(const string & request)
 
     return parsed_request;
 }
+
+} // namespace ftp

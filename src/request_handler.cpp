@@ -1,6 +1,9 @@
 #include "request_handler.hpp"
 #include "request_parser.hpp"
 
+namespace ftp
+{
+
 bool request_handler::execute(const string & request)
 {
     vector<string> parsed_request = request_parser::parse(request);
@@ -12,3 +15,5 @@ bool request_handler::execute(const string & request)
 
     return true;
 }
+
+} // namespace ftp

@@ -6,6 +6,9 @@ using std::cout;
 using std::cin;
 using std::string;
 
+namespace ftp
+{
+
 void user_interface::run()
 {
     string request;
@@ -16,3 +19,5 @@ void user_interface::run()
         getline(cin, request);
     } while (request_handler_.execute(request));
 }
+
+} // namespace frp
