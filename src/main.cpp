@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "ftp_client.hpp"
+#include "user_interface.hpp"
 
 using std::cerr;
 using std::endl;
@@ -13,7 +14,8 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    ftp::client client(argv[1], static_cast<unsigned short>(atoi(argv[2])));
+    user_interface ui;
+    ui.run();
 
     return 0;
 }
