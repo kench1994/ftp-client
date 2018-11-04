@@ -10,6 +10,7 @@
 #include <iostream>
 
 using std::cout;
+using std::endl;
 
 namespace ftp
 {
@@ -28,8 +29,16 @@ bool request_handler::execute(const string & request)
     {
         open(parsed_request);
     }
+    else if (ftp_request == request::exit)
+    {
+        return false;
+    }
+    else
+    {
+        cout << error::invalid_request << endl;
+    }
 
-    return parsed_request[0] != request::exit;
+    return true;
 }
 
 void request_handler::open(const vector<string> & request)
