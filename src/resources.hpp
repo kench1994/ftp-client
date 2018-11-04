@@ -7,10 +7,6 @@
 #ifndef FTP_CLIENT_RESOURCES_HPP
 #define FTP_CLIENT_RESOURCES_HPP
 
-#include <string>
-
-using std::string;
-
 namespace ftp
 {
 namespace user_request
