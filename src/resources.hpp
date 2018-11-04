@@ -4,8 +4,8 @@
  * Copyright (c) 2018 Denis Kovalchuk
  */
 
-#ifndef FTP_CLIENT_REQUESTS_HPP
-#define FTP_CLIENT_REQUESTS_HPP
+#ifndef FTP_CLIENT_RESOURCES_HPP
+#define FTP_CLIENT_RESOURCES_HPP
 
 #include <string>
 
@@ -27,4 +27,4 @@ namespace error
 
 } // namespace error
 } // namespace ftp
-#endif //FTP_CLIENT_REQUESTS_HPP
+#endif //FTP_CLIENT_RESOURCES_HPP
