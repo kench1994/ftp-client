@@ -9,6 +9,7 @@
 
 using std::cout;
 using std::cin;
+using std::endl;
 using std::string;
 
 namespace ftp
@@ -23,7 +24,15 @@ void user_interface::run()
     {
         cout << "ftp> ";
         getline(cin, request);
-        proceed = request_handler_.execute(request);
+
+        try
+        {
+            proceed = request_handler_.execute(request);
+        }
+        catch (const std::exception & ex)
+        {
+            cout << ex.what() << endl;
+        }
     }
 }
 
