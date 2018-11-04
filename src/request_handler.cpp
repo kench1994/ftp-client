@@ -23,13 +23,13 @@ bool request_handler::execute(const string & request)
     }
 
     vector<string> parsed_request = request_parser::parse(request);
-    const string & ftp_request = parsed_request[0];
+    const string & user_request = parsed_request[0];
 
-    if (ftp_request == request::open)
+    if (user_request == user_request::open)
     {
         open(parsed_request);
     }
-    else if (ftp_request == request::exit)
+    else if (user_request == user_request::exit)
     {
         return false;
     }

@@ -13,7 +13,7 @@ using std::string;
 
 namespace ftp
 {
-namespace request
+namespace user_request
 {
     const char * open = "open";
     const char * exit = "exit";
