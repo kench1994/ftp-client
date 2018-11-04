@@ -8,6 +8,7 @@
 #define FTP_CLIENT_SESSION_HPP
 
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/streambuf.hpp>
 
 using std::string;
 
@@ -24,10 +25,13 @@ public:
 
     void open_control_connection(const string & hostname, const string & port);
 
+    string read_control_connection();
+
 private:
     asio::io_context io_context_;
     asio::ip::tcp::socket control_connection_;
     asio::ip::tcp::resolver resolver_;
+    asio::streambuf read_buf_;
 };
 
 } // namespace ftp

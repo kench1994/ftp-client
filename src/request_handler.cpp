@@ -7,6 +7,9 @@
 #include "request_handler.hpp"
 #include "request_parser.hpp"
 #include "requests.hpp"
+#include <iostream>
+
+using std::cout;
 
 namespace ftp
 {
@@ -34,6 +37,7 @@ void request_handler::open(const vector<string> & request)
     const string & hostname = request[1];
     const string & port = request[2];
     session_.open_control_connection(hostname, port);
+    cout << session_.read_control_connection();
 }
 
 } // namespace ftp
