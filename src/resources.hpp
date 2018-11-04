@@ -11,14 +11,13 @@ namespace ftp
 {
 namespace user_request
 {
-    const char * open = "open";
-    const char * exit = "exit";
+    extern const char * open;
+    extern const char * exit;
 } // namespace user_request
 
 namespace error
 {
-    const char * invalid_request =
-            "Invalid request. Use 'help' to display list of FTP commands.";
+    extern const char * invalid_request;
 } // namespace error
 } // namespace ftp
 #endif //FTP_CLIENT_RESOURCES_HPP

@@ -5,7 +5,6 @@
  */
 
 #include "request_handler.hpp"
-#include "request_parser.hpp"
 #include "resources.hpp"
 #include <iostream>
 
@@ -15,30 +14,27 @@ using std::endl;
 namespace ftp
 {
 
-bool request_handler::execute(const string & request)
+void request_handler::execute(const vector<string> & request)
 {
     if (request.empty())
     {
-        return true;
+        return;
     }
 
-    vector<string> parsed_request = request_parser::parse(request);
-    const string & user_request = parsed_request[0];
+    const string & user_request = request[0];
 
     if (user_request == user_request::open)
     {
-        open(parsed_request);
+        open(request);
     }
     else if (user_request == user_request::exit)
     {
-        return false;
+        // TODO: close connection
     }
     else
     {
-        cout << error::invalid_request << endl;
+        throw std::runtime_error(error::invalid_request);
     }
-
-    return true;
 }
 
 void request_handler::open(const vector<string> & request)

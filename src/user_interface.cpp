@@ -5,6 +5,8 @@
  */
 
 #include "user_interface.hpp"
+#include "request_parser.hpp"
+#include "resources.hpp"
 #include <iostream>
 
 using std::cout;
@@ -18,20 +20,30 @@ namespace ftp
 void user_interface::run()
 {
     string request;
-    bool proceed = true;
 
-    while (proceed)
+    while (true)
     {
         cout << "ftp> ";
         getline(cin, request);
 
+        vector<string> parsed_request = request_parser::parse(request);
+        if (parsed_request.empty())
+        {
+            continue;
+        }
+
         try
         {
-            proceed = request_handler_.execute(request);
+            request_handler_.execute(parsed_request);
         }
         catch (const std::exception & ex)
         {
             cout << ex.what() << endl;
+        }
+
+        if (parsed_request[0] == user_request::exit)
+        {
+            break;
         }
     }
 }
