@@ -15,6 +15,7 @@ namespace ftp
 {
 namespace request
 {
+    const string open = "open";
     const string exit = "exit";
 
 } // namespace request

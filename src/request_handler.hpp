@@ -8,8 +8,11 @@
 #define FTP_CLIENT_REQUEST_HANDLER_HPP
 
 #include <string>
+#include <vector>
+#include "session.hpp"
 
 using std::string;
+using std::vector;
 
 namespace ftp
 {
@@ -18,6 +21,11 @@ class request_handler
 {
 public:
     bool execute(const string & request);
+
+    void open(const vector<string> & request);
+
+private:
+    session session_;
 };
 
 } // namespace ftp
