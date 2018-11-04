@@ -13,13 +13,12 @@ namespace ftp
 
 bool request_handler::execute(const string & request)
 {
-    vector<string> parsed_request = request_parser::parse(request);
-
-    if (parsed_request.empty())
+    if (request.empty())
     {
         return true;
     }
 
+    vector<string> parsed_request = request_parser::parse(request);
     const string & ftp_request = parsed_request[0];
 
     if (ftp_request == request::open)
