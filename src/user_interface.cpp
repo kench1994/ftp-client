@@ -18,13 +18,14 @@ namespace ftp
 void user_interface::run()
 {
     string request;
+    bool proceed = true;
 
-    do
+    while (proceed)
     {
         cout << "ftp> ";
         getline(cin, request);
+        proceed = request_handler_.execute(request);
     }
-    while (request_handler_.execute(request));
 }
 
 } // namespace ftp
