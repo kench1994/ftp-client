@@ -22,9 +22,9 @@ class request_handler
 public:
     bool execute(const string & request);
 
+private:
     void open(const vector<string> & request);
 
-private:
     session session_;
 };
 
