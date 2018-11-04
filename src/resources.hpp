@@ -17,7 +17,7 @@ namespace user_request
 {
     const char * open = "open";
     const char * exit = "exit";
-} // namespace request
+} // namespace user_request
 
 namespace error
 {
