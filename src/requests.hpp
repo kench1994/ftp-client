@@ -15,14 +15,14 @@ namespace ftp
 {
 namespace request
 {
-    const string open = "open";
-    const string exit = "exit";
+    const char * open = "open";
+    const char * exit = "exit";
 
 } // namespace request
 
 namespace error
 {
-    const string invalid_request =
+    const char * invalid_request =
             "Invalid request. Use 'help' to display list of FTP commands.";
 
 } // namespace error
