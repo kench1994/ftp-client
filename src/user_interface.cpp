@@ -6,7 +6,6 @@
 
 #include "user_interface.hpp"
 #include <iostream>
-#include <string>
 
 using std::cout;
 using std::cin;
