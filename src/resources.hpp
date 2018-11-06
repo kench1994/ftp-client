@@ -12,6 +12,7 @@ namespace ftp
 namespace user_request
 {
     extern const char * open;
+    extern const char * close;
     extern const char * exit;
 } // namespace user_request
 

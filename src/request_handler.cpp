@@ -22,10 +22,13 @@ void request_handler::execute(const vector<string> & request)
     }
 
     const string & user_request = request[0];
-
     if (user_request == user_request::open)
     {
         open(request);
+    }
+    else if (user_request == user_request::close)
+    {
+        close();
     }
     else if (user_request == user_request::exit)
     {
@@ -48,6 +51,11 @@ void request_handler::open(const vector<string> & request)
     const string & port = request[2];
     session_.open_control_connection(hostname, port);
     cout << session_.read_control_connection();
+}
+
+void request_handler::close()
+{
+    session_.close_control_connection();
 }
 
 void request_handler::exit()

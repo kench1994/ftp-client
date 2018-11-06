@@ -5,6 +5,7 @@ namespace ftp
 namespace user_request
 {
     const char * open = "open";
+    const char * close = "close";
     const char * exit = "exit";
 } // namespace user_request
 
