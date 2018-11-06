@@ -25,6 +25,8 @@ public:
 private:
     void open(const vector<string> & request);
 
+    void exit();
+
     session session_;
 };
 

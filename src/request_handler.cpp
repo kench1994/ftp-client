@@ -29,7 +29,7 @@ void request_handler::execute(const vector<string> & request)
     }
     else if (user_request == user_request::exit)
     {
-        // TODO: close connection
+        exit();
     }
     else
     {
@@ -43,6 +43,11 @@ void request_handler::open(const vector<string> & request)
     const string & port = request[2];
     session_.open_control_connection(hostname, port);
     cout << session_.read_control_connection();
+}
+
+void request_handler::exit()
+{
+    session_.close_control_connection();
 }
 
 } // namespace ftp

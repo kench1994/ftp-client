@@ -25,6 +25,11 @@ void session::open_control_connection(const string & hostname, const string & po
     asio::connect(control_connection_, resolver_.resolve(hostname, port));
 }
 
+void session::close_control_connection()
+{
+    control_connection_.close();
+}
+
 string session::read_control_connection()
 {
     string response;

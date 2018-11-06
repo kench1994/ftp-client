@@ -25,6 +25,8 @@ public:
 
     void open_control_connection(const string & hostname, const string & port);
 
+    void close_control_connection();
+
     string read_control_connection();
 
 private:
