@@ -41,7 +41,8 @@ void user_interface::run()
             cout << ex.what() << endl;
         }
 
-        if (parsed_request[0] == user_request::exit)
+        const string & user_request = parsed_request[0];
+        if (user_request == user_request::exit)
         {
             break;
         }
