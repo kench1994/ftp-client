@@ -7,6 +7,7 @@
 #include <boost/asio/connect.hpp>
 #include <boost/asio/read.hpp>
 #include <boost/asio/read_until.hpp>
+#include <boost/asio/write.hpp>
 #include "session.hpp"
 
 using std::istream;
@@ -45,6 +46,16 @@ string session::read_control_connection()
     while (line[3] == '-');
 
     return response;
+}
+
+void session::write_control_connection(const string & request)
+{
+    asio::write(control_connection_, asio::buffer(request + "\r\n"));
+}
+
+bool session::control_connection_is_open() const
+{
+    return control_connection_.is_open();
 }
 
 } // namespace ftp

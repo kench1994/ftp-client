@@ -29,6 +29,10 @@ public:
 
     string read_control_connection();
 
+    void write_control_connection(const string & request);
+
+    bool control_connection_is_open() const;
+
 private:
     asio::io_context io_context_;
     asio::ip::tcp::socket control_connection_;

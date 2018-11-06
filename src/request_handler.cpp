@@ -56,12 +56,20 @@ void request_handler::open(const vector<string> & request)
 
 void request_handler::close()
 {
+    if (!session_.control_connection_is_open())
+    {
+        cout << error::not_connected << endl;
+        return;
+    }
+
+    session_.write_control_connection(ftp_request::close);
+    cout << session_.read_control_connection();
     session_.close_control_connection();
 }
 
 void request_handler::exit()
 {
-    session_.close_control_connection();
+    close();
 }
 
 } // namespace ftp

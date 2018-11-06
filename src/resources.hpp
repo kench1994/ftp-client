@@ -16,9 +16,15 @@ namespace user_request
     extern const char * exit;
 } // namespace user_request
 
+namespace ftp_request
+{
+    extern const char * close;
+} // namespace ftp_request
+
 namespace error
 {
     extern const char * invalid_request;
+    extern const char * not_connected;
 } // namespace error
 
 namespace usage
