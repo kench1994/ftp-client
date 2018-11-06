@@ -39,6 +39,11 @@ void request_handler::execute(const vector<string> & request)
 
 void request_handler::open(const vector<string> & request)
 {
+    if (request.size() != 3)
+    {
+        cout << usage::open << endl;
+    }
+
     const string & hostname = request[1];
     const string & port = request[2];
     session_.open_control_connection(hostname, port);
