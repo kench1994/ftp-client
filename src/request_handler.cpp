@@ -45,6 +45,7 @@ void request_handler::open(const vector<string> & request)
     if (request.size() != 3)
     {
         cout << usage::open << endl;
+        return;
     }
 
     const string & hostname = request[1];
