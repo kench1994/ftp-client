@@ -1,7 +1,9 @@
 /**
- * MIT License
+ * main.cpp
  *
- * Copyright (c) 2018 Denis Kovalchuk
+ * Copyright (c) 2018, Denis Kovalchuk <deniskovjob@gmail.com>
+ *
+ * This code is licensed under a MIT-style license.
  */
 
 #include "user_interface.hpp"

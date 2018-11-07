@@ -1,7 +1,9 @@
 /**
- * MIT License
+ * user_interface.hpp
  *
- * Copyright (c) 2018 Denis Kovalchuk
+ * Copyright (c) 2018, Denis Kovalchuk <deniskovjob@gmail.com>
+ *
+ * This code is licensed under a MIT-style license.
  */
 
 #ifndef FTP_CLIENT_USER_INTERFACE_HPP
