@@ -44,8 +44,7 @@ void request_handler::open(const vector<string> & request)
 {
     if (request.size() != 3)
     {
-        cout << usage::open << endl;
-        return;
+        throw std::runtime_error(usage::open);
     }
 
     const string & hostname = request[1];
@@ -58,8 +57,7 @@ void request_handler::close()
 {
     if (!session_.control_connection_is_open())
     {
-        cout << error::not_connected << endl;
-        return;
+        throw std::runtime_error(error::not_connected);
     }
 
     session_.write_control_connection(ftp_request::close);
