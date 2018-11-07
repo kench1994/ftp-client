@@ -22,7 +22,6 @@ namespace ftp
 class session
 {
 public:
-
     session();
 
     void open_control_connection(const string & hostname, const string & port);
