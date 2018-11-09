@@ -35,6 +35,8 @@ public:
     bool control_connection_is_open() const;
 
 private:
+    string read_line_control_connection();
+
     asio::io_context io_context_;
     asio::ip::tcp::socket control_connection_;
     asio::ip::tcp::resolver resolver_;

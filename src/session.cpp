@@ -40,14 +40,23 @@ string session::read_control_connection()
 
     do
     {
-        asio::read_until(control_connection_, read_buf_, '\n');
-        istream is(&read_buf_);
-        getline(is, line);
-        response += (line + "\n");
+        line = read_line_control_connection();
+        response += line;
     }
     while (line[3] == '-');
 
     return response;
+}
+
+string session::read_line_control_connection()
+{
+    string line;
+
+    asio::read_until(control_connection_, read_buf_, '\n');
+    istream is(&read_buf_);
+    getline(is, line);
+
+    return line + "\n";
 }
 
 void session::write_control_connection(const string & request)
