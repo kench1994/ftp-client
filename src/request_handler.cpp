@@ -78,7 +78,10 @@ void request_handler::help()
 
 void request_handler::exit()
 {
-    close();
+    if (session_.control_connection_is_open())
+    {
+        close();
+    }
 }
 
 } // namespace ftp
