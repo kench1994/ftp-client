@@ -33,27 +33,80 @@ void session::close_control_connection()
     control_connection_.close();
 }
 
+/**
+ * RFC 959: https://tools.ietf.org/html/rfc959
+ *
+ * An FTP reply consists of a three digit number (transmitted as
+ * three alphanumeric characters) followed by some text.
+ */
+string session::get_reply_code(const string & line)
+{
+    if (line.size() < 3)
+    {
+        return string();
+    }
+
+    return line.substr(0, 3);
+}
+
+/**
+ * RFC 959: https://tools.ietf.org/html/rfc959
+ *
+ * Thus the format for multi-line replies is that the first line
+ * will begin with the exact required reply code, followed
+ * immediately by a Hyphen, "-" (also known as Minus), followed by
+ * text.
+ */
+bool session::is_multiline_reply(const string & line) const
+{
+    if (line.size() < 4)
+    {
+        return false;
+    }
+
+    return line[3] == '-';
+}
+
 string session::read_control_connection()
 {
-    string response;
-    string line;
+    string line = read_line_control_connection();
 
-    do
+    if (!is_multiline_reply(line))
+    {
+        return line;
+    }
+
+    string reply = line;
+    string reply_code = get_reply_code(line);
+
+    while (true)
     {
         line = read_line_control_connection();
-        response += line;
-    }
-    while (line[3] == '-');
+        reply += line;
 
-    return response;
+        /**
+         * RFC 959: https://tools.ietf.org/html/rfc959
+         *
+         * The last line will begin with the same code, followed
+         * immediately by Space <SP>, optionally some text, and the Telnet
+         * end-of-line code.
+         */
+        string current_reply_code = get_reply_code(line);
+        if (current_reply_code == reply_code && line.size() > 3 && line[3] == ' ')
+        {
+            break;
+        }
+    }
+
+    return reply;
 }
 
 string session::read_line_control_connection()
 {
-    string line;
-
     asio::read_until(control_connection_, read_buf_, '\n');
     istream is(&read_buf_);
+
+    string line;
     getline(is, line);
 
     return line + "\n";

@@ -37,6 +37,10 @@ public:
 private:
     string read_line_control_connection();
 
+    string get_reply_code(const string & reply);
+
+    bool is_multiline_reply(const string & reply) const;
+
     asio::io_context io_context_;
     asio::ip::tcp::socket control_connection_;
     asio::ip::tcp::resolver resolver_;
