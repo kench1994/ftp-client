@@ -112,9 +112,9 @@ string session::read_line_control_connection()
     return line + "\n";
 }
 
-void session::write_control_connection(const string & request)
+void session::write_control_connection(const string & command)
 {
-    asio::write(control_connection_, asio::buffer(request + "\r\n"));
+    asio::write(control_connection_, asio::buffer(command + "\r\n"));
 }
 
 bool session::control_connection_is_open() const

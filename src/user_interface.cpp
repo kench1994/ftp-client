@@ -7,7 +7,7 @@
  */
 
 #include "user_interface.hpp"
-#include "request_parser.hpp"
+#include "command_parser.hpp"
 #include "resources.hpp"
 #include <iostream>
 
@@ -25,26 +25,26 @@ void user_interface::run()
     {
         cout << common::ftp_prefix;
 
-        string request;
-        getline(cin, request);
+        string command;
+        getline(cin, command);
 
-        vector<string> parsed_request = request_parser::parse(request);
-        if (parsed_request.empty())
+        vector<string> parsed_command = command_parser::parse(command);
+        if (parsed_command.empty())
         {
             continue;
         }
 
         try
         {
-            request_handler_.execute(parsed_request);
+            command_handler_.execute(parsed_command);
         }
         catch (const std::exception & ex)
         {
             cout << ex.what() << endl;
         }
 
-        const string & user_request = parsed_request[0];
-        if (user_request == user_request::exit)
+        const string & user_command = parsed_command[0];
+        if (user_command == user_command::exit)
         {
             break;
         }

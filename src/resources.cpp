@@ -10,23 +10,23 @@
 
 namespace ftp
 {
-namespace user_request
+namespace user_command
 {
     const char * open = "open";
     const char * close = "close";
     const char * help = "help";
     const char * exit = "exit";
-} // namespace user_request
+} // namespace user_command
 
-namespace ftp_request
+namespace ftp_command
 {
     const char * close = "QUIT";
-} // namespace ftp_request
+} // namespace ftp_command
 
 namespace error
 {
-    const char * invalid_request =
-        "Invalid request. Use 'help' to display list of FTP commands.";
+    const char * invalid_command =
+        "Invalid command. Use 'help' to display list of FTP commands.";
     const char * not_connected = "Not connected.";
 } // namespace error
 

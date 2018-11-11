@@ -11,22 +11,22 @@
 
 namespace ftp
 {
-namespace user_request
+namespace user_command
 {
     extern const char * open;
     extern const char * close;
     extern const char * help;
     extern const char * exit;
-} // namespace user_request
+} // namespace user_command
 
-namespace ftp_request
+namespace ftp_command
 {
     extern const char * close;
-} // namespace ftp_request
+} // namespace ftp_command
 
 namespace error
 {
-    extern const char * invalid_request;
+    extern const char * invalid_command;
     extern const char * not_connected;
 } // namespace error
 

@@ -9,7 +9,7 @@
 #ifndef FTP_CLIENT_USER_INTERFACE_HPP
 #define FTP_CLIENT_USER_INTERFACE_HPP
 
-#include "request_handler.hpp"
+#include "command_handler.hpp"
 
 namespace ftp
 {
@@ -20,7 +20,7 @@ public:
     void run();
 
 private:
-    request_handler request_handler_;
+    command_handler command_handler_;
 };
 
 } // namespace ftp

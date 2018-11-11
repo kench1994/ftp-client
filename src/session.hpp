@@ -30,7 +30,7 @@ public:
 
     string read_control_connection();
 
-    void write_control_connection(const string & request);
+    void write_control_connection(const string & command);
 
     bool control_connection_is_open() const;
 

@@ -1,12 +1,12 @@
 /**
- * request_parser.cpp
+ * command_parser.cpp
  *
  * Copyright (c) 2018, Denis Kovalchuk <deniskovjob@gmail.com>
  *
  * This code is licensed under a MIT-style license.
  */
 
-#include "request_parser.hpp"
+#include "command_parser.hpp"
 #include <sstream>
 
 using std::istringstream;
@@ -14,17 +14,17 @@ using std::istringstream;
 namespace ftp
 {
 
-vector<string> request_parser::parse(const string & request)
+vector<string> command_parser::parse(const string & command)
 {
-    vector<string> parsed_request;
-    istringstream iss(request);
+    vector<string> parsed_command;
+    istringstream iss(command);
 
     for (string parameter; iss >> parameter;)
     {
-        parsed_request.push_back(parameter);
+        parsed_command.push_back(parameter);
     }
 
-    return parsed_request;
+    return parsed_command;
 }
 
 } // namespace ftp
