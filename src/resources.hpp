@@ -15,6 +15,7 @@ namespace user_request
 {
     extern const char * open;
     extern const char * close;
+    extern const char * help;
     extern const char * exit;
 } // namespace user_request
 
@@ -33,5 +34,10 @@ namespace usage
 {
     extern const char * open;
 } // namespace usage
+
+namespace common
+{
+    extern const char * help;
+} // namespace common
 } // namespace ftp
 #endif //FTP_CLIENT_RESOURCES_HPP

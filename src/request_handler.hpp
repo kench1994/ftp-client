@@ -29,6 +29,8 @@ private:
 
     void close();
 
+    void help();
+
     void exit();
 
     session session_;

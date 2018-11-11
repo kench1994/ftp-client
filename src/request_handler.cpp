@@ -32,6 +32,10 @@ void request_handler::execute(const vector<string> & request)
     {
         close();
     }
+    else if (user_request == user_request::help)
+    {
+        help();
+    }
     else if (user_request == user_request::exit)
     {
         exit();
@@ -65,6 +69,11 @@ void request_handler::close()
     session_.write_control_connection(ftp_request::close);
     cout << session_.read_control_connection();
     session_.close_control_connection();
+}
+
+void request_handler::help()
+{
+    cout << common::help;
 }
 
 void request_handler::exit()

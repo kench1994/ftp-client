@@ -14,6 +14,7 @@ namespace user_request
 {
     const char * open = "open";
     const char * close = "close";
+    const char * help = "help";
     const char * exit = "exit";
 } // namespace user_request
 
@@ -33,4 +34,14 @@ namespace usage
 {
     const char * open = "Usage: open <hostname> <port>";
 } // namespace usage
+
+namespace common
+{
+    const char * help =
+            "List of FTP commands:\n"
+            "\topen <hostname> <open> - Open new connection.\n"
+            "\tclose - Close current connection.\n"
+            "\thelp - Print list of FTP commands.\n"
+            "\texit - Exit program.\n";
+} // namespace common
 } // namespace ftp
