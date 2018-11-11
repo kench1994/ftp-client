@@ -37,6 +37,7 @@ namespace usage
 
 namespace common
 {
+    const char * ftp_prefix = "ftp> ";
     const char * help =
             "List of FTP commands:\n"
             "\topen <hostname> <open> - Open new connection.\n"

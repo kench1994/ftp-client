@@ -23,7 +23,7 @@ void user_interface::run()
 {
     while (true)
     {
-        cout << "ftp> ";
+        cout << common::ftp_prefix;
 
         string request;
         getline(cin, request);

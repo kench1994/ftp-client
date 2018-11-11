@@ -37,6 +37,7 @@ namespace usage
 
 namespace common
 {
+    extern const char * ftp_prefix;
     extern const char * help;
 } // namespace common
 } // namespace ftp
