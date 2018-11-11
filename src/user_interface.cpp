@@ -21,11 +21,11 @@ namespace ftp
 
 void user_interface::run()
 {
-    string request;
-
     while (true)
     {
         cout << "ftp> ";
+
+        string request;
         getline(cin, request);
 
         vector<string> parsed_request = request_parser::parse(request);
