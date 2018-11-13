@@ -28,6 +28,7 @@ namespace error
 {
     extern const char * invalid_command;
     extern const char * not_connected;
+    extern const char * already_connected;
 } // namespace error
 
 namespace usage

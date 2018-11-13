@@ -28,6 +28,7 @@ namespace error
     const char * invalid_command =
         "Invalid command. Use 'help' to display list of FTP commands.";
     const char * not_connected = "Not connected.";
+    const char * already_connected = "Already connected, use close first.";
 } // namespace error
 
 namespace usage

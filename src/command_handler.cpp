@@ -80,6 +80,11 @@ void command_handler::open(const vector<string> & parameters)
         throw std::runtime_error(usage::open);
     }
 
+    if (session_.control_connection_is_open())
+    {
+        throw std::runtime_error(error::already_connected);
+    }
+
     const string & hostname = parameters[0];
     const string & port = parameters[1];
     session_.open_control_connection(hostname, port);
