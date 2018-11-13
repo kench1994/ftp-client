@@ -25,26 +25,24 @@ void user_interface::run()
     {
         cout << common::ftp_prefix;
 
-        string command;
-        getline(cin, command);
+        string str_command;
+        getline(cin, str_command);
 
-        vector<string> parsed_command = command_parser::parse(command);
-        if (parsed_command.empty())
-        {
+        if (str_command.empty())
             continue;
-        }
 
+        user_command command;
         try
         {
-            command_handler_.execute(parsed_command);
+            command = command_parser::parse(str_command);
+            command_handler_.execute(command);
         }
         catch (const std::exception & ex)
         {
             cout << ex.what() << endl;
         }
 
-        const string & user_command = parsed_command[0];
-        if (user_command == user_command::exit)
+        if (command == command::exit)
         {
             break;
         }

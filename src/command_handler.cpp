@@ -16,20 +16,13 @@ using std::endl;
 namespace ftp
 {
 
-void command_handler::execute(const vector<string> & command)
+void command_handler::execute(const user_command & command)
 {
-    if (command.empty())
-    {
-        return;
-    }
-
-    const string & user_command = command[0];
-
-    if (is_local_command(user_command))
+    if (is_local_command(command))
     {
         execute_local_command(command);
     }
-    else if (is_remote_command(user_command))
+    else if (is_remote_command(command))
     {
         execute_remote_command(command);
     }
@@ -39,60 +32,56 @@ void command_handler::execute(const vector<string> & command)
     }
 }
 
-bool command_handler::is_local_command(const string & command) const
+bool command_handler::is_local_command(const user_command & command) const
 {
-    return command == user_command::open ||
-           command == user_command::help ||
-           command == user_command::exit;
+    return command == command::open ||
+           command == command::help ||
+           command == command::exit;
 }
 
-bool command_handler::is_remote_command(const string & command) const
+bool command_handler::is_remote_command(const user_command & command) const
 {
-    return command == user_command::close;
+    return command == command::close;
 }
 
-void command_handler::execute_local_command(const vector<string> & command)
+void command_handler::execute_local_command(const user_command & command)
 {
-    const string & user_command = command[0];
-
-    if (user_command == user_command::open)
+    if (command == command::open)
     {
-        open(command);
+        open(command.parameters());
     }
-    else if (user_command == user_command::help)
+    else if (command == command::help)
     {
         help();
     }
-    else if (user_command == user_command::exit)
+    else if (command == command::exit)
     {
         exit();
     }
 }
 
-void command_handler::execute_remote_command(const vector<string> & command)
+void command_handler::execute_remote_command(const user_command & command)
 {
     if (!session_.control_connection_is_open())
     {
         throw std::runtime_error(error::not_connected);
     }
 
-    const string & user_command = command[0];
-
-    if (user_command == user_command::close)
+    if (command == command::close)
     {
         close();
     }
 }
 
-void command_handler::open(const vector<string> & command)
+void command_handler::open(const vector<string> & parameters)
 {
-    if (command.size() != 3)
+    if (parameters.size() != 2)
     {
         throw std::runtime_error(usage::open);
     }
 
-    const string & hostname = command[1];
-    const string & port = command[2];
+    const string & hostname = parameters[0];
+    const string & port = parameters[1];
     session_.open_control_connection(hostname, port);
     cout << session_.read_control_connection();
 }

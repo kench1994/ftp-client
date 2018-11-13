@@ -7,6 +7,7 @@
  */
 
 #include "command_parser.hpp"
+#include "resources.hpp"
 #include <sstream>
 
 using std::istringstream;
@@ -14,17 +15,32 @@ using std::istringstream;
 namespace ftp
 {
 
-vector<string> command_parser::parse(const string & command)
+static bool is_valid_command(const string & command)
 {
-    vector<string> parsed_command;
-    istringstream iss(command);
+    return command == command::open ||
+           command == command::close ||
+           command == command::help ||
+           command == command::exit;
+}
 
-    for (string parameter; iss >> parameter;)
+user_command command_parser::parse(const string & command)
+{
+    if (!is_valid_command(command))
     {
-        parsed_command.push_back(parameter);
+        std::runtime_error(error::invalid_command);
     }
 
-    return parsed_command;
+    istringstream iss(command);
+    string str_command;
+    iss >> str_command;
+
+    vector<string> parameters;
+    for (string parameter; iss >> parameter;)
+    {
+        parameters.push_back(parameter);
+    }
+
+    return user_command(std::move(str_command), std::move(parameters));
 }
 
 } // namespace ftp

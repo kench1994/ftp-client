@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include "session.hpp"
+#include "user_command.hpp"
 
 using std::string;
 using std::vector;
@@ -22,18 +23,18 @@ namespace ftp
 class command_handler
 {
 public:
-    void execute(const vector<string> & command);
+    void execute(const user_command & user_command);
 
 private:
-    bool is_local_command(const string & command) const;
+    bool is_local_command(const user_command & command) const;
 
-    bool is_remote_command(const string & command) const;
+    bool is_remote_command(const user_command & command) const;
 
-    void execute_local_command(const vector<string> & command);
+    void execute_local_command(const user_command & command);
 
-    void execute_remote_command(const vector<string> & command);
+    void execute_remote_command(const user_command & command);
 
-    void open(const vector<string> & command);
+    void open(const vector<string> & parameters);
 
     void close();
 

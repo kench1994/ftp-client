@@ -11,13 +11,13 @@
 
 namespace ftp
 {
-namespace user_command
+namespace command
 {
     extern const char * open;
     extern const char * close;
     extern const char * help;
     extern const char * exit;
-} // namespace user_command
+} // namespace command
 
 namespace ftp_command
 {

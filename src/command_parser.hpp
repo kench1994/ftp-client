@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <string>
+#include "user_command.hpp"
 
 using std::vector;
 using std::string;
@@ -21,7 +22,7 @@ namespace ftp
 class command_parser
 {
 public:
-    static vector<string> parse(const string & command);
+    static user_command parse(const string & command);
 };
 
 } // namespace ftp
