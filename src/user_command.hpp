@@ -24,8 +24,8 @@ public:
     user_command() = default;
 
     user_command(string && command, vector<string> && parameters)
-            : command_(command),
-              parameters_(parameters)
+            : command_(std::move(command)),
+              parameters_(std::move(parameters))
     {
     }
 
