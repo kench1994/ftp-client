@@ -25,16 +25,16 @@ void user_interface::run()
     {
         cout << common::ftp_prefix;
 
-        string str_command;
-        getline(cin, str_command);
+        string user_input;
+        getline(cin, user_input);
 
-        if (str_command.empty())
+        if (user_input.empty())
             continue;
 
         user_command command;
         try
         {
-            command = command_parser::parse(str_command);
+            command = command_parser::parse(user_input);
             command_handler_.execute(command);
         }
         catch (const std::exception & ex)
