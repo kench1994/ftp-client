@@ -18,7 +18,7 @@ using std::exception;
 int main(int argc, char * argv[])
 {
     cin.exceptions(istream::failbit | istream::badbit);
-    
+
     try
     {
         ftp::user_interface ui;
@@ -42,5 +42,5 @@ int main(int argc, char * argv[])
         return EXIT_FAILURE;
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
