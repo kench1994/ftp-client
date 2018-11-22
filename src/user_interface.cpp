@@ -44,7 +44,7 @@ void user_interface::run()
 
         if (command == command::exit)
         {
-            break;
+            return;
         }
     }
 }
