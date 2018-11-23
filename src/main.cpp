@@ -13,7 +13,6 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::istream;
-using std::exception;
 
 int main(int argc, char * argv[])
 {
@@ -36,7 +35,7 @@ int main(int argc, char * argv[])
             return EXIT_FAILURE;
         }
     }
-    catch (const exception & ex)
+    catch (const std::exception & ex)
     {
         cout << ex.what() << endl;
         return EXIT_FAILURE;
