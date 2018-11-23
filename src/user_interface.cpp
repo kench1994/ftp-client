@@ -19,17 +19,24 @@ using std::string;
 namespace ftp
 {
 
+string user_interface::read_line(const string & greeting)
+{
+    string line;
+
+    while (line.empty())
+    {
+        cout << greeting;
+        getline(cin, line);
+    }
+
+    return line;
+}
+
 void user_interface::run()
 {
     while (true)
     {
-        cout << common::ftp_prefix;
-
-        string user_input;
-        getline(cin, user_input);
-
-        if (user_input.empty())
-            continue;
+        string user_input = read_line(common::ftp_prefix);
 
         user_command command;
         try
