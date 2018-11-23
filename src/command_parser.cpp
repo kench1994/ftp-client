@@ -25,14 +25,14 @@ static bool is_valid_command(const string & command)
 
 user_command command_parser::parse(const string & command)
 {
-    if (!is_valid_command(command))
-    {
-        std::runtime_error(error::invalid_command);
-    }
-
     istringstream iss(command);
     string str_command;
     iss >> str_command;
+
+    if (!is_valid_command(str_command))
+    {
+        throw std::runtime_error(error::invalid_command);
+    }
 
     vector<string> parameters;
     for (string parameter; iss >> parameter;)
