@@ -22,7 +22,7 @@ namespace ftp
 class command_parser
 {
 public:
-    static user_command parse(const string & command);
+    static user_command parse(const string & user_input);
 };
 
 } // namespace ftp

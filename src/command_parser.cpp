@@ -23,13 +23,13 @@ static bool is_valid_command(const string & command)
            command == command::exit;
 }
 
-user_command command_parser::parse(const string & command)
+user_command command_parser::parse(const string & user_input)
 {
-    istringstream iss(command);
-    string str_command;
-    iss >> str_command;
+    istringstream iss(user_input);
+    string command;
+    iss >> command;
 
-    if (!is_valid_command(str_command))
+    if (!is_valid_command(command))
     {
         throw std::runtime_error(error::invalid_command);
     }
@@ -40,7 +40,7 @@ user_command command_parser::parse(const string & command)
         parameters.push_back(parameter);
     }
 
-    return user_command(std::move(str_command), std::move(parameters));
+    return user_command(std::move(command), std::move(parameters));
 }
 
 } // namespace ftp
