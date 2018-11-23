@@ -75,11 +75,6 @@ void command_handler::execute_remote_command(const user_command & command)
 
 void command_handler::open(const vector<string> & parameters)
 {
-    if (parameters.size() != 2)
-    {
-        throw std::runtime_error(usage::open);
-    }
-
     if (session_.control_connection_is_open())
     {
         throw std::runtime_error(error::already_connected);
