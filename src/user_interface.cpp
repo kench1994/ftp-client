@@ -38,20 +38,19 @@ void user_interface::run()
     {
         string user_input = read_line(common::ftp_prefix);
 
-        user_command command;
         try
         {
-            command = command_parser::parse(user_input);
+            user_command command = command_parser::parse(user_input);
             command_handler_.execute(command);
+
+            if (command == command::exit)
+            {
+                return;
+            }
         }
         catch (const std::exception & ex)
         {
             cout << ex.what() << endl;
-        }
-
-        if (command == command::exit)
-        {
-            return;
         }
     }
 }
