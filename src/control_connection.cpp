@@ -1,5 +1,5 @@
 /**
- * session.cpp
+ * control_connection.cpp
  *
  * Copyright (c) 2018, Denis Kovalchuk <deniskovjob@gmail.com>
  *
@@ -10,27 +10,24 @@
 #include <boost/asio/read.hpp>
 #include <boost/asio/read_until.hpp>
 #include <boost/asio/write.hpp>
-#include "session.hpp"
+#include "control_connection.hpp"
 
 using std::istream;
 
 namespace ftp
 {
 
-session::session()
-        : control_connection_(io_context_),
+control_connection::control_connection(const string & hostname,
+                                       const string & port)
+        : socket_(io_context_),
           resolver_(io_context_)
 {
+    asio::connect(socket_, resolver_.resolve(hostname, port));
 }
 
-void session::open_control_connection(const string & hostname, const string & port)
+control_connection::~control_connection()
 {
-    asio::connect(control_connection_, resolver_.resolve(hostname, port));
-}
-
-void session::close_control_connection()
-{
-    control_connection_.close();
+    socket_.close();
 }
 
 /**
@@ -39,7 +36,7 @@ void session::close_control_connection()
  * An FTP reply consists of a three digit number (transmitted as
  * three alphanumeric characters) followed by some text.
  */
-string session::get_reply_code(const string & line)
+string control_connection::get_reply_code(const string & line)
 {
     if (line.size() < 3)
     {
@@ -57,7 +54,7 @@ string session::get_reply_code(const string & line)
  * immediately by a Hyphen, "-" (also known as Minus), followed by
  * text.
  */
-bool session::is_multiline_reply(const string & line) const
+bool control_connection::is_multiline_reply(const string & line) const
 {
     if (line.size() < 4)
     {
@@ -67,9 +64,9 @@ bool session::is_multiline_reply(const string & line) const
     return line[3] == '-';
 }
 
-string session::read_control_connection()
+string control_connection::read()
 {
-    string line = read_line_control_connection();
+    string line = read_line();
 
     if (!is_multiline_reply(line))
     {
@@ -81,7 +78,7 @@ string session::read_control_connection()
 
     while (true)
     {
-        line = read_line_control_connection();
+        line = read_line();
         reply += line;
 
         /**
@@ -101,9 +98,9 @@ string session::read_control_connection()
     return reply;
 }
 
-string session::read_line_control_connection()
+string control_connection::read_line()
 {
-    asio::read_until(control_connection_, read_buf_, '\n');
+    asio::read_until(socket_, read_buf_, '\n');
     istream is(&read_buf_);
 
     string line;
@@ -112,14 +109,9 @@ string session::read_line_control_connection()
     return line + "\n";
 }
 
-void session::write_control_connection(const string & command)
+void control_connection::write(const string & command)
 {
-    asio::write(control_connection_, asio::buffer(command + "\r\n"));
-}
-
-bool session::control_connection_is_open() const
-{
-    return control_connection_.is_open();
+    asio::write(socket_, asio::buffer(command + "\r\n"));
 }
 
 } // namespace ftp

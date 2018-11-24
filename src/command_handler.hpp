@@ -11,11 +11,12 @@
 
 #include <string>
 #include <vector>
-#include "session.hpp"
+#include "control_connection.hpp"
 #include "user_command.hpp"
 
 using std::string;
 using std::vector;
+using std::unique_ptr;
 
 namespace ftp
 {
@@ -42,8 +43,8 @@ private:
 
     void exit();
 
-    session session_;
+    unique_ptr<control_connection> control_connection_;
 };
 
 } // namespace ftp
-#endif //FTP_CLIENT_command_HANDLER_HPP
+#endif //FTP_CLIENT_COMMAND_HANDLER_HPP

@@ -9,9 +9,11 @@
 #include "command_handler.hpp"
 #include "resources.hpp"
 #include <iostream>
+#include <memory>
 
 using std::cout;
 using std::endl;
+using std::make_unique;
 
 namespace ftp
 {
@@ -62,7 +64,7 @@ void command_handler::execute_local_command(const user_command & command)
 
 void command_handler::execute_remote_command(const user_command & command)
 {
-    if (!session_.control_connection_is_open())
+    if (!control_connection_)
     {
         throw std::runtime_error(error::not_connected);
     }
@@ -80,22 +82,22 @@ void command_handler::open(const vector<string> & parameters)
         throw std::runtime_error(usage::open);
     }
 
-    if (session_.control_connection_is_open())
+    if (control_connection_)
     {
         throw std::runtime_error(error::already_connected);
     }
 
     const string & hostname = parameters[0];
     const string & port = parameters[1];
-    session_.open_control_connection(hostname, port);
-    cout << session_.read_control_connection();
+    control_connection_ = make_unique<control_connection>(hostname, port);
+    cout << control_connection_->read();
 }
 
 void command_handler::close()
 {
-    session_.write_control_connection(ftp_command::close);
-    cout << session_.read_control_connection();
-    session_.close_control_connection();
+    control_connection_->write(ftp_command::close);
+    cout << control_connection_->read();
+    control_connection_.reset();
 }
 
 void command_handler::help()
@@ -105,7 +107,7 @@ void command_handler::help()
 
 void command_handler::exit()
 {
-    if (session_.control_connection_is_open())
+    if (control_connection_)
     {
         close();
     }
