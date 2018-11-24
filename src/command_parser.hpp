@@ -23,10 +23,6 @@ class command_parser
 {
 public:
     static user_command parse(const string & user_input);
-
-private:
-    static bool is_valid_command(const string & command,
-                                 const vector<string> & parameters);
 };
 
 } // namespace ftp

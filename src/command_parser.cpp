@@ -15,11 +15,24 @@ using std::istringstream;
 namespace ftp
 {
 
+static bool is_valid_command(const string & command)
+{
+    return command == command::open ||
+           command == command::close ||
+           command == command::help ||
+           command == command::exit;
+}
+
 user_command command_parser::parse(const string & user_input)
 {
     istringstream iss(user_input);
     string command;
     iss >> command;
+
+    if (!is_valid_command(command))
+    {
+        throw std::runtime_error(error::invalid_command);
+    }
 
     vector<string> parameters;
     for (string parameter; iss >> parameter;)
@@ -27,24 +40,7 @@ user_command command_parser::parse(const string & user_input)
         parameters.push_back(parameter);
     }
 
-    if (!is_valid_command(command, parameters))
-    {
-        throw std::runtime_error(error::invalid_command);
-    }
-
     return user_command(std::move(command), std::move(parameters));
-}
-
-bool command_parser::is_valid_command(const string & command,
-                                      const vector<string> & parameters)
-{
-    if (command == command::open && parameters.size() != 2)
-    {
-        throw std::runtime_error(usage::open);
-    }
-
-    return command == command::open || command == command::close ||
-           command == command::help || command == command::exit;
 }
 
 } // namespace ftp
