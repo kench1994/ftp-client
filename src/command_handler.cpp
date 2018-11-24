@@ -8,6 +8,7 @@
 
 #include "command_handler.hpp"
 #include "resources.hpp"
+#include "local_exception.hpp"
 #include <iostream>
 #include <memory>
 
@@ -30,7 +31,7 @@ void command_handler::execute(const user_command & command)
     }
     else
     {
-        throw std::runtime_error(error::invalid_command);
+        throw local_exception(error::invalid_command);
     }
 }
 
@@ -66,7 +67,7 @@ void command_handler::execute_remote_command(const user_command & command)
 {
     if (!control_connection_)
     {
-        throw std::runtime_error(error::not_connected);
+        throw local_exception(error::not_connected);
     }
 
     if (command == command::close)
@@ -79,12 +80,12 @@ void command_handler::open(const vector<string> & parameters)
 {
     if (parameters.size() != 2)
     {
-        throw std::runtime_error(usage::open);
+        throw local_exception(usage::open);
     }
 
     if (control_connection_)
     {
-        throw std::runtime_error(error::already_connected);
+        throw local_exception(error::already_connected);
     }
 
     const string & hostname = parameters[0];

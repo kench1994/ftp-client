@@ -8,6 +8,7 @@
 
 #include "command_parser.hpp"
 #include "resources.hpp"
+#include "local_exception.hpp"
 #include <sstream>
 
 using std::istringstream;
@@ -31,7 +32,7 @@ user_command command_parser::parse(const string & user_input)
 
     if (!is_valid_command(command))
     {
-        throw std::runtime_error(error::invalid_command);
+        throw local_exception(error::invalid_command);
     }
 
     vector<string> parameters;

@@ -9,6 +9,7 @@
 #include "user_interface.hpp"
 #include "command_parser.hpp"
 #include "resources.hpp"
+#include "local_exception.hpp"
 #include <iostream>
 
 using std::cout;
@@ -48,7 +49,7 @@ void user_interface::run()
                 return;
             }
         }
-        catch (const std::exception & ex)
+        catch (const local_exception & ex)
         {
             cout << ex.what() << endl;
         }
