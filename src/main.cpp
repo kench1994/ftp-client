@@ -16,7 +16,7 @@ using std::istream;
 
 int main(int argc, char * argv[])
 {
-    cin.exceptions(istream::failbit | istream::badbit);
+    cin.exceptions(cin.exceptions() | istream::failbit | istream::badbit);
 
     try
     {
