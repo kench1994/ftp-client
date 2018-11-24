@@ -10,6 +10,7 @@
 #include "command_parser.hpp"
 #include "resources.hpp"
 #include "local_exception.hpp"
+#include "utils.hpp"
 #include <iostream>
 
 using std::cout;
@@ -20,24 +21,11 @@ using std::string;
 namespace ftp
 {
 
-string user_interface::read_line(const string & greeting)
-{
-    string line;
-
-    while (line.empty())
-    {
-        cout << greeting;
-        getline(cin, line);
-    }
-
-    return line;
-}
-
 void user_interface::run()
 {
     while (true)
     {
-        string user_input = read_line(common::ftp_prefix);
+        string user_input = utils::read_line(common::ftp_prefix);
 
         try
         {

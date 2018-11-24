@@ -20,8 +20,6 @@ public:
     void run();
 
 private:
-    string read_line(const string & greeting);
-
     command_handler command_handler_;
 };
 
