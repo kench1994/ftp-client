@@ -27,13 +27,7 @@ public:
     void execute(const user_command & user_command);
 
 private:
-    bool is_local_command(const user_command & command) const;
-
     bool is_remote_command(const user_command & command) const;
-
-    void execute_local_command(const user_command & command);
-
-    void execute_remote_command(const user_command & command);
 
     void open(const vector<string> & parameters);
 

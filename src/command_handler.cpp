@@ -22,37 +22,18 @@ namespace ftp
 
 void command_handler::execute(const user_command & command)
 {
-    if (is_local_command(command))
+    if (is_remote_command(command) && !control_connection_)
     {
-        execute_local_command(command);
+        throw local_exception(error::not_connected);
     }
-    else if (is_remote_command(command))
-    {
-        execute_remote_command(command);
-    }
-    else
-    {
-        throw local_exception(error::invalid_command);
-    }
-}
 
-bool command_handler::is_local_command(const user_command & command) const
-{
-    return command == command::open ||
-           command == command::help ||
-           command == command::exit;
-}
-
-bool command_handler::is_remote_command(const user_command & command) const
-{
-    return command == command::close;
-}
-
-void command_handler::execute_local_command(const user_command & command)
-{
     if (command == command::open)
     {
         open(command.parameters());
+    }
+    else if (command == command::close)
+    {
+        close();
     }
     else if (command == command::help)
     {
@@ -62,19 +43,15 @@ void command_handler::execute_local_command(const user_command & command)
     {
         exit();
     }
+    else
+    {
+        throw local_exception(error::invalid_command);
+    }
 }
 
-void command_handler::execute_remote_command(const user_command & command)
+bool command_handler::is_remote_command(const user_command & command) const
 {
-    if (!control_connection_)
-    {
-        throw local_exception(error::not_connected);
-    }
-
-    if (command == command::close)
-    {
-        close();
-    }
+    return command == command::close;
 }
 
 void command_handler::open(const vector<string> & parameters)
