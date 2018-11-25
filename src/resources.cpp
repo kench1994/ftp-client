@@ -20,6 +20,8 @@ namespace command
 
 namespace ftp_command
 {
+    const char * user = "USER";
+    const char * password = "PASS";
     const char * close = "QUIT";
 } // namespace ftp_command
 
@@ -39,6 +41,8 @@ namespace usage
 namespace common
 {
     const char * ftp_prefix = "ftp> ";
+    const char * enter_name = "login: ";
+    const char * enter_password = "password: ";
     const char * help =
         "List of FTP commands:\n"
         "\topen <hostname> <open> - Open new connection.\n"

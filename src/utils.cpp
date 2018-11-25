@@ -7,10 +7,13 @@
  */
 
 #include <iostream>
+#include <zconf.h>
+#include <termio.h>
 #include "utils.hpp"
 
 using std::cout;
 using std::cin;
+using std::endl;
 
 namespace ftp
 {
@@ -28,6 +31,33 @@ string read_line(const string & greeting)
     }
 
     return line;
+}
+
+string read_secure_line(const string & greeting)
+{
+    struct termios old_settings;
+    struct termios new_settings;
+
+    /**
+     * Masking password input.
+     * http://www.cplusplus.com/articles/E6vU7k9E
+     * http://man7.org/linux/man-pages/man3/termios.3.html
+     */
+    tcgetattr(STDIN_FILENO, &old_settings);
+    new_settings = old_settings;
+    new_settings.c_lflag &= ~(ICANON | ECHO);
+
+    (void) tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
+
+    string password;
+    cout << greeting;
+    getline(cin, password);
+
+    (void) tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
+
+    cout << endl;
+
+    return password;
 }
 
 } // namespace utils

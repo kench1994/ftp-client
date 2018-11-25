@@ -21,6 +21,8 @@ namespace command
 
 namespace ftp_command
 {
+    extern const char * user;
+    extern const char * password;
     extern const char * close;
 } // namespace ftp_command
 
@@ -39,6 +41,8 @@ namespace usage
 namespace common
 {
     extern const char * ftp_prefix;
+    extern const char * enter_name;
+    extern const char * enter_password;
     extern const char * help;
 } // namespace common
 } // namespace ftp

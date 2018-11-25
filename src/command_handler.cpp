@@ -9,6 +9,7 @@
 #include "command_handler.hpp"
 #include "resources.hpp"
 #include "local_exception.hpp"
+#include "utils.hpp"
 #include <iostream>
 #include <memory>
 
@@ -91,6 +92,14 @@ void command_handler::open(const vector<string> & parameters)
     const string & hostname = parameters[0];
     const string & port = parameters[1];
     control_connection_ = make_unique<control_connection>(hostname, port);
+    cout << control_connection_->read();
+
+    string name = utils::read_line(common::enter_name);
+    control_connection_->write(ftp_command::user + string(" ") + name);
+    cout << control_connection_->read();
+
+    string password = utils::read_secure_line(common::enter_password);
+    control_connection_->write(ftp_command::password + string(" ") + password);
     cout << control_connection_->read();
 }
 

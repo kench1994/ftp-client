@@ -20,6 +20,8 @@ namespace utils
 
 string read_line(const string & greeting);
 
+string read_secure_line(const string & greeting);
+
 } // namespace utils
 } // namespace ftp
 #endif //FTP_CLIENT_UTILS_HPP
