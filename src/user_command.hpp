@@ -12,9 +12,6 @@
 #include <string>
 #include <vector>
 
-using std::string;
-using std::vector;
-
 namespace ftp
 {
 
@@ -23,18 +20,18 @@ class user_command
 public:
     user_command() = default;
 
-    user_command(string && command, vector<string> && parameters)
+    user_command(std::string && command, std::vector<std::string> && parameters)
             : command_(std::move(command)),
               parameters_(std::move(parameters))
     {
     }
 
-    const string & command() const
+    const std::string & command() const
     {
         return command_;
     }
 
-    const vector<string> & parameters() const
+    const std::vector<std::string> & parameters() const
     {
         return parameters_;
     }
@@ -45,8 +42,8 @@ public:
     }
 
 private:
-    string command_;
-    vector<string> parameters_;
+    std::string command_;
+    std::vector<std::string> parameters_;
 };
 
 } // namespace ftp

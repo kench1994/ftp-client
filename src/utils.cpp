@@ -11,29 +11,25 @@
 #include <termio.h>
 #include "utils.hpp"
 
-using std::cout;
-using std::cin;
-using std::endl;
-
 namespace ftp
 {
 namespace utils
 {
 
-string read_line(const string & greeting)
+std::string read_line(const std::string & greeting)
 {
-    string line;
+    std::string line;
 
     while (line.empty())
     {
-        cout << greeting;
-        getline(cin, line);
+        std::cout << greeting;
+        getline(std::cin, line);
     }
 
     return line;
 }
 
-string read_secure_line(const string & greeting)
+std::string read_secure_line(const std::string & greeting)
 {
     struct termios old_settings;
     struct termios new_settings;
@@ -49,13 +45,13 @@ string read_secure_line(const string & greeting)
 
     (void) tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
 
-    string password;
-    cout << greeting;
-    getline(cin, password);
+    std::string password;
+    std::cout << greeting;
+    getline(std::cin, password);
 
     (void) tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
 
-    cout << endl;
+    std::cout << std::endl;
 
     return password;
 }

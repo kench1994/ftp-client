@@ -10,19 +10,17 @@
 #include "resources.hpp"
 #include <sstream>
 
-using std::istringstream;
-
 namespace ftp
 {
 
-user_command command_parser::parse(const string & user_input)
+user_command command_parser::parse(const std::string & user_input)
 {
-    istringstream iss(user_input);
-    string command;
+    std::istringstream iss(user_input);
+    std::string command;
     iss >> command;
 
-    vector<string> parameters;
-    for (string parameter; iss >> parameter;)
+    std::vector<std::string> parameters;
+    for (std::string parameter; iss >> parameter;)
     {
         parameters.push_back(parameter);
     }

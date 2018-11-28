@@ -11,16 +11,14 @@
 
 #include <string>
 
-using std::string;
-
 namespace ftp
 {
 namespace utils
 {
 
-string read_line(const string & greeting);
+std::string read_line(const std::string & greeting);
 
-string read_secure_line(const string & greeting);
+std::string read_secure_line(const std::string & greeting);
 
 } // namespace utils
 } // namespace ftp

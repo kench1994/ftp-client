@@ -13,11 +13,6 @@
 #include "utils.hpp"
 #include <iostream>
 
-using std::cout;
-using std::cin;
-using std::endl;
-using std::string;
-
 namespace ftp
 {
 
@@ -25,7 +20,7 @@ void user_interface::run()
 {
     while (true)
     {
-        string user_input = utils::read_line(common::ftp_prefix);
+        std::string user_input = utils::read_line(common::ftp_prefix);
 
         try
         {
@@ -39,7 +34,7 @@ void user_interface::run()
         }
         catch (const local_exception & ex)
         {
-            cout << ex.what() << endl;
+            std::cout << ex.what() << std::endl;
         }
     }
 }

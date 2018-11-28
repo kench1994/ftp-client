@@ -3,16 +3,14 @@
 
 #include <stdexcept>
 
-using std::runtime_error;
-
 namespace ftp
 {
 
-class local_exception : public runtime_error
+class local_exception : public std::runtime_error
 {
 public:
     explicit local_exception(const char * message)
-            : runtime_error(message)
+            : std::runtime_error(message)
     {
     }
 };

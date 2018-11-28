@@ -12,8 +12,6 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/streambuf.hpp>
 
-using std::string;
-
 using namespace boost;
 
 namespace ftp
@@ -22,20 +20,20 @@ namespace ftp
 class control_connection
 {
 public:
-    control_connection(const string & hostname, const string & port);
+    control_connection(const std::string & hostname, const std::string & port);
 
     ~control_connection();
 
-    string read();
+    std::string read();
 
-    void write(const string & command);
+    void write(const std::string & command);
 
 private:
-    string read_line();
+    std::string read_line();
 
-    string get_reply_code(const string & reply);
+    std::string get_reply_code(const std::string & reply);
 
-    bool is_multiline_reply(const string & reply) const;
+    bool is_multiline_reply(const std::string & reply) const;
 
     asio::io_context io_context_;
     asio::ip::tcp::socket socket_;

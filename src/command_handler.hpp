@@ -14,10 +14,6 @@
 #include "control_connection.hpp"
 #include "user_command.hpp"
 
-using std::string;
-using std::vector;
-using std::unique_ptr;
-
 namespace ftp
 {
 
@@ -29,7 +25,7 @@ public:
 private:
     bool is_remote_command(const user_command & command) const;
 
-    void open(const vector<string> & parameters);
+    void open(const std::vector<std::string> & parameters);
 
     void close();
 
@@ -37,7 +33,7 @@ private:
 
     void exit();
 
-    unique_ptr<control_connection> control_connection_;
+    std::unique_ptr<control_connection> control_connection_;
 };
 
 } // namespace ftp
