@@ -27,6 +27,7 @@ namespace ftp_command
 
 namespace error
 {
+    const char * unknown_error = "Unknown error.";
     const char * invalid_command =
         "Invalid command. Use 'help' to display list of FTP commands.";
     const char * not_connected = "Not connected.";

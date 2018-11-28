@@ -28,6 +28,7 @@ namespace ftp_command
 
 namespace error
 {
+    extern const char * unknown_error;
     extern const char * invalid_command;
     extern const char * not_connected;
     extern const char * already_connected;
