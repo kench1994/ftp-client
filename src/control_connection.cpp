@@ -62,6 +62,20 @@ bool control_connection::is_multiline_reply(const std::string & line) const
     return line[3] == '-';
 }
 
+/**
+ * RFC 959: https://tools.ietf.org/html/rfc959
+ *
+ * The last line will begin with the same code, followed
+ * immediately by Space <SP>, optionally some text, and the Telnet
+ * end-of-line code.
+ */
+bool control_connection::is_end_of_multiline_reply(const std::string & line,
+                                                   const std::string & first_reply_code)
+{
+    std::string current_reply_code = get_reply_code(line);
+    return current_reply_code == first_reply_code && line.size() > 3 && line[3] == ' ';
+}
+
 std::string control_connection::read()
 {
     std::string line = read_line();
@@ -72,25 +86,12 @@ std::string control_connection::read()
     }
 
     std::string reply = line;
-    std::string reply_code = get_reply_code(line);
+    std::string first_reply_code = get_reply_code(line);
 
-    while (true)
+    while (!is_end_of_multiline_reply(line, first_reply_code))
     {
         line = read_line();
         reply += line;
-
-        /**
-         * RFC 959: https://tools.ietf.org/html/rfc959
-         *
-         * The last line will begin with the same code, followed
-         * immediately by Space <SP>, optionally some text, and the Telnet
-         * end-of-line code.
-         */
-        std::string current_reply_code = get_reply_code(line);
-        if (current_reply_code == reply_code && line.size() > 3 && line[3] == ' ')
-        {
-            break;
-        }
     }
 
     return reply;

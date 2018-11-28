@@ -35,6 +35,9 @@ private:
 
     bool is_multiline_reply(const std::string & reply) const;
 
+    bool is_end_of_multiline_reply(const std::string & line,
+                                   const std::string & first_reply_code);
+
     asio::io_context io_context_;
     asio::ip::tcp::socket socket_;
     asio::ip::tcp::resolver resolver_;
