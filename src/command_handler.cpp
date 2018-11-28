@@ -68,11 +68,11 @@ void command_handler::open(const std::vector<std::string> & parameters)
     std::cout << control_connection_->read();
 
     std::string name = utils::read_line(common::enter_name);
-    control_connection_->write(ftp_command::user + std::string(" ") + name);
+    control_connection_->write(ftp_command::user + " " + name);
     std::cout << control_connection_->read();
 
     std::string password = utils::read_secure_line(common::enter_password);
-    control_connection_->write(ftp_command::password + std::string(" ") + password);
+    control_connection_->write(ftp_command::password + " " + password);
     std::cout << control_connection_->read();
 }
 
