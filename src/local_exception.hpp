@@ -1,3 +1,11 @@
+/**
+ * local_exception.hpp
+ *
+ * Copyright (c) 2018, Denis Kovalchuk <deniskovjob@gmail.com>
+ *
+ * This code is licensed under a MIT-style license.
+ */
+
 #ifndef FTP_CLIENT_LOCAL_EXCEPTION_HPP
 #define FTP_CLIENT_LOCAL_EXCEPTION_HPP
 
