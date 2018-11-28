@@ -11,7 +11,9 @@
 
 int main(int argc, char * argv[])
 {
-    std::cin.exceptions(std::cin.exceptions() | std::istream::failbit | std::istream::badbit);
+    std::cin.exceptions(std::cin.exceptions() |
+                        std::istream::failbit |
+                        std::istream::badbit);
 
     try
     {
