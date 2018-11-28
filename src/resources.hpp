@@ -9,42 +9,44 @@
 #ifndef FTP_CLIENT_RESOURCES_HPP
 #define FTP_CLIENT_RESOURCES_HPP
 
+#include <string>
+
 namespace ftp
 {
 namespace command
 {
-    extern const char * open;
-    extern const char * close;
-    extern const char * help;
-    extern const char * exit;
+    extern const std::string open;
+    extern const std::string close;
+    extern const std::string help;
+    extern const std::string exit;
 } // namespace command
 
 namespace ftp_command
 {
-    extern const char * user;
-    extern const char * password;
-    extern const char * close;
+    extern const std::string user;
+    extern const std::string password;
+    extern const std::string close;
 } // namespace ftp_command
 
 namespace error
 {
-    extern const char * unknown_error;
-    extern const char * invalid_command;
-    extern const char * not_connected;
-    extern const char * already_connected;
+    extern const std::string unknown_error;
+    extern const std::string invalid_command;
+    extern const std::string not_connected;
+    extern const std::string already_connected;
 } // namespace error
 
 namespace usage
 {
-    extern const char * open;
+    extern const std::string open;
 } // namespace usage
 
 namespace common
 {
-    extern const char * ftp_prefix;
-    extern const char * enter_name;
-    extern const char * enter_password;
-    extern const char * help;
+    extern const std::string ftp_prefix;
+    extern const std::string enter_name;
+    extern const std::string enter_password;
+    extern const std::string help;
 } // namespace common
 } // namespace ftp
 #endif //FTP_CLIENT_RESOURCES_HPP

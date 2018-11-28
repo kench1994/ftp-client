@@ -17,7 +17,7 @@ namespace ftp
 class local_exception : public std::runtime_error
 {
 public:
-    explicit local_exception(const char * message)
+    explicit local_exception(const std::string & message)
             : std::runtime_error(message)
     {
     }

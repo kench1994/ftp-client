@@ -36,7 +36,7 @@ public:
         return parameters_;
     }
 
-    friend bool operator==(const user_command & lhs, const char * rhs)
+    friend bool operator==(const user_command & lhs, const std::string & rhs)
     {
         return lhs.command() == rhs;
     }
