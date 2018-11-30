@@ -88,16 +88,16 @@ string control_connection::read()
         return line;
     }
 
-    string reply = line;
+    string multiline_reply = line;
     string first_reply_code = get_reply_code(line);
 
     while (!is_end_of_multiline_reply(line, first_reply_code))
     {
         line = read_line();
-        reply += line;
+        multiline_reply += line;
     }
 
-    return reply;
+    return multiline_reply;
 }
 
 string control_connection::read_line()
