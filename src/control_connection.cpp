@@ -25,6 +25,7 @@ control_connection::control_connection(const std::string & hostname,
 
 control_connection::~control_connection()
 {
+    socket_.shutdown(asio::socket_base::shutdown_both);
     socket_.close();
 }
 
