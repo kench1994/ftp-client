@@ -10,37 +10,41 @@
 #include "user_interface.hpp"
 #include "resources.hpp"
 
+using std::cout;
+using std::cin;
+using std::endl;
+using std::istream;
+using std::exception;
+
 int main(int argc, char * argv[])
 {
-    std::cin.exceptions(std::cin.exceptions() |
-                        std::istream::failbit |
-                        std::istream::badbit);
+    cin.exceptions(cin.exceptions() | istream::failbit | istream::badbit);
 
     try
     {
         ftp::user_interface ui;
         ui.run();
     }
-    catch (const std::istream::failure & ex)
+    catch (const istream::failure & ex)
     {
-        if (std::cin.eof())
+        if (cin.eof())
         {
             return EXIT_SUCCESS;
         }
         else
         {
-            std::cout << ex.what() << std::endl;
+            cout << ex.what() << endl;
             return EXIT_FAILURE;
         }
     }
-    catch (const std::exception & ex)
+    catch (const exception & ex)
     {
-        std::cout << ex.what() << std::endl;
+        cout << ex.what() << endl;
         return EXIT_FAILURE;
     }
     catch (...)
     {
-        std::cout << ftp::error::unknown_error << std::endl;
+        cout << ftp::error::unknown_error << endl;
         return EXIT_FAILURE;
     }
 
