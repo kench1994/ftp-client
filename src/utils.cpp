@@ -16,20 +16,25 @@ namespace ftp
 namespace utils
 {
 
-std::string read_line(const std::string & greeting)
+using std::string;
+using std::cout;
+using std::cin;
+using std::endl;
+
+string read_line(const string & greeting)
 {
-    std::string line;
+    string line;
 
     while (line.empty())
     {
-        std::cout << greeting;
-        getline(std::cin, line);
+        cout << greeting;
+        getline(cin, line);
     }
 
     return line;
 }
 
-std::string read_secure_line(const std::string & greeting)
+string read_secure_line(const string & greeting)
 {
     struct termios old_settings;
     struct termios new_settings;
@@ -45,13 +50,13 @@ std::string read_secure_line(const std::string & greeting)
 
     (void) tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
 
-    std::string password;
-    std::cout << greeting;
-    getline(std::cin, password);
+    string password;
+    cout << greeting;
+    getline(cin, password);
 
     (void) tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
 
-    std::cout << std::endl;
+    cout << endl;
 
     return password;
 }

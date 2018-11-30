@@ -12,8 +12,6 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/streambuf.hpp>
 
-using namespace boost;
-
 namespace ftp
 {
 
@@ -38,10 +36,10 @@ private:
     bool is_end_of_multiline_reply(const std::string & line,
                                    const std::string & first_reply_code);
 
-    asio::io_context io_context_;
-    asio::ip::tcp::socket socket_;
-    asio::ip::tcp::resolver resolver_;
-    asio::streambuf read_buf_;
+    boost::asio::io_context io_context_;
+    boost::asio::ip::tcp::socket socket_;
+    boost::asio::ip::tcp::resolver resolver_;
+    boost::asio::streambuf read_buf_;
 };
 
 } // namespace ftp

@@ -10,41 +10,44 @@
 
 namespace ftp
 {
+
+using std::string;
+
 namespace command
 {
-    const std::string open = "open";
-    const std::string close = "close";
-    const std::string help = "help";
-    const std::string exit = "exit";
+    const string open = "open";
+    const string close = "close";
+    const string help = "help";
+    const string exit = "exit";
 } // namespace command
 
 namespace ftp_command
 {
-    const std::string user = "USER";
-    const std::string password = "PASS";
-    const std::string close = "QUIT";
+    const string user = "USER";
+    const string password = "PASS";
+    const string close = "QUIT";
 } // namespace ftp_command
 
 namespace error
 {
-    const std::string unknown_error = "Unknown error.";
-    const std::string invalid_command =
+    const string unknown_error = "Unknown error.";
+    const string invalid_command =
         "Invalid command. Use 'help' to display list of FTP commands.";
-    const std::string not_connected = "Not connected.";
-    const std::string already_connected = "Already connected, use close first.";
+    const string not_connected = "Not connected.";
+    const string already_connected = "Already connected, use close first.";
 } // namespace error
 
 namespace usage
 {
-    const std::string open = "Usage: open <hostname> <port>";
+    const string open = "Usage: open <hostname> <port>";
 } // namespace usage
 
 namespace common
 {
-    const std::string ftp_prefix = "ftp> ";
-    const std::string enter_name = "login: ";
-    const std::string enter_password = "password: ";
-    const std::string help =
+    const string ftp_prefix = "ftp> ";
+    const string enter_name = "login: ";
+    const string enter_password = "password: ";
+    const string help =
         "List of FTP commands:\n"
         "\topen <hostname> <open> - Open new connection.\n"
         "\tclose - Close current connection.\n"

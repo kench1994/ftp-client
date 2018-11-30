@@ -13,19 +13,23 @@
 namespace ftp
 {
 
-user_command command_parser::parse(const std::string & user_input)
+using std::string;
+using std::vector;
+using std::istringstream;
+
+user_command command_parser::parse(const string & user_input)
 {
-    std::istringstream iss(user_input);
-    std::string command;
+    istringstream iss(user_input);
+    string command;
     iss >> command;
 
-    std::vector<std::string> parameters;
-    for (std::string parameter; iss >> parameter;)
+    vector<string> parameters;
+    for (string parameter; iss >> parameter;)
     {
         parameters.push_back(parameter);
     }
 
-    return user_command(std::move(command), std::move(parameters));
+    return user_command(move(command), move(parameters));
 }
 
 } // namespace ftp

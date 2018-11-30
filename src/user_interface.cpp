@@ -16,11 +16,15 @@
 namespace ftp
 {
 
+using std::string;
+using std::cout;
+using std::endl;
+
 void user_interface::run()
 {
     while (true)
     {
-        std::string user_input = utils::read_line(common::ftp_prefix);
+        string user_input = utils::read_line(common::ftp_prefix);
 
         try
         {
@@ -34,7 +38,7 @@ void user_interface::run()
         }
         catch (const local_exception & ex)
         {
-            std::cout << ex.what() << std::endl;
+            cout << ex.what() << endl;
         }
     }
 }
