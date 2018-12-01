@@ -37,6 +37,11 @@ void command_handler::execute(const string & command,
         }
 
         open(arguments[0], arguments[1]);
+
+        string username = utils::read_line("Name: ");
+        user(username);
+        string password = utils::read_secure_line("Password: ");
+        pass(password);
     }
     else if (command == command::local::close)
     {
@@ -71,12 +76,16 @@ void command_handler::open(const string & hostname, const string & port)
 
     control_connection_ = make_unique<control_connection>(hostname, port);
     cout << control_connection_->read();
+}
 
-    string name = utils::read_line("Name: ");
-    control_connection_->write(command::remote::user + " " + name);
+void command_handler::user(const string & username)
+{
+    control_connection_->write(command::remote::user + " " + username);
     cout << control_connection_->read();
+}
 
-    string password = utils::read_secure_line("Password: ");
+void command_handler::pass(const string & password)
+{
     control_connection_->write(command::remote::password + " " + password);
     cout << control_connection_->read();
 }

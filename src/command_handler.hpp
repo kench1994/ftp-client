@@ -27,6 +27,10 @@ private:
 
     void open(const std::string & hostname, const std::string & port);
 
+    void user(const std::string & username);
+
+    void pass(const std::string & password);
+
     void close();
 
     void help();
