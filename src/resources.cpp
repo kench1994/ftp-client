@@ -30,31 +30,4 @@ namespace remote
     const string close = "QUIT";
 } // namespace remote
 } // namespace command
-
-namespace error
-{
-    const string unknown_error = "Unknown error.";
-    const string invalid_command =
-        "Invalid command. Use 'help' to display list of FTP commands.";
-    const string not_connected = "Not connected.";
-    const string already_connected = "Already connected, use close first.";
-} // namespace error
-
-namespace usage
-{
-    const string open = "Usage: open <hostname> <port>";
-} // namespace usage
-
-namespace common
-{
-    const string ftp_prefix = "ftp> ";
-    const string enter_name = "login: ";
-    const string enter_password = "password: ";
-    const string help =
-        "List of FTP commands:\n"
-        "\topen <hostname> <open> - Open new connection.\n"
-        "\tclose - Close current connection.\n"
-        "\thelp - Print list of FTP commands.\n"
-        "\texit - Exit program.\n";
-} // namespace common
 } // namespace ftp

@@ -44,7 +44,7 @@ int main(int argc, char * argv[])
     }
     catch (...)
     {
-        cout << ftp::error::unknown_error << endl;
+        cout << "Unknown error." << endl;
         return EXIT_FAILURE;
     }
 

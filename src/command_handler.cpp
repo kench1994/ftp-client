@@ -18,6 +18,7 @@ namespace ftp
 using std::string;
 using std::vector;
 using std::cout;
+using std::endl;
 using std::make_unique;
 
 void command_handler::execute(const string & command,
@@ -25,7 +26,7 @@ void command_handler::execute(const string & command,
 {
     if (is_needed_connection(command) && !control_connection_)
     {
-        throw local_exception(error::not_connected);
+        throw local_exception("Not connected.");
     }
 
     if (command == command::local::open)
@@ -51,7 +52,8 @@ void command_handler::execute(const string & command,
     }
     else
     {
-        throw local_exception(error::invalid_command);
+        throw local_exception("Invalid command. "
+                              "Use 'help' to display list of FTP commands.");
     }
 }
 
@@ -64,17 +66,17 @@ void command_handler::open(const string & hostname, const string & port)
 {
     if (control_connection_)
     {
-        throw local_exception(error::already_connected);
+        throw local_exception("Already connected, use close first.");
     }
 
     control_connection_ = make_unique<control_connection>(hostname, port);
     cout << control_connection_->read();
 
-    string name = utils::read_line(common::enter_name);
+    string name = utils::read_line("Name: ");
     control_connection_->write(command::remote::user + " " + name);
     cout << control_connection_->read();
 
-    string password = utils::read_secure_line(common::enter_password);
+    string password = utils::read_secure_line("Password: ");
     control_connection_->write(command::remote::password + " " + password);
     cout << control_connection_->read();
 }
@@ -88,7 +90,11 @@ void command_handler::close()
 
 void command_handler::help()
 {
-    cout << common::help;
+    cout << "List of FTP commands:\n"
+            "\topen <hostname> <open> - Open new connection.\n"
+            "\tclose - Close current connection.\n"
+            "\thelp - Print list of FTP commands.\n"
+            "\texit - Exit program." << endl;
 }
 
 void command_handler::exit()

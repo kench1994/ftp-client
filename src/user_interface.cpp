@@ -25,7 +25,7 @@ void user_interface::run()
 {
     while (true)
     {
-        string user_input = utils::read_line(common::ftp_prefix);
+        string user_input = utils::read_line("ftp> ");
 
         string command = utils::get_command(user_input);
         vector<string> arguments = utils::get_arguments(user_input);
