@@ -25,10 +25,10 @@ void user_interface::run()
 {
     while (true)
     {
-        string user_input = utils::read_line("ftp> ");
+        auto user_input = utils::read_line("ftp> ");
 
-        string command = utils::get_command(user_input);
-        vector<string> arguments = utils::get_arguments(user_input);
+        auto command = utils::get_command(user_input);
+        auto arguments = utils::get_arguments(user_input);
 
         try
         {
