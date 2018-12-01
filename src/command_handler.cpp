@@ -29,7 +29,13 @@ void command_handler::execute(const user_command & command)
 
     if (command == command::local::open)
     {
-        open(command.parameters());
+        const vector<string> & parameters = command.parameters();
+        if (parameters.size() != 2)
+        {
+            throw local_exception("Usage: open <hostname> <port>");
+        }
+
+        open(parameters[0], parameters[1]);
     }
     else if (command == command::local::close)
     {
@@ -54,20 +60,13 @@ bool command_handler::is_needed_connection(const user_command & command) const
     return command == command::local::close;
 }
 
-void command_handler::open(const vector<string> & parameters)
+void command_handler::open(const string & hostname, const string & port)
 {
-    if (parameters.size() != 2)
-    {
-        throw local_exception(usage::open);
-    }
-
     if (control_connection_)
     {
         throw local_exception(error::already_connected);
     }
 
-    const string & hostname = parameters[0];
-    const string & port = parameters[1];
     control_connection_ = make_unique<control_connection>(hostname, port);
     cout << control_connection_->read();
 

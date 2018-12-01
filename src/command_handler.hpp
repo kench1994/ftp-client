@@ -25,7 +25,7 @@ public:
 private:
     bool is_needed_connection(const user_command & command) const;
 
-    void open(const std::vector<std::string> & parameters);
+    void open(const std::string & hostname, const std::string & port);
 
     void close();
 
