@@ -9,6 +9,7 @@
 #include <iostream>
 #include <zconf.h>
 #include <termio.h>
+#include <sstream>
 #include "utils.hpp"
 
 namespace ftp
@@ -17,6 +18,8 @@ namespace utils
 {
 
 using std::string;
+using std::vector;
+using std::istringstream;
 using std::cout;
 using std::cin;
 using std::endl;
@@ -59,6 +62,32 @@ string read_secure_line(const string & greeting)
     cout << endl;
 
     return password;
+}
+
+string get_command(const string & user_input)
+{
+    string command;
+
+    istringstream iss(user_input);
+    iss >> command;
+
+    return command;
+}
+
+vector<string> get_arguments(const string & user_input)
+{
+    string command;
+
+    istringstream iss(user_input);
+    iss >> command;
+
+    vector<string> arguments;
+    for (string argument; iss >> argument;)
+    {
+        arguments.push_back(move(argument));
+    }
+
+    return arguments;
 }
 
 } // namespace utils

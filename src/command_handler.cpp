@@ -20,7 +20,8 @@ using std::vector;
 using std::cout;
 using std::make_unique;
 
-void command_handler::execute(const user_command & command)
+void command_handler::execute(const string & command,
+                              const vector<string> & arguments)
 {
     if (is_needed_connection(command) && !control_connection_)
     {
@@ -29,13 +30,12 @@ void command_handler::execute(const user_command & command)
 
     if (command == command::local::open)
     {
-        const vector<string> & parameters = command.parameters();
-        if (parameters.size() != 2)
+        if (arguments.size() != 2)
         {
             throw local_exception("Usage: open <hostname> <port>");
         }
 
-        open(parameters[0], parameters[1]);
+        open(arguments[0], arguments[1]);
     }
     else if (command == command::local::close)
     {
@@ -55,7 +55,7 @@ void command_handler::execute(const user_command & command)
     }
 }
 
-bool command_handler::is_needed_connection(const user_command & command) const
+bool command_handler::is_needed_connection(const string & command) const
 {
     return command == command::local::close;
 }

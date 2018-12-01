@@ -8,6 +8,6 @@ find_package(Boost 1.67.0 REQUIRED COMPONENTS system)
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
-    add_executable(ftp_client src/main.cpp src/user_interface.cpp src/user_interface.hpp src/command_handler.cpp src/command_handler.hpp src/command_parser.cpp src/command_parser.hpp src/resources.hpp src/control_connection.cpp src/control_connection.hpp src/resources.cpp src/user_command.hpp src/local_exception.hpp src/utils.cpp src/utils.hpp)
+    add_executable(ftp_client src/main.cpp src/user_interface.cpp src/user_interface.hpp src/command_handler.cpp src/command_handler.hpp src/resources.hpp src/control_connection.cpp src/control_connection.hpp src/resources.cpp src/local_exception.hpp src/utils.cpp src/utils.hpp)
     target_link_libraries(ftp_client ${Boost_LIBRARIES})
 endif()

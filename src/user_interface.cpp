@@ -7,16 +7,17 @@
  */
 
 #include "user_interface.hpp"
-#include "command_parser.hpp"
 #include "resources.hpp"
 #include "local_exception.hpp"
 #include "utils.hpp"
 #include <iostream>
+#include <vector>
 
 namespace ftp
 {
 
 using std::string;
+using std::vector;
 using std::cout;
 using std::endl;
 
@@ -26,10 +27,12 @@ void user_interface::run()
     {
         string user_input = utils::read_line(common::ftp_prefix);
 
+        string command = utils::get_command(user_input);
+        vector<string> arguments = utils::get_arguments(user_input);
+
         try
         {
-            user_command command = command_parser::parse(user_input);
-            command_handler_.execute(command);
+            command_handler_.execute(command, arguments);
 
             if (command == command::local::exit)
             {
