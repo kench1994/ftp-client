@@ -11,7 +11,6 @@
 #include "local_exception.hpp"
 #include "utils.hpp"
 #include <iostream>
-#include <memory>
 
 namespace ftp
 {
@@ -28,19 +27,19 @@ void command_handler::execute(const user_command & command)
         throw local_exception(error::not_connected);
     }
 
-    if (command == command::open)
+    if (command == command::local::open)
     {
         open(command.parameters());
     }
-    else if (command == command::close)
+    else if (command == command::local::close)
     {
         close();
     }
-    else if (command == command::help)
+    else if (command == command::local::help)
     {
         help();
     }
-    else if (command == command::exit)
+    else if (command == command::local::exit)
     {
         exit();
     }
@@ -52,7 +51,7 @@ void command_handler::execute(const user_command & command)
 
 bool command_handler::is_remote_command(const user_command & command) const
 {
-    return command == command::close;
+    return command == command::local::close;
 }
 
 void command_handler::open(const vector<string> & parameters)
@@ -73,17 +72,17 @@ void command_handler::open(const vector<string> & parameters)
     cout << control_connection_->read();
 
     string name = utils::read_line(common::enter_name);
-    control_connection_->write(ftp_command::user + " " + name);
+    control_connection_->write(command::remote::user + " " + name);
     cout << control_connection_->read();
 
     string password = utils::read_secure_line(common::enter_password);
-    control_connection_->write(ftp_command::password + " " + password);
+    control_connection_->write(command::remote::password + " " + password);
     cout << control_connection_->read();
 }
 
 void command_handler::close()
 {
-    control_connection_->write(ftp_command::close);
+    control_connection_->write(command::remote::close);
     cout << control_connection_->read();
     control_connection_.reset();
 }

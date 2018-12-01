@@ -15,18 +15,21 @@ using std::string;
 
 namespace command
 {
+namespace local
+{
     const string open = "open";
     const string close = "close";
     const string help = "help";
     const string exit = "exit";
-} // namespace command
+} // namespace local
 
-namespace ftp_command
+namespace remote
 {
     const string user = "USER";
     const string password = "PASS";
     const string close = "QUIT";
-} // namespace ftp_command
+} // namespace remote
+} // namespace command
 
 namespace error
 {

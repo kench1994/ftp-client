@@ -15,18 +15,21 @@ namespace ftp
 {
 namespace command
 {
+namespace local
+{
     extern const std::string open;
     extern const std::string close;
     extern const std::string help;
     extern const std::string exit;
-} // namespace command
+} // namespace local
 
-namespace ftp_command
+namespace remote
 {
     extern const std::string user;
     extern const std::string password;
     extern const std::string close;
-} // namespace ftp_command
+} // namespace remote
+} // namespace command
 
 namespace error
 {

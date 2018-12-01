@@ -31,7 +31,7 @@ void user_interface::run()
             user_command command = command_parser::parse(user_input);
             command_handler_.execute(command);
 
-            if (command == command::exit)
+            if (command == command::local::exit)
             {
                 return;
             }
