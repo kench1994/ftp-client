@@ -22,7 +22,7 @@ using std::make_unique;
 
 void command_handler::execute(const user_command & command)
 {
-    if (is_remote_command(command) && !control_connection_)
+    if (is_needed_connection(command) && !control_connection_)
     {
         throw local_exception(error::not_connected);
     }
@@ -49,7 +49,7 @@ void command_handler::execute(const user_command & command)
     }
 }
 
-bool command_handler::is_remote_command(const user_command & command) const
+bool command_handler::is_needed_connection(const user_command & command) const
 {
     return command == command::local::close;
 }

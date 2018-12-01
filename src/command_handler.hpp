@@ -23,7 +23,7 @@ public:
     void execute(const user_command & user_command);
 
 private:
-    bool is_remote_command(const user_command & command) const;
+    bool is_needed_connection(const user_command & command) const;
 
     void open(const std::vector<std::string> & parameters);
 
