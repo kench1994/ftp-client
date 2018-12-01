@@ -29,7 +29,9 @@ private:
 
     void login(const std::string & username);
 
-    void open(const std::string & hostname, const std::string & port);
+    void login(const std::vector<std::string> & arguments);
+
+    void open(const std::vector<std::string> & arguments);
 
     void user(const std::string & username);
 

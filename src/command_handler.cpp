@@ -33,28 +33,12 @@ void command_handler::execute(const string & command,
     {
         if (command == command::local::open)
         {
-            if (arguments.size() != 2)
-            {
-                throw local_exception("Usage: open <hostname> <port>");
-            }
-
-            open(arguments[0], arguments[1]);
+            open(arguments);
             login();
         }
         else if (command == command::local::user)
         {
-            if (arguments.empty())
-            {
-                login();
-            }
-            else if (arguments.size() == 1)
-            {
-                login(arguments[0]);
-            }
-            else
-            {
-                throw local_exception("Usage: user <username>");
-            }
+            login(arguments);
         }
         else if (command == command::local::close)
         {
@@ -99,14 +83,35 @@ void command_handler::login(const string & username)
     pass(password);
 }
 
-void command_handler::open(const string & hostname, const string & port)
+void command_handler::login(const vector<string> & arguments)
 {
+    if (arguments.empty())
+    {
+        login();
+    }
+    else if (arguments.size() == 1)
+    {
+        login(arguments[0]);
+    }
+    else
+    {
+        throw local_exception("Usage: user <username>");
+    }
+}
+
+void command_handler::open(const vector<string> & arguments)
+{
+    if (arguments.size() != 2)
+    {
+        throw local_exception("Usage: open <hostname> <port>");
+    }
+
     if (control_connection_)
     {
         throw local_exception("Already connected, use close first.");
     }
 
-    control_connection_ = make_unique<control_connection>(hostname, port);
+    control_connection_ = make_unique<control_connection>(arguments[0], arguments[1]);
     cout << control_connection_->read();
 }
 
