@@ -29,47 +29,55 @@ void command_handler::execute(const string & command,
         throw local_exception("Not connected.");
     }
 
-    if (command == command::local::open)
+    try
     {
-        if (arguments.size() != 2)
+        if (command == command::local::open)
         {
-            throw local_exception("Usage: open <hostname> <port>");
-        }
+            if (arguments.size() != 2)
+            {
+                throw local_exception("Usage: open <hostname> <port>");
+            }
 
-        open(arguments[0], arguments[1]);
-        login();
-    }
-    else if (command == command::local::user)
-    {
-        if (arguments.empty())
-        {
+            open(arguments[0], arguments[1]);
             login();
         }
-        else if (arguments.size() == 1)
+        else if (command == command::local::user)
         {
-            login(arguments[0]);
+            if (arguments.empty())
+            {
+                login();
+            }
+            else if (arguments.size() == 1)
+            {
+                login(arguments[0]);
+            }
+            else
+            {
+                throw local_exception("Usage: user <username>");
+            }
+        }
+        else if (command == command::local::close)
+        {
+            close();
+        }
+        else if (command == command::local::help)
+        {
+            help();
+        }
+        else if (command == command::local::exit)
+        {
+            exit();
         }
         else
         {
-            throw local_exception("Usage: user <username>");
+            throw local_exception("Invalid command. "
+                                  "Use 'help' to display list of FTP commands.");
         }
     }
-    else if (command == command::local::close)
+    catch (const boost::system::system_error & ex)
     {
-        close();
-    }
-    else if (command == command::local::help)
-    {
-        help();
-    }
-    else if (command == command::local::exit)
-    {
-        exit();
-    }
-    else
-    {
-        throw local_exception("Invalid command. "
-                              "Use 'help' to display list of FTP commands.");
+        control_connection_.reset();
+        cout << ex.what() << endl;
     }
 }
 
