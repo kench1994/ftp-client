@@ -18,6 +18,7 @@ namespace command
 namespace local
 {
     extern const std::string open;
+    extern const std::string user;
     extern const std::string close;
     extern const std::string help;
     extern const std::string exit;

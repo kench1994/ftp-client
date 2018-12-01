@@ -37,11 +37,22 @@ void command_handler::execute(const string & command,
         }
 
         open(arguments[0], arguments[1]);
-
-        string username = utils::read_line("Name: ");
-        user(username);
-        string password = utils::read_secure_line("Password: ");
-        pass(password);
+        login();
+    }
+    else if (command == command::local::user)
+    {
+        if (arguments.empty())
+        {
+            login();
+        }
+        else if (arguments.size() == 1)
+        {
+            login(arguments[0]);
+        }
+        else
+        {
+            throw local_exception("Usage: user <username>");
+        }
     }
     else if (command == command::local::close)
     {
@@ -65,6 +76,19 @@ void command_handler::execute(const string & command,
 bool command_handler::is_needed_connection(const string & command) const
 {
     return command == command::local::close;
+}
+
+void command_handler::login()
+{
+    string username = utils::read_line("Name: ");
+    login(username);
+}
+
+void command_handler::login(const string & username)
+{
+    user(username);
+    string password = utils::read_secure_line("Password: ");
+    pass(password);
 }
 
 void command_handler::open(const string & hostname, const string & port)

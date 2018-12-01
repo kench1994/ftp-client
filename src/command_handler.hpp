@@ -25,6 +25,10 @@ public:
 private:
     bool is_needed_connection(const std::string & command) const;
 
+    void login();
+
+    void login(const std::string & username);
+
     void open(const std::string & hostname, const std::string & port);
 
     void user(const std::string & username);

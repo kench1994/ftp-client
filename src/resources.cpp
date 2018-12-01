@@ -18,6 +18,7 @@ namespace command
 namespace local
 {
     const string open = "open";
+    const string user = "user";
     const string close = "close";
     const string help = "help";
     const string exit = "exit";
