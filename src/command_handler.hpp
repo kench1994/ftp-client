@@ -25,6 +25,8 @@ public:
 private:
     bool is_needed_connection(const std::string & command) const;
 
+    boost::asio::ip::tcp::endpoint parse_pasv_reply(const std::string & reply);
+
     void login();
 
     void login(const std::string & username);
@@ -36,6 +38,10 @@ private:
     void user(const std::string & username);
 
     void pass(const std::string & password);
+
+    void ls(const std::vector<std::string> & arguments);
+
+    std::string pasv();
 
     void close();
 

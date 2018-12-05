@@ -19,6 +19,7 @@ namespace local
 {
     extern const std::string open;
     extern const std::string user;
+    extern const std::string ls;
     extern const std::string close;
     extern const std::string help;
     extern const std::string exit;
@@ -28,6 +29,8 @@ namespace remote
 {
     extern const std::string user;
     extern const std::string password;
+    extern const std::string ls;
+    extern const std::string pasv;
     extern const std::string close;
 } // namespace remote
 } // namespace command
