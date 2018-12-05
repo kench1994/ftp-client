@@ -236,6 +236,7 @@ void command_handler::help()
 {
     cout << "List of FTP commands:\n"
             "\topen <hostname> <open> - Open new connection.\n"
+            "\tuser <username> - Send new user information.\n"
             "\tls <remote-directory> - Print list of files in the remote directory.\n"
             "\tclose - Close current connection.\n"
             "\thelp - Print list of FTP commands.\n"
