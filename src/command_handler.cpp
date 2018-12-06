@@ -127,7 +127,23 @@ command_handler::parse_pasv_reply(const string & reply)
 
 void command_handler::open(const vector<string> & arguments)
 {
-    if (arguments.size() != 2)
+    string hostname;
+    static string ftp_port = "21";
+
+    if (arguments.empty())
+    {
+        hostname = utils::read_line("hostname: ");
+    }
+    else if (arguments.size() == 1)
+    {
+        hostname = arguments[0];
+    }
+    else if (arguments.size() == 2)
+    {
+        hostname = arguments[0];
+        ftp_port = arguments[1];
+    }
+    else
     {
         throw local_exception("Usage: open <hostname> <port>");
     }
@@ -137,7 +153,7 @@ void command_handler::open(const vector<string> & arguments)
         throw local_exception("Already connected, use close first.");
     }
 
-    control_connection_ = make_unique<control_connection>(arguments[0], arguments[1]);
+    control_connection_ = make_unique<control_connection>(hostname, ftp_port);
     cout << control_connection_->read();
 }
 
