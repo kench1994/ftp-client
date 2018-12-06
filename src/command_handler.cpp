@@ -193,15 +193,15 @@ void command_handler::user(const vector<string> & arguments)
 
 void command_handler::ls(const std::vector<std::string> & arguments)
 {
-    string request;
+    string command;
 
     if (arguments.empty())
     {
-        request = command::remote::ls;
+        command = command::remote::ls;
     }
     else if (arguments.size() == 1)
     {
-        request = command::remote::ls + " " + arguments[0];
+        command = command::remote::ls + " " + arguments[0];
     }
     else
     {
@@ -216,7 +216,7 @@ void command_handler::ls(const std::vector<std::string> & arguments)
         data_connection data_connection(endpoint);
         data_connection.connect();
 
-        control_connection_->write(request);
+        control_connection_->write(command);
         cout << control_connection_->read();
 
         cout << data_connection.read();
