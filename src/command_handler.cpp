@@ -37,11 +37,11 @@ void command_handler::execute(const string & command,
         if (command == command::local::open)
         {
             open(arguments);
-            login();
+            user();
         }
         else if (command == command::local::user)
         {
-            login(arguments);
+            user(arguments);
         }
         else if (command == command::local::close)
         {
@@ -125,35 +125,6 @@ command_handler::parse_pasv_reply(const string & reply)
              boost::asio::ip::address::from_string(ip), port);
 }
 
-void command_handler::login()
-{
-    string username = utils::read_line("Name: ");
-    login(username);
-}
-
-void command_handler::login(const string & username)
-{
-    user(username);
-    string password = utils::read_secure_line("Password: ");
-    pass(password);
-}
-
-void command_handler::login(const vector<string> & arguments)
-{
-    if (arguments.empty())
-    {
-        login();
-    }
-    else if (arguments.size() == 1)
-    {
-        login(arguments[0]);
-    }
-    else
-    {
-        throw local_exception("Usage: user <username>");
-    }
-}
-
 void command_handler::open(const vector<string> & arguments)
 {
     if (arguments.size() != 2)
@@ -170,14 +141,36 @@ void command_handler::open(const vector<string> & arguments)
     cout << control_connection_->read();
 }
 
-void command_handler::user(const string & username)
+void command_handler::user(const vector<string> & arguments)
 {
+    string username;
+
+    if (arguments.empty())
+    {
+        username = utils::read_line("Name: ");
+    }
+    else if (arguments.size() == 1)
+    {
+        username = arguments[0];
+    }
+    else
+    {
+        throw local_exception("Usage: user <username>");
+    }
+
     control_connection_->write(command::remote::user + " " + username);
     cout << control_connection_->read();
-}
 
-void command_handler::pass(const string & password)
-{
+    /**
+     * Send password command.
+     *
+     * RFC 959: https://tools.ietf.org/html/rfc959
+     *
+     * This command must be immediately preceded by the
+     * user name command, and, for some sites, completes the user's
+     * identification for access control.
+     */
+    string password = utils::read_secure_line("Password: ");
     control_connection_->write(command::remote::password + " " + password);
     cout << control_connection_->read();
 }

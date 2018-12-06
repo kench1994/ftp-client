@@ -27,17 +27,9 @@ private:
 
     boost::asio::ip::tcp::endpoint parse_pasv_reply(const std::string & reply);
 
-    void login();
-
-    void login(const std::string & username);
-
-    void login(const std::vector<std::string> & arguments);
-
     void open(const std::vector<std::string> & arguments);
 
-    void user(const std::string & username);
-
-    void pass(const std::string & password);
+    void user(const std::vector<std::string> & arguments = {});
 
     void ls(const std::vector<std::string> & arguments);
 
