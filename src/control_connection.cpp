@@ -81,20 +81,20 @@ bool control_connection::is_end_of_multiline_reply(const string & line,
 
 string control_connection::read()
 {
-    string line = read_line();
+    string reply = read_line();
 
-    if (!is_multiline_reply(line))
+    if (!is_multiline_reply(reply))
     {
-        return line;
+        return reply;
     }
 
-    string multiline_reply = line;
-    string first_reply_code = get_reply_code(line);
+    string multiline_reply = reply;
+    string first_reply_code = get_reply_code(reply);
 
-    while (!is_end_of_multiline_reply(line, first_reply_code))
+    while (!is_end_of_multiline_reply(reply, first_reply_code))
     {
-        line = read_line();
-        multiline_reply += line;
+        reply = read_line();
+        multiline_reply += reply;
     }
 
     return multiline_reply;
