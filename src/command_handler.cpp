@@ -159,7 +159,7 @@ void command_handler::open(const vector<string> & arguments)
     }
 
     control_connection_ = make_unique<control_connection>(hostname, ftp_port);
-    cout << control_connection_->read();
+    cout << control_connection_->read() << endl;
 }
 
 void command_handler::user(const vector<string> & arguments)
@@ -180,7 +180,7 @@ void command_handler::user(const vector<string> & arguments)
     }
 
     control_connection_->write(command::remote::user + " " + username);
-    cout << control_connection_->read();
+    cout << control_connection_->read() << endl;
 
     /**
      * Send password command.
@@ -193,7 +193,7 @@ void command_handler::user(const vector<string> & arguments)
      */
     string password = utils::read_secure_line("Password: ");
     control_connection_->write(command::remote::password + " " + password);
-    cout << control_connection_->read();
+    cout << control_connection_->read() << endl;
 }
 
 void command_handler::ls(const std::vector<std::string> & arguments)
@@ -222,12 +222,12 @@ void command_handler::ls(const std::vector<std::string> & arguments)
         data_connection.connect();
 
         control_connection_->write(command);
-        cout << control_connection_->read();
+        cout << control_connection_->read() << endl;
 
         cout << data_connection.read();
     }
 
-    cout << control_connection_->read();
+    cout << control_connection_->read() << endl;
 }
 
 string command_handler::pasv()
@@ -235,7 +235,7 @@ string command_handler::pasv()
     control_connection_->write(command::remote::pasv);
     string reply = control_connection_->read();
 
-    cout << reply;
+    cout << reply << endl;
 
     return reply;
 }
@@ -243,7 +243,7 @@ string command_handler::pasv()
 void command_handler::close()
 {
     control_connection_->write(command::remote::close);
-    cout << control_connection_->read();
+    cout << control_connection_->read() << endl;
     control_connection_.reset();
 }
 

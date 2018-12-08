@@ -110,7 +110,7 @@ string control_connection::read()
     while (!is_end_of_multiline_reply(reply, first_reply_code))
     {
         reply = read_line();
-        multiline_reply += reply;
+        multiline_reply += "\n" + reply;
     }
 
     return multiline_reply;
@@ -129,7 +129,7 @@ string control_connection::read_line()
         throw negative_completion_code(line);
     }
 
-    return line + "\n";
+    return line;
 }
 
 void control_connection::write(const string & command)
