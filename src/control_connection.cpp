@@ -18,6 +18,7 @@ namespace ftp
 
 using std::string;
 using std::istream;
+using std::runtime_error;
 
 control_connection::control_connection(const string & hostname,
                                        const string & port)
@@ -42,11 +43,6 @@ control_connection::~control_connection()
  */
 bool control_connection::is_multiline_reply(const string & reply_line) const
 {
-    if (reply_line.size() < 4)
-    {
-        return false;
-    }
-
     return reply_line[3] == '-';
 }
 
@@ -112,6 +108,20 @@ string control_connection::read_line()
 
     string line;
     getline(is, line);
+
+    /**
+     * RFC 959: https://tools.ietf.org/html/rfc959
+     *
+     * A reply is defined to contain the 3-digit code, followed by Space
+     * <SP>, followed by one line of text (where some maximum line length
+     * has been specified), and terminated by the Telnet end-of-line code.
+     *
+     * Make sure the line contains at least 3-digit code and followed Space <SP>.
+     */
+    if (line.size() < 4)
+    {
+        throw runtime_error("Invalid server reply: " + line);
+    }
 
     if (is_negative_completion_code(line))
     {
