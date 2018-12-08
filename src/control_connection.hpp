@@ -29,14 +29,12 @@ public:
 private:
     std::string read_line();
 
-    std::string get_reply_code(const std::string & reply);
+    bool is_multiline_reply(const std::string & reply_line) const;
 
-    bool is_multiline_reply(const std::string & reply) const;
+    bool is_end_of_multiline_reply(const std::string & first_reply_line,
+                                   const std::string & current_reply_line) const;
 
-    bool is_end_of_multiline_reply(const std::string & line,
-                                   const std::string & first_reply_code);
-
-    bool is_negative_completion_code(const std::string & reply) const;
+    bool is_negative_completion_code(const std::string & reply_line) const;
 
     boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;

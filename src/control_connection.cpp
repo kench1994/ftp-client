@@ -35,49 +35,38 @@ control_connection::~control_connection()
 /**
  * RFC 959: https://tools.ietf.org/html/rfc959
  *
- * An FTP reply consists of a three digit number (transmitted as
- * three alphanumeric characters) followed by some text.
- */
-string control_connection::get_reply_code(const string & line)
-{
-    if (line.size() < 3)
-    {
-        return string();
-    }
-
-    return line.substr(0, 3);
-}
-
-/**
- * RFC 959: https://tools.ietf.org/html/rfc959
- *
  * Thus the format for multi-line replies is that the first line
  * will begin with the exact required reply code, followed
  * immediately by a Hyphen, "-" (also known as Minus), followed by
  * text.
  */
-bool control_connection::is_multiline_reply(const string & line) const
+bool control_connection::is_multiline_reply(const string & reply_line) const
 {
-    if (line.size() < 4)
+    if (reply_line.size() < 4)
     {
         return false;
     }
 
-    return line[3] == '-';
+    return reply_line[3] == '-';
 }
 
 /**
  * RFC 959: https://tools.ietf.org/html/rfc959
  *
+ * An FTP reply consists of a three digit number (transmitted as
+ * three alphanumeric characters) followed by some text.
+ *
+ * ...
+ *
  * The last line will begin with the same code, followed
  * immediately by Space <SP>, optionally some text, and the Telnet
  * end-of-line code.
  */
-bool control_connection::is_end_of_multiline_reply(const string & line,
-                                                   const string & first_reply_code)
+bool control_connection::is_end_of_multiline_reply(const string & first_reply_line,
+                                                   const string & current_reply_line) const
 {
-    string current_reply_code = get_reply_code(line);
-    return current_reply_code == first_reply_code && line.size() > 3 && line[3] == ' ';
+    return equal(first_reply_line.cbegin(), first_reply_line.cbegin() +  3,
+                 current_reply_line.cbegin()) && current_reply_line[3] == ' ';
 }
 
 /**
@@ -90,27 +79,27 @@ bool control_connection::is_end_of_multiline_reply(const string & line,
  *     4yz   Transient Negative Completion reply
  *     5yz   Permanent Negative Completion reply
  */
-bool control_connection::is_negative_completion_code(const std::string & reply) const
+bool control_connection::is_negative_completion_code(const std::string & reply_line) const
 {
-    return reply[0] == '4' || reply[0] == '5';
+    return reply_line[0] == '4' || reply_line[0] == '5';
 }
 
 string control_connection::read()
 {
-    string reply = read_line();
+    string reply_line = read_line();
 
-    if (!is_multiline_reply(reply))
+    if (!is_multiline_reply(reply_line))
     {
-        return reply;
+        return reply_line;
     }
 
-    string multiline_reply = reply;
-    string first_reply_code = get_reply_code(reply);
+    string first_reply_line = reply_line;
+    string multiline_reply = reply_line;
 
-    while (!is_end_of_multiline_reply(reply, first_reply_code))
+    while (!is_end_of_multiline_reply(first_reply_line, reply_line))
     {
-        reply = read_line();
-        multiline_reply += "\n" + reply;
+        reply_line = read_line();
+        multiline_reply += "\n" + reply_line;
     }
 
     return multiline_reply;
