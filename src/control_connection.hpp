@@ -36,6 +36,8 @@ private:
     bool is_end_of_multiline_reply(const std::string & line,
                                    const std::string & first_reply_code);
 
+    bool is_negative_completion_code(const std::string & reply) const;
+
     boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;
     boost::asio::ip::tcp::resolver resolver_;

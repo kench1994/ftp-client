@@ -11,6 +11,7 @@
 #include <boost/asio/read_until.hpp>
 #include <boost/asio/write.hpp>
 #include "control_connection.hpp"
+#include "negative_completion_code.hpp"
 
 namespace ftp
 {
@@ -79,6 +80,21 @@ bool control_connection::is_end_of_multiline_reply(const string & line,
     return current_reply_code == first_reply_code && line.size() > 3 && line[3] == ' ';
 }
 
+/**
+ * RFC 959: https://tools.ietf.org/html/rfc959
+ *
+ * There are five values for the first digit of the reply code:
+ *     1yz   Positive Preliminary reply
+ *     2yz   Positive Completion reply
+ *     3yz   Positive Intermediate reply
+ *     4yz   Transient Negative Completion reply
+ *     5yz   Permanent Negative Completion reply
+ */
+bool control_connection::is_negative_completion_code(const std::string & reply) const
+{
+    return reply[0] == '4' || reply[0] == '5';
+}
+
 string control_connection::read()
 {
     string reply = read_line();
@@ -107,6 +123,11 @@ string control_connection::read_line()
 
     string line;
     getline(is, line);
+
+    if (is_negative_completion_code(line))
+    {
+        throw negative_completion_code(line);
+    }
 
     return line + "\n";
 }

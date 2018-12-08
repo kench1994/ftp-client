@@ -12,6 +12,7 @@
 #include "utils.hpp"
 #include <iostream>
 #include "data_connection.hpp"
+#include "negative_completion_code.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -64,6 +65,10 @@ void command_handler::execute(const string & command,
             throw local_exception("Invalid command. "
                                   "Use 'help' to display list of FTP commands.");
         }
+    }
+    catch (const negative_completion_code & ex)
+    {
+        cout << ex.what() << endl;
     }
     catch (const boost::system::system_error & ex)
     {
