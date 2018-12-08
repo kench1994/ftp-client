@@ -33,6 +33,62 @@ control_connection::~control_connection()
     socket_.shutdown(boost::asio::socket_base::shutdown_both);
 }
 
+string control_connection::read()
+{
+    string reply_line = read_line();
+
+    if (!is_multiline_reply(reply_line))
+    {
+        return reply_line;
+    }
+
+    string first_reply_line = reply_line;
+    string multiline_reply = reply_line;
+
+    while (!is_end_of_multiline_reply(first_reply_line, reply_line))
+    {
+        reply_line = read_line();
+        multiline_reply += "\n" + reply_line;
+    }
+
+    return multiline_reply;
+}
+
+void control_connection::write(const string & command)
+{
+    boost::asio::write(socket_, boost::asio::buffer(command + "\r\n"));
+}
+
+string control_connection::read_line()
+{
+    boost::asio::read_until(socket_, read_buf_, '\n');
+    istream is(&read_buf_);
+
+    string line;
+    getline(is, line);
+
+    /**
+     * RFC 959: https://tools.ietf.org/html/rfc959
+     *
+     * A reply is defined to contain the 3-digit code, followed by Space
+     * <SP>, followed by one line of text (where some maximum line length
+     * has been specified), and terminated by the Telnet end-of-line code.
+     *
+     * Make sure the line contains at least 3-digit code and followed Space <SP>.
+     */
+    if (line.size() < 4)
+    {
+        throw runtime_error("Invalid server reply: " + line);
+    }
+
+    if (is_negative_completion_code(line))
+    {
+        throw negative_completion_code(line);
+    }
+
+    return line;
+}
+
 /**
  * RFC 959: https://tools.ietf.org/html/rfc959
  *
@@ -78,62 +134,6 @@ bool control_connection::is_end_of_multiline_reply(const string & first_reply_li
 bool control_connection::is_negative_completion_code(const std::string & reply_line) const
 {
     return reply_line[0] == '4' || reply_line[0] == '5';
-}
-
-string control_connection::read()
-{
-    string reply_line = read_line();
-
-    if (!is_multiline_reply(reply_line))
-    {
-        return reply_line;
-    }
-
-    string first_reply_line = reply_line;
-    string multiline_reply = reply_line;
-
-    while (!is_end_of_multiline_reply(first_reply_line, reply_line))
-    {
-        reply_line = read_line();
-        multiline_reply += "\n" + reply_line;
-    }
-
-    return multiline_reply;
-}
-
-string control_connection::read_line()
-{
-    boost::asio::read_until(socket_, read_buf_, '\n');
-    istream is(&read_buf_);
-
-    string line;
-    getline(is, line);
-
-    /**
-     * RFC 959: https://tools.ietf.org/html/rfc959
-     *
-     * A reply is defined to contain the 3-digit code, followed by Space
-     * <SP>, followed by one line of text (where some maximum line length
-     * has been specified), and terminated by the Telnet end-of-line code.
-     *
-     * Make sure the line contains at least 3-digit code and followed Space <SP>.
-     */
-    if (line.size() < 4)
-    {
-        throw runtime_error("Invalid server reply: " + line);
-    }
-
-    if (is_negative_completion_code(line))
-    {
-        throw negative_completion_code(line);
-    }
-
-    return line;
-}
-
-void control_connection::write(const string & command)
-{
-    boost::asio::write(socket_, boost::asio::buffer(command + "\r\n"));
 }
 
 } // namespace ftp
