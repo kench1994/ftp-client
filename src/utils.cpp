@@ -10,6 +10,8 @@
 #include <zconf.h>
 #include <termio.h>
 #include <sstream>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 #include "utils.hpp"
 
 namespace ftp
@@ -76,15 +78,12 @@ string get_command(const string & user_input)
 
 vector<string> get_arguments(const string & user_input)
 {
-    string command;
-
-    istringstream iss(user_input);
-    iss >> command;
-
     vector<string> arguments;
-    for (string argument; iss >> argument;)
+    boost::split(arguments, user_input, boost::is_any_of(" "));
+
+    if (!arguments.empty())
     {
-        arguments.push_back(move(argument));
+        arguments.erase(arguments.begin());
     }
 
     return arguments;
