@@ -72,8 +72,8 @@ void command_handler::execute(const string & command,
     }
     catch (const boost::system::system_error & ex)
     {
-        control_connection_.reset();
         cout << ex.what() << endl;
+        control_connection_.reset();
     }
 }
 
