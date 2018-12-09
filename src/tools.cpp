@@ -1,5 +1,5 @@
 /**
- * utils.cpp
+ * tools.cpp
  *
  * Copyright (c) 2018, Denis Kovalchuk <deniskovjob@gmail.com>
  *
@@ -12,11 +12,11 @@
 #include <sstream>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
-#include "utils.hpp"
+#include "tools.hpp"
 
 namespace ftp
 {
-namespace utils
+namespace tools
 {
 
 using std::string;
@@ -89,5 +89,5 @@ vector<string> get_arguments(const string & user_input)
     return arguments;
 }
 
-} // namespace utils
+} // namespace tools
 } // namespace ftp

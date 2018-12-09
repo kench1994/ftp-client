@@ -9,7 +9,7 @@
 #include "command_handler.hpp"
 #include "resources.hpp"
 #include "local_exception.hpp"
-#include "utils.hpp"
+#include "tools.hpp"
 #include <iostream>
 #include "data_connection.hpp"
 #include "negative_completion_code.hpp"
@@ -137,7 +137,7 @@ void command_handler::open(const vector<string> & arguments)
 
     if (arguments.empty())
     {
-        hostname = utils::read_line("hostname: ");
+        hostname = tools::read_line("hostname: ");
     }
     else if (arguments.size() == 1)
     {
@@ -168,7 +168,7 @@ void command_handler::user(const vector<string> & arguments)
 
     if (arguments.empty())
     {
-        username = utils::read_line("Name: ");
+        username = tools::read_line("Name: ");
     }
     else if (arguments.size() == 1)
     {
@@ -191,7 +191,7 @@ void command_handler::user(const vector<string> & arguments)
      * user name command, and, for some sites, completes the user's
      * identification for access control.
      */
-    string password = utils::read_secure_line("Password: ");
+    string password = tools::read_secure_line("Password: ");
     control_connection_->write(command::remote::password + " " + password);
     cout << control_connection_->read() << endl;
 }

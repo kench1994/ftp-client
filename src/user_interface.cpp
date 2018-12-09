@@ -9,7 +9,7 @@
 #include "user_interface.hpp"
 #include "resources.hpp"
 #include "local_exception.hpp"
-#include "utils.hpp"
+#include "tools.hpp"
 #include <iostream>
 #include <vector>
 
@@ -25,10 +25,10 @@ void user_interface::run()
 {
     while (true)
     {
-        string user_input = utils::read_line("ftp> ");
+        string user_input = tools::read_line("ftp> ");
 
-        string command = utils::get_command(user_input);
-        vector<string> arguments = utils::get_arguments(user_input);
+        string command = tools::get_command(user_input);
+        vector<string> arguments = tools::get_arguments(user_input);
 
         try
         {
