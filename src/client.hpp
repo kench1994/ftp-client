@@ -1,13 +1,13 @@
 /**
- * command_handler.cpp
+ * client.hpp
  *
  * Copyright (c) 2018, Denis Kovalchuk <deniskovjob@gmail.com>
  *
  * This code is licensed under a MIT-style license.
  */
 
-#ifndef FTP_CLIENT_COMMAND_HANDLER_HPP
-#define FTP_CLIENT_COMMAND_HANDLER_HPP
+#ifndef FTP_CLIENT_CLIENT_HPP
+#define FTP_CLIENT_CLIENT_HPP
 
 #include <string>
 #include <vector>
@@ -16,11 +16,11 @@
 namespace ftp
 {
 
-class command_handler
+class client
 {
 public:
-    void execute(const std::string & command,
-                 const std::vector<std::string> & arguments);
+    void execute_command(const std::string & command,
+                         const std::vector<std::string> & arguments);
 
 private:
     bool is_needed_connection(const std::string & command) const;
@@ -45,4 +45,4 @@ private:
 };
 
 } // namespace ftp
-#endif //FTP_CLIENT_COMMAND_HANDLER_HPP
+#endif //FTP_CLIENT_CLIENT_HPP

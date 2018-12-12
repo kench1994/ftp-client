@@ -1,12 +1,12 @@
 /**
- * command_handler.cpp
+ * client.cpp
  *
  * Copyright (c) 2018, Denis Kovalchuk <deniskovjob@gmail.com>
  *
  * This code is licensed under a MIT-style license.
  */
 
-#include "command_handler.hpp"
+#include "client.hpp"
 #include "resources.hpp"
 #include "local_exception.hpp"
 #include "tools.hpp"
@@ -25,8 +25,8 @@ using std::cout;
 using std::endl;
 using std::make_unique;
 
-void command_handler::execute(const string & command,
-                              const vector<string> & arguments)
+void client::execute_command(const string & command,
+                             const vector<string> & arguments)
 {
     if (is_needed_connection(command) && !control_connection_)
     {
@@ -77,7 +77,7 @@ void command_handler::execute(const string & command,
     }
 }
 
-bool command_handler::is_needed_connection(const string & command) const
+bool client::is_needed_connection(const string & command) const
 {
     return command == command::local::close || command == command::local::ls ||
            command == command::local::user;
@@ -96,7 +96,7 @@ bool command_handler::is_needed_connection(const string & command) const
  * Where h1 is the high order 8 bits of the internet host address.
  */
 boost::asio::ip::tcp::endpoint
-command_handler::parse_pasv_reply(const string & reply)
+client::parse_pasv_reply(const string & reply)
 {
     size_t begin = reply.find('(');
     if (begin == string::npos)
@@ -130,7 +130,7 @@ command_handler::parse_pasv_reply(const string & reply)
              boost::asio::ip::address::from_string(ip), port);
 }
 
-void command_handler::open(const vector<string> & arguments)
+void client::open(const vector<string> & arguments)
 {
     string hostname;
     static string ftp_port = "21";
@@ -162,7 +162,7 @@ void command_handler::open(const vector<string> & arguments)
     cout << control_connection_->read() << endl;
 }
 
-void command_handler::user(const vector<string> & arguments)
+void client::user(const vector<string> & arguments)
 {
     string username;
 
@@ -196,7 +196,7 @@ void command_handler::user(const vector<string> & arguments)
     cout << control_connection_->read() << endl;
 }
 
-void command_handler::ls(const std::vector<std::string> & arguments)
+void client::ls(const std::vector<std::string> & arguments)
 {
     string command;
 
@@ -230,7 +230,7 @@ void command_handler::ls(const std::vector<std::string> & arguments)
     cout << control_connection_->read() << endl;
 }
 
-string command_handler::pasv()
+string client::pasv()
 {
     control_connection_->write(command::remote::pasv);
     string reply = control_connection_->read();
@@ -240,14 +240,14 @@ string command_handler::pasv()
     return reply;
 }
 
-void command_handler::close()
+void client::close()
 {
     control_connection_->write(command::remote::close);
     cout << control_connection_->read() << endl;
     control_connection_.reset();
 }
 
-void command_handler::help()
+void client::help()
 {
     cout << "List of FTP commands:\n"
             "\topen <hostname> <port> - Open new connection.\n"
@@ -258,7 +258,7 @@ void command_handler::help()
             "\texit - Exit program." << endl;
 }
 
-void command_handler::exit()
+void client::exit()
 {
     if (control_connection_)
     {

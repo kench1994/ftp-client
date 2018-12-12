@@ -32,7 +32,7 @@ void user_interface::run()
 
         try
         {
-            command_handler_.execute(command, arguments);
+            ftp_client_.execute_command(command, arguments);
 
             if (command == command::local::exit)
             {
