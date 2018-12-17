@@ -22,6 +22,8 @@ public:
     void execute_command(const std::string & command,
                          const std::vector<std::string> & arguments);
 
+    bool is_open() const;
+
 private:
     bool is_needed_connection(const std::string & command) const;
 

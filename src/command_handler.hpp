@@ -11,6 +11,7 @@
 
 #include <string>
 #include <vector>
+#include "client.hpp"
 
 namespace ftp
 {
@@ -20,6 +21,11 @@ class command_handler
 public:
     void execute(const std::string & command,
                  const std::vector<std::string> & arguments);
+
+private:
+    bool is_needed_connection(const std::string & command) const;
+
+    client client_;
 };
 
 } // namespace ftp

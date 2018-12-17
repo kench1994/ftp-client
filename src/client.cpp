@@ -77,6 +77,11 @@ void client::execute_command(const string & command,
     }
 }
 
+bool client::is_open() const
+{
+    return control_connection_ != nullptr;
+}
+
 bool client::is_needed_connection(const string & command) const
 {
     return command == command::local::close || command == command::local::ls ||
