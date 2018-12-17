@@ -24,6 +24,8 @@ public:
 
     bool is_open() const;
 
+    void reset();
+
 private:
     bool is_needed_connection(const std::string & command) const;
 
