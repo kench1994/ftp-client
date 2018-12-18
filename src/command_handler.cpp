@@ -151,11 +151,11 @@ void command_handler::ls(const vector<string> & arguments)
 {
     if (arguments.empty())
     {
-        client_.ls();
+        client_.list();
     }
     else if (arguments.size() == 1)
     {
-        client_.ls(arguments[0]);
+        client_.list(arguments[0]);
     }
     else
     {

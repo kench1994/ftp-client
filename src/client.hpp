@@ -28,7 +28,7 @@ public:
 
     void pass(const std::string & password);
 
-    void ls(const std::optional<std::string> & remote_directory = std::nullopt);
+    void list(const std::optional<std::string> & remote_directory = std::nullopt);
 
     void close();
 
