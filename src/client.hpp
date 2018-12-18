@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include "control_connection.hpp"
+#include <optional>
 
 namespace ftp
 {
@@ -19,31 +20,24 @@ namespace ftp
 class client
 {
 public:
-    void execute_command(const std::string & command,
-                         const std::vector<std::string> & arguments);
+    void open(const std::string & hostname, const std::string & port = "21");
 
     bool is_open() const;
+
+    void user(const std::string & username);
+
+    void pass(const std::string & password);
+
+    void ls(const std::optional<std::string> & remote_directory = std::nullopt);
+
+    void close();
 
     void reset();
 
 private:
-    bool is_needed_connection(const std::string & command) const;
-
     boost::asio::ip::tcp::endpoint parse_pasv_reply(const std::string & reply);
 
-    void open(const std::vector<std::string> & arguments);
-
-    void user(const std::vector<std::string> & arguments = {});
-
-    void ls(const std::vector<std::string> & arguments);
-
     std::string pasv();
-
-    void close();
-
-    void help();
-
-    void exit();
 
     std::unique_ptr<control_connection> control_connection_;
 };

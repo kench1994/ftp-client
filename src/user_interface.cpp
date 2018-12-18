@@ -11,7 +11,6 @@
 #include "local_exception.hpp"
 #include "tools.hpp"
 #include <iostream>
-#include <vector>
 
 namespace ftp
 {
@@ -32,7 +31,7 @@ void user_interface::run()
 
         try
         {
-            ftp_client_.execute_command(command, arguments);
+            command_handler_.execute(command, arguments);
 
             if (command == command::local::exit)
             {

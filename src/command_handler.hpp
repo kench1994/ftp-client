@@ -25,6 +25,22 @@ public:
 private:
     bool is_needed_connection(const std::string & command) const;
 
+    void open(const std::vector<std::string> & arguments);
+
+    void user();
+
+    void user(const std::vector<std::string> & arguments);
+
+    void pass();
+
+    void ls(const std::vector<std::string> & arguments);
+
+    void close();
+
+    void help();
+
+    void exit();
+
     client client_;
 };
 

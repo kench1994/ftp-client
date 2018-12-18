@@ -10,6 +10,7 @@
 #include "local_exception.hpp"
 #include "resources.hpp"
 #include "negative_completion_code.hpp"
+#include "tools.hpp"
 #include <iostream>
 
 using std::string;
@@ -17,6 +18,7 @@ using std::vector;
 using std::cout;
 using std::cin;
 using std::endl;
+using std::optional;
 
 namespace ftp
 {
@@ -31,30 +33,32 @@ void command_handler::execute(const string & command,
 
     try
     {
-        // TODO: add handling of commands.
         if (command == command::local::open)
         {
-
+            open(arguments);
+            user();
+            pass();
         }
         else if (command == command::local::user)
         {
-
+            user(arguments);
+            pass();
         }
         else if (command == command::local::close)
         {
-
+            close();
         }
         else if (command == command::local::ls)
         {
-
+            ls(arguments);
         }
         else if (command == command::local::help)
         {
-
+            help();
         }
         else if (command == command::local::exit)
         {
-
+            exit();
         }
         else
         {
@@ -77,6 +81,106 @@ bool command_handler::is_needed_connection(const std::string & command) const
 {
     return command == command::local::close || command == command::local::ls ||
            command == command::local::user;
+}
+
+void command_handler::open(const vector<string> & arguments)
+{
+    string hostname;
+    string port = "21";
+
+    if (arguments.empty())
+    {
+        hostname = tools::read_line("hostname: ");
+    }
+    else if (arguments.size() == 1)
+    {
+        hostname = arguments[0];
+    }
+    else if (arguments.size() == 2)
+    {
+        hostname = arguments[0];
+        port = arguments[1];
+    }
+    else
+    {
+        throw local_exception("Usage: open <hostname> <port>");
+    }
+
+    client_.open(hostname, port);
+}
+
+void command_handler::user()
+{
+    string username = tools::read_line("username: ");
+    client_.user(username);
+}
+
+void command_handler::user(const vector<string> & arguments)
+{
+    if (arguments.empty())
+    {
+        user();
+    }
+    if (arguments.size() == 1)
+    {
+        client_.user(arguments[0]);
+    }
+    else
+    {
+        throw local_exception("Usage: user <username>");
+    }
+}
+
+/**
+ * Send password command.
+ *
+ * RFC 959: https://tools.ietf.org/html/rfc959
+ *
+ * This command must be immediately preceded by the
+ * user name command, and, for some sites, completes the user's
+ * identification for access control.
+ */
+void command_handler::pass()
+{
+    string password = tools::read_secure_line("password: ");
+    client_.pass(password);
+}
+
+void command_handler::close()
+{
+    client_.close();
+}
+
+void command_handler::ls(const vector<string> & arguments)
+{
+    if (arguments.empty())
+    {
+        client_.ls();
+    }
+    else if (arguments.size() == 1)
+    {
+        client_.ls(arguments[0]);
+    }
+    else
+    {
+        throw local_exception("Usage: ls <remote-directory>");
+    }
+}
+
+void command_handler::help()
+{
+    cout << "List of FTP commands:\n"
+            "\topen <hostname> <port> - Open new connection.\n"
+            "\tuser <username> - Send new user information.\n"
+            "\tls <remote-directory> - Print list of files in the remote directory.\n"
+            "\tclose - Close current connection.\n"
+            "\thelp - Print list of FTP commands.\n"
+            "\texit - Exit program." << endl;
+}
+
+void command_handler::exit()
+{
+    client_.close();
 }
 
 } // namespace ftp
