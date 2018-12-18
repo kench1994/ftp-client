@@ -114,7 +114,8 @@ void command_handler::user(const vector<string> & arguments)
 {
     if (arguments.empty())
     {
-        user();
+        string username = tools::read_line("username: ");
+        client_.user(username);
     }
     if (arguments.size() == 1)
     {
