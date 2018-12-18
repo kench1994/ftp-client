@@ -24,13 +24,12 @@ void user_interface::run()
 {
     while (true)
     {
-        string user_input = tools::read_line("ftp> ");
-
-        string command = tools::get_command(user_input);
-        vector<string> arguments = tools::get_arguments(user_input);
-
         try
         {
+            string user_input = tools::read_line("ftp> ");
+            string command = tools::get_command(user_input);
+            vector<string> arguments = tools::get_arguments(user_input);
+
             command_handler_.execute(command, arguments);
 
             if (command == command::local::exit)
