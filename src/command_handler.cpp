@@ -88,15 +88,15 @@ void command_handler::open(const vector<string> & arguments)
     if (arguments.empty())
     {
         string hostname = tools::read_line("hostname: ");
-        client_.open(hostname);
+        cout << client_.open(hostname) << endl;
     }
     else if (arguments.size() == 1)
     {
-        client_.open(arguments[0]);
+        cout << client_.open(arguments[0]) << endl;
     }
     else if (arguments.size() == 2)
     {
-        client_.open(arguments[0], arguments[1]);
+        cout << client_.open(arguments[0], arguments[1]) << endl;
     }
     else
     {
@@ -107,7 +107,7 @@ void command_handler::open(const vector<string> & arguments)
 void command_handler::user()
 {
     string username = tools::read_line("username: ");
-    client_.user(username);
+    cout << client_.user(username) << endl;
 }
 
 void command_handler::user(const vector<string> & arguments)
@@ -115,11 +115,11 @@ void command_handler::user(const vector<string> & arguments)
     if (arguments.empty())
     {
         string username = tools::read_line("username: ");
-        client_.user(username);
+        cout << client_.user(username) << endl;
     }
     if (arguments.size() == 1)
     {
-        client_.user(arguments[0]);
+        cout << client_.user(arguments[0]) << endl;
     }
     else
     {
@@ -139,23 +139,23 @@ void command_handler::user(const vector<string> & arguments)
 void command_handler::pass()
 {
     string password = tools::read_secure_line("password: ");
-    client_.pass(password);
+    cout << client_.pass(password) << endl;
 }
 
 void command_handler::close()
 {
-    client_.close();
+    cout << client_.close() << endl;
 }
 
 void command_handler::ls(const vector<string> & arguments)
 {
     if (arguments.empty())
     {
-        client_.list();
+        cout << client_.list() << endl;
     }
     else if (arguments.size() == 1)
     {
-        client_.list(arguments[0]);
+        cout << client_.list(arguments[0]) << endl;
     }
     else
     {
@@ -176,7 +176,10 @@ void command_handler::help()
 
 void command_handler::exit()
 {
-    client_.close();
+    if (client_.is_open())
+    {
+        cout << client_.close() << endl;
+    }
 }
 
 } // namespace ftp

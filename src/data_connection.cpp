@@ -7,6 +7,7 @@
  */
 
 #include "data_connection.hpp"
+#include "tools.hpp"
 #include <boost/asio/read.hpp>
 
 namespace ftp
@@ -41,15 +42,15 @@ string data_connection::read()
     }
 
     istream is(&read_buf_);
-    string response;
-    string line;
+    string multiline_reply;
+    string reply_line;
 
-    while (getline(is, line))
+    while (getline(is, reply_line))
     {
-        response += line + "\n";
+        tools::add_line(multiline_reply, reply_line);
     }
 
-    return response;
+    return multiline_reply;
 }
 
 } // namespace ftp

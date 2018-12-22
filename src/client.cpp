@@ -11,6 +11,7 @@
 #include "local_exception.hpp"
 #include <iostream>
 #include "data_connection.hpp"
+#include "tools.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -24,7 +25,7 @@ using std::endl;
 using std::make_unique;
 using std::optional;
 
-void client::open(const string & hostname, const string & port)
+string client::open(const string & hostname, const string & port)
 {
     if (control_connection_)
     {
@@ -32,7 +33,7 @@ void client::open(const string & hostname, const string & port)
     }
 
     control_connection_ = make_unique<control_connection>(hostname, port);
-    cout << control_connection_->read() << endl;
+    return control_connection_->read();
 }
 
 bool client::is_open() const
@@ -40,19 +41,19 @@ bool client::is_open() const
     return control_connection_ != nullptr;
 }
 
-void client::user(const string & username)
+string client::user(const string & username)
 {
     control_connection_->write(command::remote::user + " " + username);
-    cout << control_connection_->read() << endl;
+    return control_connection_->read();
 }
 
-void client::pass(const string & password)
+string client::pass(const string & password)
 {
     control_connection_->write(command::remote::password + " " + password);
-    cout << control_connection_->read() << endl;
+    return control_connection_->read();
 }
 
-void client::list(const optional<string> & remote_directory)
+string client::list(const optional<string> & remote_directory)
 {
     string command = command::remote::ls;
 
@@ -61,33 +62,39 @@ void client::list(const optional<string> & remote_directory)
         command += " " + remote_directory.value();
     }
 
-    string reply = pasv();
-    boost::asio::ip::tcp::endpoint endpoint = parse_pasv_reply(reply);
+    string multiline_reply;
+    string reply_line;
+
+    reply_line = pasv();
+    tools::add_line(multiline_reply, reply_line);
 
     // Minimize lifetime of data_connection.
     {
-        data_connection data_connection(endpoint);
+        boost::asio::ip::tcp::endpoint ep = parse_pasv_reply(reply_line);
+        data_connection data_connection(ep);
         data_connection.connect();
 
         control_connection_->write(command);
-        cout << control_connection_->read() << endl;
 
-        cout << data_connection.read();
+        reply_line = control_connection_->read();
+        tools::add_line(multiline_reply, reply_line);
+
+        reply_line = data_connection.read();
+        tools::add_line(multiline_reply, reply_line);
     }
 
-    cout << control_connection_->read() << endl;
+    reply_line = control_connection_->read();
+    tools::add_line(multiline_reply, reply_line);
+
+    return multiline_reply;
 }
 
-void client::close()
+string client::close()
 {
-    if (!control_connection_)
-    {
-        return;
-    }
-
     control_connection_->write(command::remote::close);
-    cout << control_connection_->read() << endl;
+    string reply = control_connection_->read();
     control_connection_.reset();
+    return reply;
 }
 
 void client::reset()
@@ -145,11 +152,7 @@ client::parse_pasv_reply(const string & reply)
 string client::pasv()
 {
     control_connection_->write(command::remote::pasv);
-    string reply = control_connection_->read();
-
-    cout << reply << endl;
-
-    return reply;
+    return control_connection_->read();
 }
 
 } // namespace ftp
