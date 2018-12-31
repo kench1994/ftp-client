@@ -12,7 +12,6 @@
 #include <boost/asio/write.hpp>
 #include "control_connection.hpp"
 #include "negative_completion_code.hpp"
-#include "tools.hpp"
 
 namespace ftp
 {
@@ -49,7 +48,7 @@ string control_connection::read()
     while (!is_end_of_multiline_reply(first_reply_line, reply_line))
     {
         reply_line = read_line();
-        tools::add_line(multiline_reply, reply_line);
+        multiline_reply += "\n" + reply_line;
     }
 
     return multiline_reply;

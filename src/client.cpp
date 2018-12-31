@@ -11,7 +11,6 @@
 #include "local_exception.hpp"
 #include <iostream>
 #include "data_connection.hpp"
-#include "tools.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -66,7 +65,7 @@ string client::list(const optional<string> & remote_directory)
     string reply_line;
 
     reply_line = pasv();
-    tools::add_line(multiline_reply, reply_line);
+    multiline_reply += "\n" + reply_line;
 
     // Minimize lifetime of data_connection.
     {
@@ -77,14 +76,14 @@ string client::list(const optional<string> & remote_directory)
         control_connection_->write(command);
 
         reply_line = control_connection_->read();
-        tools::add_line(multiline_reply, reply_line);
+        multiline_reply += "\n" + reply_line;
 
         reply_line = data_connection.read();
-        tools::add_line(multiline_reply, reply_line);
+        multiline_reply += "\n" + reply_line;
     }
 
     reply_line = control_connection_->read();
-    tools::add_line(multiline_reply, reply_line);
+    multiline_reply += "\n" + reply_line;
 
     return multiline_reply;
 }
