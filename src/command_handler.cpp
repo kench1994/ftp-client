@@ -85,6 +85,11 @@ bool command_handler::is_needed_connection(const std::string & command) const
 
 void command_handler::open(const vector<string> & arguments)
 {
+    if (client_.is_open())
+    {
+        throw local_exception("Already connected, use close first.");
+    }
+
     if (arguments.empty())
     {
         string hostname = tools::read_line("hostname: ");

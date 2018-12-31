@@ -26,11 +26,6 @@ using std::optional;
 
 string client::open(const string & hostname, const string & port)
 {
-    if (control_connection_)
-    {
-        throw local_exception("Already connected, use close first.");
-    }
-
     control_connection_ = make_unique<control_connection>(hostname, port);
     return control_connection_->read();
 }
