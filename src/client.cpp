@@ -83,6 +83,12 @@ string client::list(const optional<string> & remote_directory)
     return multiline_reply;
 }
 
+string client::pwd()
+{
+    control_connection_->write(command::remote::pwd);
+    return control_connection_->read();
+}
+
 string client::close()
 {
     control_connection_->write(command::remote::close);

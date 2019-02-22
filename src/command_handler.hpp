@@ -35,6 +35,8 @@ private:
 
     void ls(const std::vector<std::string> & arguments);
 
+    void pwd();
+
     void close();
 
     void help();

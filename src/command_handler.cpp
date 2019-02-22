@@ -52,6 +52,10 @@ void command_handler::execute(const string & command,
         {
             ls(arguments);
         }
+        else if (command == command::local::pwd)
+        {
+            pwd();
+        }
         else if (command == command::local::help)
         {
             help();
@@ -80,7 +84,7 @@ void command_handler::execute(const string & command,
 bool command_handler::is_needed_connection(const std::string & command) const
 {
     return command == command::local::close || command == command::local::ls ||
-           command == command::local::user;
+           command == command::local::user || command == command::local::pwd;
 }
 
 void command_handler::open(const vector<string> & arguments)
@@ -168,12 +172,18 @@ void command_handler::ls(const vector<string> & arguments)
     }
 }
 
+void command_handler::pwd()
+{
+    cout << client_.pwd() << endl;
+}
+
 void command_handler::help()
 {
     cout << "List of FTP commands:\n"
             "\topen <hostname> <port> - Open new connection.\n"
             "\tuser <username> - Send new user information.\n"
             "\tls <remote-directory> - Print list of files in the remote directory.\n"
+            "\tpwd - Print the current working directory name.\n"
             "\tclose - Close current connection.\n"
             "\thelp - Print list of FTP commands.\n"
             "\texit - Exit program." << endl;

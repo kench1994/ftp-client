@@ -30,6 +30,8 @@ public:
 
     std::string list(const std::optional<std::string> & remote_directory = std::nullopt);
 
+    std::string pwd();
+
     std::string close();
 
     void reset();
