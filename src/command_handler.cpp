@@ -153,11 +153,6 @@ void command_handler::pass()
     cout << client_.pass(password) << endl;
 }
 
-void command_handler::close()
-{
-    cout << client_.close() << endl;
-}
-
 void command_handler::ls(const vector<string> & arguments)
 {
     if (arguments.empty())
@@ -177,6 +172,11 @@ void command_handler::ls(const vector<string> & arguments)
 void command_handler::pwd()
 {
     cout << client_.pwd() << endl;
+}
+
+void command_handler::close()
+{
+    cout << client_.close() << endl;
 }
 
 void command_handler::help()
