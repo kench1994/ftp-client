@@ -83,8 +83,10 @@ void command_handler::execute(const string & command,
 
 bool command_handler::is_needed_connection(const std::string & command) const
 {
-    return command == command::local::close || command == command::local::ls ||
-           command == command::local::user || command == command::local::pwd;
+    return command == command::local::close ||
+           command == command::local::ls ||
+           command == command::local::user ||
+           command == command::local::pwd;
 }
 
 void command_handler::open(const vector<string> & arguments)
