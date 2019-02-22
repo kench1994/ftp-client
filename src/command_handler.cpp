@@ -133,7 +133,7 @@ void command_handler::user(const vector<string> & arguments)
         string username = tools::read_line("username: ");
         cout << client_.user(username) << endl;
     }
-    if (arguments.size() == 1)
+    else if (arguments.size() == 1)
     {
         cout << client_.user(arguments[0]) << endl;
     }
