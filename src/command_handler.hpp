@@ -37,6 +37,8 @@ private:
 
     void pwd();
 
+    void mkdir(const std::vector<std::string> & arguments);
+
     void close();
 
     void help();

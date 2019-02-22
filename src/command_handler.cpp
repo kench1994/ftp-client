@@ -56,6 +56,10 @@ void command_handler::execute(const string & command,
         {
             pwd();
         }
+        else if (command == command::local::mkdir)
+        {
+            mkdir(arguments);
+        }
         else if (command == command::local::help)
         {
             help();
@@ -86,7 +90,8 @@ bool command_handler::is_needed_connection(const std::string & command) const
     return command == command::local::close ||
            command == command::local::ls ||
            command == command::local::user ||
-           command == command::local::pwd;
+           command == command::local::pwd ||
+           command == command::local::mkdir;
 }
 
 void command_handler::open(const vector<string> & arguments)
@@ -174,6 +179,26 @@ void command_handler::pwd()
     cout << client_.pwd() << endl;
 }
 
+void command_handler::mkdir(const std::vector<std::string> & arguments)
+{
+    string pathname;
+
+    if (arguments.empty())
+    {
+        pathname = tools::read_line("pathname: ");
+    }
+    else if (arguments.size() == 1)
+    {
+        pathname = arguments[0];
+    }
+    else
+    {
+        throw local_exception("Usage: mkdir <pathname>");
+    }
+
+    cout << client_.mkdir(pathname) << endl;
+}
+
 void command_handler::close()
 {
     cout << client_.close() << endl;
@@ -186,6 +211,7 @@ void command_handler::help()
             "\tuser <username> - Send new user information.\n"
             "\tls <remote-directory> - Print list of files in the remote directory.\n"
             "\tpwd - Print the current working directory name.\n"
+            "\tmkdir <pathname> - Make a directory with the name \"pathname\".\n"
             "\tclose - Close current connection.\n"
             "\thelp - Print list of FTP commands.\n"
             "\texit - Exit program." << endl;

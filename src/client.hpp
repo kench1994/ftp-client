@@ -32,6 +32,8 @@ public:
 
     std::string pwd();
 
+    std::string mkdir(const std::string & pathname);
+
     std::string close();
 
     void reset();

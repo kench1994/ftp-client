@@ -89,6 +89,12 @@ string client::pwd()
     return control_connection_->read();
 }
 
+string client::mkdir(const string & pathname)
+{
+    control_connection_->write(command::remote::mkdir + " " + pathname);
+    return control_connection_->read();
+}
+
 string client::close()
 {
     control_connection_->write(command::remote::close);
