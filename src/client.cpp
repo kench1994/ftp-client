@@ -48,6 +48,12 @@ string client::pass(const string & password)
     return control_connection_->read();
 }
 
+string client::cd(const std::string & remote_directory)
+{
+    control_connection_->write(command::remote::cd + " " + remote_directory);
+    return control_connection_->read();
+}
+
 string client::list(const optional<string> & remote_directory)
 {
     string command = command::remote::ls;

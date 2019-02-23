@@ -28,6 +28,8 @@ public:
 
     std::string pass(const std::string & password);
 
+    std::string cd(const std::string & remote_directory);
+
     std::string list(const std::optional<std::string> & remote_directory = std::nullopt);
 
     std::string pwd();

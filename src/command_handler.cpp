@@ -48,6 +48,10 @@ void command_handler::execute(const string & command,
         {
             close();
         }
+        else if (command == command::local::cd)
+        {
+            cd(arguments);
+        }
         else if (command == command::local::ls)
         {
             ls(arguments);
@@ -92,6 +96,7 @@ void command_handler::execute(const string & command,
 bool command_handler::is_needed_connection(const std::string & command) const
 {
     return command == command::local::close ||
+           command == command::local::cd ||
            command == command::local::ls ||
            command == command::local::user ||
            command == command::local::pwd ||
@@ -163,6 +168,26 @@ void command_handler::pass()
     cout << client_.pass(password) << endl;
 }
 
+void command_handler::cd(const std::vector<std::string> & arguments)
+{
+    string remote_directory;
+
+    if (arguments.empty())
+    {
+        remote_directory = tools::read_line("remote directory: ");
+    }
+    else if (arguments.size() == 1)
+    {
+        remote_directory = arguments[0];
+    }
+    else
+    {
+        throw local_exception("Usage: cd <remote-directory>");
+    }
+
+    cout << client_.cd(remote_directory) << endl;
+}
+
 void command_handler::ls(const vector<string> & arguments)
 {
     if (arguments.empty())
@@ -219,6 +244,7 @@ void command_handler::help()
     cout << "List of FTP commands:\n"
             "\topen <hostname> <port> - Open new connection.\n"
             "\tuser <username> - Send new user information.\n"
+            "\tcd <remote-directory> - Change remote working directory.\n"
             "\tls <remote-directory> - Print list of files in the remote directory.\n"
             "\tpwd - Print the current working directory name.\n"
             "\tmkdir <pathname> - Make a directory with the name \"pathname\".\n"

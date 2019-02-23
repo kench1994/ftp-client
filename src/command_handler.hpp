@@ -33,6 +33,8 @@ private:
 
     void pass();
 
+    void cd(const std::vector<std::string> & arguments);
+
     void ls(const std::vector<std::string> & arguments);
 
     void pwd();
