@@ -22,6 +22,7 @@ namespace local
     const string ls = "ls";
     const string pwd = "pwd";
     const string mkdir = "mkdir";
+    const string syst = "syst";
     const string close = "close";
     const string help = "help";
     const string exit = "exit";
@@ -35,6 +36,7 @@ namespace remote
     const string pwd = "PWD";
     const string mkdir = "MKD";
     const string pasv = "PASV";
+    const string syst = "SYST";
     const string close = "QUIT";
 } // namespace remote
 } // namespace command

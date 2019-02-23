@@ -39,6 +39,8 @@ private:
 
     void mkdir(const std::vector<std::string> & arguments);
 
+    void syst();
+
     void close();
 
     void help();

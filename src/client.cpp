@@ -95,6 +95,12 @@ string client::mkdir(const string & pathname)
     return control_connection_->read();
 }
 
+string client::syst()
+{
+    control_connection_->write(command::remote::syst);
+    return control_connection_->read();
+}
+
 string client::close()
 {
     control_connection_->write(command::remote::close);

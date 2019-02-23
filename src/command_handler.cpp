@@ -60,6 +60,10 @@ void command_handler::execute(const string & command,
         {
             mkdir(arguments);
         }
+        else if (command == command::local::syst)
+        {
+            syst();
+        }
         else if (command == command::local::help)
         {
             help();
@@ -91,7 +95,8 @@ bool command_handler::is_needed_connection(const std::string & command) const
            command == command::local::ls ||
            command == command::local::user ||
            command == command::local::pwd ||
-           command == command::local::mkdir;
+           command == command::local::mkdir ||
+           command == command::local::syst;
 }
 
 void command_handler::open(const vector<string> & arguments)
@@ -199,6 +204,11 @@ void command_handler::mkdir(const std::vector<std::string> & arguments)
     cout << client_.mkdir(pathname) << endl;
 }
 
+void command_handler::syst()
+{
+    cout << client_.syst() << endl;
+}
+
 void command_handler::close()
 {
     cout << client_.close() << endl;
@@ -212,6 +222,7 @@ void command_handler::help()
             "\tls <remote-directory> - Print list of files in the remote directory.\n"
             "\tpwd - Print the current working directory name.\n"
             "\tmkdir <pathname> - Make a directory with the name \"pathname\".\n"
+            "\tsyst - Show remote system type.\n"
             "\tclose - Close current connection.\n"
             "\thelp - Print list of FTP commands.\n"
             "\texit - Exit program." << endl;
