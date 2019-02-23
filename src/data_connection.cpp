@@ -7,6 +7,7 @@
  */
 
 #include "data_connection.hpp"
+#include "tools.hpp"
 #include <boost/asio/read.hpp>
 
 namespace ftp
@@ -46,7 +47,7 @@ string data_connection::read()
 
     while (getline(is, reply_line))
     {
-        multiline_reply += "\n" + reply_line;
+        tools::add_line(multiline_reply, reply_line);
     }
 
     return multiline_reply;
