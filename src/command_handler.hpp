@@ -41,6 +41,8 @@ private:
 
     void mkdir(const std::vector<std::string> & arguments);
 
+    void binary();
+
     void syst();
 
     void close();

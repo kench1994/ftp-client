@@ -36,6 +36,8 @@ public:
 
     std::string mkdir(const std::string & pathname);
 
+    std::string binary();
+
     std::string syst();
 
     std::string close();
