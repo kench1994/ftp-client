@@ -132,7 +132,7 @@ bool control_connection::is_end_of_multiline_reply(const string & first_reply_li
  *     4yz   Transient Negative Completion reply
  *     5yz   Permanent Negative Completion reply
  */
-bool control_connection::is_negative_completion_code(const std::string & reply_line) const
+bool control_connection::is_negative_completion_code(const string & reply_line) const
 {
     return reply_line[0] == '4' || reply_line[0] == '5';
 }

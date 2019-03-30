@@ -103,7 +103,7 @@ void command_handler::execute(const string & command,
     }
 }
 
-bool command_handler::is_needed_connection(const std::string & command) const
+bool command_handler::is_needed_connection(const string & command) const
 {
     return command == command::local::close ||
            command == command::local::cd ||
@@ -180,7 +180,7 @@ void command_handler::pass()
     cout << client_.pass(password) << endl;
 }
 
-void command_handler::cd(const std::vector<std::string> & arguments)
+void command_handler::cd(const vector<string> & arguments)
 {
     string remote_directory;
 
@@ -216,7 +216,7 @@ void command_handler::ls(const vector<string> & arguments)
     }
 }
 
-void command_handler::get(const vector<std::string> & arguments)
+void command_handler::get(const vector<string> & arguments)
 {
     string remote_path, local_filename;
 
@@ -255,7 +255,7 @@ void command_handler::pwd()
     cout << client_.pwd() << endl;
 }
 
-void command_handler::mkdir(const std::vector<std::string> & arguments)
+void command_handler::mkdir(const vector<string> & arguments)
 {
     string pathname;
 

@@ -17,6 +17,7 @@ namespace ftp
 using std::string;
 using std::istream;
 using std::ofstream;
+using std::array;
 
 data_connection::data_connection(const boost::asio::ip::tcp::endpoint & endpoint)
     : endpoint_(endpoint),
@@ -59,7 +60,7 @@ void data_connection::read_file(ofstream & file)
 {
     for (;;)
     {
-        std::array<char, 8156> buffer;
+        array<char, 8156> buffer;
         boost::system::error_code error;
 
         size_t len = socket_.read_some(boost::asio::buffer(buffer), error);
