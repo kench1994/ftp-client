@@ -21,6 +21,7 @@ namespace local
     const string user = "user";
     const string cd = "cd";
     const string ls = "ls";
+    const string get = "get";
     const string pwd = "pwd";
     const string mkdir = "mkdir";
     const string syst = "syst";
@@ -36,6 +37,7 @@ namespace remote
     const string password = "PASS";
     const string cd = "CWD";
     const string ls = "LIST";
+    const string get = "RETR";
     const string pwd = "PWD";
     const string mkdir = "MKD";
     const string pasv = "PASV";

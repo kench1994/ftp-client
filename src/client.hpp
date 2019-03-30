@@ -13,6 +13,7 @@
 #include <vector>
 #include "control_connection.hpp"
 #include <optional>
+#include <fstream>
 
 namespace ftp
 {
@@ -31,6 +32,8 @@ public:
     std::string cd(const std::string & remote_directory);
 
     std::string list(const std::optional<std::string> & remote_directory = std::nullopt);
+
+    std::string get(const std::string & remote_path, std::ofstream & file);
 
     std::string pwd();
 

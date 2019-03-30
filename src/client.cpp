@@ -24,6 +24,7 @@ using std::cout;
 using std::endl;
 using std::make_unique;
 using std::optional;
+using std::ofstream;
 
 string client::open(const string & hostname, const string & port)
 {
@@ -82,6 +83,37 @@ string client::list(const optional<string> & remote_directory)
 
         reply_line = data_connection.read();
         tools::add_line(multiline_reply, reply_line);
+    }
+
+    reply_line = control_connection_->read();
+    tools::add_line(multiline_reply, reply_line);
+
+    return multiline_reply;
+}
+
+string client::get(const string & remote_path, ofstream & file)
+{
+    string multiline_reply;
+    string reply_line;
+
+    reply_line = pasv();
+    tools::add_line(multiline_reply, reply_line);
+
+    // Minimize lifetime of data_connection.
+    {
+        boost::asio::ip::tcp::endpoint ep = parse_pasv_reply(reply_line);
+        data_connection data_connection(ep);
+        data_connection.connect();
+
+        control_connection_->write(command::remote::binary);
+        reply_line = control_connection_->read();
+        tools::add_line(multiline_reply, reply_line);
+
+        control_connection_->write(command::remote::get + " " + remote_path);
+        reply_line = control_connection_->read();
+        tools::add_line(multiline_reply, reply_line);
+
+        data_connection.read_file(file);
     }
 
     reply_line = control_connection_->read();

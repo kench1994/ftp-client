@@ -4,7 +4,7 @@ project(ftp_client)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS -pthread)
 
-find_package(Boost 1.67.0 REQUIRED COMPONENTS system)
+find_package(Boost 1.67.0 REQUIRED COMPONENTS system filesystem)
 
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})

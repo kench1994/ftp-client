@@ -37,6 +37,8 @@ private:
 
     void ls(const std::vector<std::string> & arguments);
 
+    void get(const std::vector<std::string> & arguments);
+
     void pwd();
 
     void mkdir(const std::vector<std::string> & arguments);

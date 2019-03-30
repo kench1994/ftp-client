@@ -24,6 +24,8 @@ public:
 
     std::string read();
 
+    void read_file(std::ofstream & file);
+
 private:
     boost::asio::ip::tcp::endpoint endpoint_;
     boost::asio::io_context io_context_;

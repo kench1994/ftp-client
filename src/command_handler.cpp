@@ -19,6 +19,8 @@ using std::cout;
 using std::cin;
 using std::endl;
 using std::optional;
+using std::ofstream;
+using std::ios_base;
 
 namespace ftp
 {
@@ -55,6 +57,10 @@ void command_handler::execute(const string & command,
         else if (command == command::local::ls)
         {
             ls(arguments);
+        }
+        else if (command == command::local::get)
+        {
+            get(arguments);
         }
         else if (command == command::local::pwd)
         {
@@ -102,6 +108,7 @@ bool command_handler::is_needed_connection(const std::string & command) const
     return command == command::local::close ||
            command == command::local::cd ||
            command == command::local::ls ||
+           command == command::local::get ||
            command == command::local::user ||
            command == command::local::pwd ||
            command == command::local::mkdir ||
@@ -209,6 +216,40 @@ void command_handler::ls(const vector<string> & arguments)
     }
 }
 
+void command_handler::get(const vector<std::string> & arguments)
+{
+    string remote_path, local_filename;
+
+    if (arguments.empty())
+    {
+        remote_path = tools::read_line("filename: ");
+        local_filename = tools::get_filename(remote_path);
+    }
+    else if (arguments.size() == 1)
+    {
+        remote_path = arguments[0];
+        local_filename = tools::get_filename(remote_path);
+    }
+    else if (arguments.size() == 2)
+    {
+        remote_path = arguments[0];
+        local_filename = arguments[1];
+    }
+    else
+    {
+        throw local_exception("Usage: get <remote-path> <local-filename>");
+    }
+
+    ofstream file(local_filename, ios_base::binary);
+
+    if (!file)
+    {
+        throw local_exception("Can not create file: " + local_filename);
+    }
+
+    cout << client_.get(remote_path, file) << endl;
+}
+
 void command_handler::pwd()
 {
     cout << client_.pwd() << endl;
@@ -256,6 +297,7 @@ void command_handler::help()
             "\tuser <username> - Send new user information.\n"
             "\tcd <remote-directory> - Change remote working directory.\n"
             "\tls <remote-directory> - Print list of files in the remote directory.\n"
+            "\tget <remote-path> <local-filename> - Retrieve a copy of the file.\n"
             "\tpwd - Print the current working directory name.\n"
             "\tmkdir <pathname> - Make a directory with the name \"pathname\".\n"
             "\tbinary - Set binary transfer type.\n"

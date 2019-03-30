@@ -13,6 +13,7 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
 #include "tools.hpp"
+#include <boost/filesystem.hpp>
 
 namespace ftp
 {
@@ -97,6 +98,12 @@ void add_line(string & source, const string & line)
     }
 
     source += line;
+}
+
+string get_filename(const string & path)
+{
+    boost::filesystem::path p(path);
+    return p.filename().string();
 }
 
 } // namespace tools
