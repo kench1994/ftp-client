@@ -11,7 +11,6 @@
 #include "local_exception.hpp"
 #include <iostream>
 #include "data_connection.hpp"
-#include "tools.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -26,10 +25,10 @@ using std::make_unique;
 using std::optional;
 using std::ofstream;
 
-string client::open(const string & hostname, const string & port)
+void client::open(const string & hostname, const string & port)
 {
     control_connection_ = make_unique<control_connection>(hostname, port);
-    return control_connection_->read();
+    cout << control_connection_->read() << endl;
 }
 
 bool client::is_open() const
@@ -37,25 +36,25 @@ bool client::is_open() const
     return control_connection_ != nullptr;
 }
 
-string client::user(const string & username)
+void client::user(const string & username)
 {
     control_connection_->write(command::remote::user + " " + username);
-    return control_connection_->read();
+    cout << control_connection_->read() << endl;
 }
 
-string client::pass(const string & password)
+void client::pass(const string & password)
 {
     control_connection_->write(command::remote::password + " " + password);
-    return control_connection_->read();
+    cout << control_connection_->read() << endl;
 }
 
-string client::cd(const string & remote_directory)
+void client::cd(const string & remote_directory)
 {
     control_connection_->write(command::remote::cd + " " + remote_directory);
-    return control_connection_->read();
+    cout << control_connection_->read() << endl;
 }
 
-string client::list(const optional<string> & remote_directory)
+void client::list(const optional<string> & remote_directory)
 {
     string command = command::remote::ls;
 
@@ -64,11 +63,10 @@ string client::list(const optional<string> & remote_directory)
         command += " " + remote_directory.value();
     }
 
-    string multiline_reply;
     string reply_line;
 
     reply_line = pasv();
-    tools::add_line(multiline_reply, reply_line);
+    cout << reply_line << endl;
 
     // Minimize lifetime of data_connection.
     {
@@ -77,27 +75,20 @@ string client::list(const optional<string> & remote_directory)
         data_connection.connect();
 
         control_connection_->write(command);
+        cout <<  control_connection_->read() << endl;
 
-        reply_line = control_connection_->read();
-        tools::add_line(multiline_reply, reply_line);
-
-        reply_line = data_connection.read();
-        tools::add_line(multiline_reply, reply_line);
+        cout << data_connection.read() << endl;
     }
 
-    reply_line = control_connection_->read();
-    tools::add_line(multiline_reply, reply_line);
-
-    return multiline_reply;
+    cout << control_connection_->read() << endl;
 }
 
-string client::get(const string & remote_path, ofstream & file)
+void client::get(const string & remote_path, ofstream & file)
 {
-    string multiline_reply;
     string reply_line;
 
     reply_line = pasv();
-    tools::add_line(multiline_reply, reply_line);
+    cout << reply_line << endl;
 
     // Minimize lifetime of data_connection.
     {
@@ -106,52 +97,46 @@ string client::get(const string & remote_path, ofstream & file)
         data_connection.connect();
 
         control_connection_->write(command::remote::binary);
-        reply_line = control_connection_->read();
-        tools::add_line(multiline_reply, reply_line);
+        cout << control_connection_->read() << endl;
 
         control_connection_->write(command::remote::get + " " + remote_path);
-        reply_line = control_connection_->read();
-        tools::add_line(multiline_reply, reply_line);
+        cout << control_connection_->read() << endl;
 
         data_connection.read_file(file);
     }
 
-    reply_line = control_connection_->read();
-    tools::add_line(multiline_reply, reply_line);
-
-    return multiline_reply;
+    cout << control_connection_->read() << endl;
 }
 
-string client::pwd()
+void client::pwd()
 {
     control_connection_->write(command::remote::pwd);
-    return control_connection_->read();
+    cout << control_connection_->read() << endl;
 }
 
-string client::mkdir(const string & pathname)
+void client::mkdir(const string & pathname)
 {
     control_connection_->write(command::remote::mkdir + " " + pathname);
-    return control_connection_->read();
+    cout << control_connection_->read() << endl;
 }
 
-string client::binary()
+void client::binary()
 {
     control_connection_->write(command::remote::binary);
-    return control_connection_->read();
+    cout << control_connection_->read() << endl;
 }
 
-string client::syst()
+void client::syst()
 {
     control_connection_->write(command::remote::syst);
-    return control_connection_->read();
+    cout << control_connection_->read() << endl;
 }
 
-string client::close()
+void client::close()
 {
     control_connection_->write(command::remote::close);
-    string reply = control_connection_->read();
+    cout << control_connection_->read() << endl;
     control_connection_.reset();
-    return reply;
 }
 
 void client::reset()

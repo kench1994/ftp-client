@@ -126,15 +126,15 @@ void command_handler::open(const vector<string> & arguments)
     if (arguments.empty())
     {
         string hostname = tools::read_line("hostname: ");
-        cout << client_.open(hostname) << endl;
+        client_.open(hostname);
     }
     else if (arguments.size() == 1)
     {
-        cout << client_.open(arguments[0]) << endl;
+        client_.open(arguments[0]);
     }
     else if (arguments.size() == 2)
     {
-        cout << client_.open(arguments[0], arguments[1]) << endl;
+        client_.open(arguments[0], arguments[1]);
     }
     else
     {
@@ -145,7 +145,7 @@ void command_handler::open(const vector<string> & arguments)
 void command_handler::user()
 {
     string username = tools::read_line("username: ");
-    cout << client_.user(username) << endl;
+    client_.user(username);
 }
 
 void command_handler::user(const vector<string> & arguments)
@@ -153,11 +153,11 @@ void command_handler::user(const vector<string> & arguments)
     if (arguments.empty())
     {
         string username = tools::read_line("username: ");
-        cout << client_.user(username) << endl;
+        client_.user(username);
     }
     else if (arguments.size() == 1)
     {
-        cout << client_.user(arguments[0]) << endl;
+        client_.user(arguments[0]);
     }
     else
     {
@@ -177,7 +177,7 @@ void command_handler::user(const vector<string> & arguments)
 void command_handler::pass()
 {
     string password = tools::read_secure_line("password: ");
-    cout << client_.pass(password) << endl;
+    client_.pass(password);
 }
 
 void command_handler::cd(const vector<string> & arguments)
@@ -197,18 +197,18 @@ void command_handler::cd(const vector<string> & arguments)
         throw local_exception("Usage: cd <remote-directory>");
     }
 
-    cout << client_.cd(remote_directory) << endl;
+    client_.cd(remote_directory);
 }
 
 void command_handler::ls(const vector<string> & arguments)
 {
     if (arguments.empty())
     {
-        cout << client_.list() << endl;
+        client_.list();
     }
     else if (arguments.size() == 1)
     {
-        cout << client_.list(arguments[0]) << endl;
+        client_.list(arguments[0]);
     }
     else
     {
@@ -247,12 +247,12 @@ void command_handler::get(const vector<string> & arguments)
         throw local_exception("Can not create file: " + local_filename);
     }
 
-    cout << client_.get(remote_path, file) << endl;
+    client_.get(remote_path, file);
 }
 
 void command_handler::pwd()
 {
-    cout << client_.pwd() << endl;
+    client_.pwd();
 }
 
 void command_handler::mkdir(const vector<string> & arguments)
@@ -272,22 +272,22 @@ void command_handler::mkdir(const vector<string> & arguments)
         throw local_exception("Usage: mkdir <pathname>");
     }
 
-    cout << client_.mkdir(pathname) << endl;
+    client_.mkdir(pathname);
 }
 
 void command_handler::binary()
 {
-    cout << client_.binary() << endl;
+    client_.binary();
 }
 
 void command_handler::syst()
 {
-    cout << client_.syst() << endl;
+    client_.syst();
 }
 
 void command_handler::close()
 {
-    cout << client_.close() << endl;
+    client_.close();
 }
 
 void command_handler::help()
@@ -311,7 +311,7 @@ void command_handler::exit()
 {
     if (client_.is_open())
     {
-        cout << client_.close() << endl;
+        client_.close();
     }
 }
 

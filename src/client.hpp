@@ -21,29 +21,29 @@ namespace ftp
 class client
 {
 public:
-    std::string open(const std::string & hostname, const std::string & port = "21");
+    void open(const std::string & hostname, const std::string & port = "21");
 
     bool is_open() const;
 
-    std::string user(const std::string & username);
+    void user(const std::string & username);
 
-    std::string pass(const std::string & password);
+    void pass(const std::string & password);
 
-    std::string cd(const std::string & remote_directory);
+    void cd(const std::string & remote_directory);
 
-    std::string list(const std::optional<std::string> & remote_directory = std::nullopt);
+    void list(const std::optional<std::string> & remote_directory = std::nullopt);
 
-    std::string get(const std::string & remote_path, std::ofstream & file);
+    void get(const std::string & remote_path, std::ofstream & file);
 
-    std::string pwd();
+    void pwd();
 
-    std::string mkdir(const std::string & pathname);
+    void mkdir(const std::string & pathname);
 
-    std::string binary();
+    void binary();
 
-    std::string syst();
+    void syst();
 
-    std::string close();
+    void close();
 
     void reset();
 
