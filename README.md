@@ -20,6 +20,7 @@ FTP may run in active or passive mode, which determines how the data connection 
   <li>pwd - Print working directory.</li>
   <li>cd remote-directory - Change working directory.</li>
   <li>ls - Print list directory contents.</li>
+  <li>get remote-path [local-filename] - Retrieve a copy of the file.</li>
   <li>mkdir directory-name - Make directory.</li>
   <li>stat - Print server information.</li>
   <li>close - Close current connection.</li>
