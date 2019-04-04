@@ -78,10 +78,6 @@ void client::list(const optional<string> & remote_directory)
 
 void client::get(const string & remote_path, ofstream & file)
 {
-    // Use binary mode to download files.
-    control_connection_->write(command::remote::binary);
-    cout << control_connection_->read() << endl;
-
     unique_ptr<data_connection> data_connection =
             data_transfer_mode_->activate(*control_connection_);
 
