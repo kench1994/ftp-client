@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include "control_connection.hpp"
+#include "data_transfer_mode.hpp"
 #include <optional>
 #include <fstream>
 
@@ -48,11 +49,9 @@ public:
     void reset();
 
 private:
-    boost::asio::ip::tcp::endpoint parse_pasv_reply(const std::string & reply);
-
-    std::string pasv();
-
     std::unique_ptr<control_connection> control_connection_;
+
+    std::unique_ptr<data_transfer_mode> data_transfer_mode_;
 };
 
 } // namespace ftp
