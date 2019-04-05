@@ -34,7 +34,7 @@ string data_connection::read()
 {
     try
     {
-        boost::asio::read(socket_, read_buf_);
+        boost::asio::read(socket_, stream_buffer_);
     }
     catch (const boost::system::system_error & ex)
     {
@@ -44,7 +44,7 @@ string data_connection::read()
         }
     }
 
-    istream is(&read_buf_);
+    istream is(&stream_buffer_);
     string multiline_reply;
     string reply_line;
 

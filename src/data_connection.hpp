@@ -30,7 +30,7 @@ private:
     boost::asio::ip::tcp::endpoint endpoint_;
     boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;
-    boost::asio::streambuf read_buf_;
+    boost::asio::streambuf stream_buffer_;
 };
 
 } // namespace ftp
