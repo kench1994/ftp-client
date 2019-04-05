@@ -60,7 +60,7 @@ void data_connection::read_file(ofstream & file)
 {
     for (;;)
     {
-        array<char, 8156> buffer;
+        array<char, 4096> buffer;
         boost::system::error_code error;
 
         size_t len = socket_.read_some(boost::asio::buffer(buffer), error);
