@@ -71,7 +71,7 @@ void data_connection::read_file(ofstream & file)
         }
         else if (error)
         {
-            throw;
+            throw boost::system::system_error(error);
         }
 
         file.write(buffer.data(), len);
