@@ -36,22 +36,22 @@ control_connection::~control_connection()
 
 string control_connection::read()
 {
-    string reply_line = read_line();
+    string reply = read_line();
 
-    if (!is_multiline_reply(reply_line))
+    if (!is_multiline_reply(reply))
     {
-        return reply_line;
+        return reply;
     }
 
-    string first_reply_line = reply_line;
-    string multiline_reply = reply_line;
+    string first_reply = reply;
+    string multiline_reply = reply;
 
     while (true)
     {
-        reply_line = read_line();
-        multiline_reply += "\n" + reply_line;
+        reply = read_line();
+        multiline_reply += "\n" + reply;
 
-        if (is_end_of_multiline_reply(first_reply_line, reply_line))
+        if (is_end_of_multiline_reply(first_reply, reply))
             break;
     }
 
@@ -101,9 +101,9 @@ string control_connection::read_line()
  * immediately by a Hyphen, "-" (also known as Minus), followed by
  * text.
  */
-bool control_connection::is_multiline_reply(const string & reply_line) const
+bool control_connection::is_multiline_reply(const string & reply) const
 {
-    return reply_line[3] == '-';
+    return reply[3] == '-';
 }
 
 /**
@@ -118,11 +118,11 @@ bool control_connection::is_multiline_reply(const string & reply_line) const
  * immediately by Space <SP>, optionally some text, and the Telnet
  * end-of-line code.
  */
-bool control_connection::is_end_of_multiline_reply(const string & first_reply_line,
-                                                   const string & current_reply_line) const
+bool control_connection::is_end_of_multiline_reply(const string & first_reply,
+                                                   const string & current_reply) const
 {
-    return equal(first_reply_line.cbegin(), first_reply_line.cbegin() +  3,
-                 current_reply_line.cbegin()) && current_reply_line[3] == ' ';
+    return equal(first_reply.cbegin(), first_reply.cbegin() +  3,
+                 current_reply.cbegin()) && current_reply[3] == ' ';
 }
 
 /**
