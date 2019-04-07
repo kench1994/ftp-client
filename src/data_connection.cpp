@@ -19,9 +19,10 @@ using std::istream;
 using std::ofstream;
 using std::array;
 
-data_connection::data_connection(const boost::asio::ip::tcp::endpoint & endpoint)
+data_connection::data_connection(boost::asio::io_context & io_context,
+                                 const boost::asio::ip::tcp::endpoint & endpoint)
     : endpoint_(endpoint),
-      socket_(io_context_, endpoint_.protocol())
+      socket_(io_context, endpoint_.protocol())
 {
 }
 

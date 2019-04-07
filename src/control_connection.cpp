@@ -21,10 +21,11 @@ using std::string;
 using std::istream;
 using std::runtime_error;
 
-control_connection::control_connection(const string & hostname,
+control_connection::control_connection(boost::asio::io_context & io_context,
+                                       const string & hostname,
                                        const string & port)
-        : socket_(io_context_),
-          resolver_(io_context_)
+        : socket_(io_context),
+          resolver_(io_context)
 {
     boost::asio::connect(socket_, resolver_.resolve(hostname, port));
 }

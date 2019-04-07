@@ -24,8 +24,8 @@ using std::unique_ptr;
 
 void client::open(const string & hostname, const string & port)
 {
-    data_transfer_mode_ = make_unique<passive_mode>();
-    control_connection_ = make_unique<control_connection>(hostname, port);
+    data_transfer_mode_ = make_unique<passive_mode>(io_context_);
+    control_connection_ = make_unique<control_connection>(io_context_, hostname, port);
     cout << control_connection_->read() << endl;
 }
 

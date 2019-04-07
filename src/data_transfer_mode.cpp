@@ -24,6 +24,16 @@ using std::cout;
 using std::endl;
 using std::vector;
 
+data_transfer_mode::data_transfer_mode(boost::asio::io_context & io_context)
+    : io_context_(io_context)
+{
+}
+
+passive_mode::passive_mode(boost::asio::io_context & io_context)
+    : data_transfer_mode(io_context)
+{
+}
+
 unique_ptr<data_connection> passive_mode::activate(control_connection & control_connection)
 {
     control_connection.write(command::remote::pasv);
@@ -34,7 +44,7 @@ unique_ptr<data_connection> passive_mode::activate(control_connection & control_
     boost::asio::ip::tcp::endpoint server_endpoint =
             get_endpoint_from_server_reply(server_reply);
 
-    return make_unique<data_connection>(server_endpoint);
+    return make_unique<data_connection>(io_context_, server_endpoint);
 }
 
 /**

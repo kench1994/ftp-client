@@ -18,7 +18,8 @@ namespace ftp
 class control_connection
 {
 public:
-    control_connection(const std::string & hostname, const std::string & port);
+    control_connection(boost::asio::io_context & io_context,
+                       const std::string & hostname, const std::string & port);
 
     ~control_connection();
 
@@ -36,7 +37,6 @@ private:
 
     bool is_negative_completion_code(const std::string & reply_line) const;
 
-    boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;
     boost::asio::ip::tcp::resolver resolver_;
     boost::asio::streambuf stream_buffer_;

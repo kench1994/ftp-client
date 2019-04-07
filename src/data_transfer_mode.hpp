@@ -21,14 +21,21 @@ namespace ftp
 class data_transfer_mode
 {
 public:
+    explicit data_transfer_mode(boost::asio::io_context & io_context);
+
     virtual std::unique_ptr<data_connection> activate(control_connection & control_connection) = 0;
 
     virtual ~data_transfer_mode() = default;
+
+protected:
+    boost::asio::io_context & io_context_;
 };
 
 class passive_mode : public data_transfer_mode
 {
 public:
+    explicit passive_mode(boost::asio::io_context & io_context);
+
     std::unique_ptr<data_connection> activate(control_connection & control_connection) override;
 
 private:
