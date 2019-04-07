@@ -90,16 +90,6 @@ vector<string> get_arguments(const string & user_input)
     return arguments;
 }
 
-void add_line(string & source, const string & line)
-{
-    if (!source.empty())
-    {
-        source += "\n";
-    }
-
-    source += line;
-}
-
 string get_filename(const string & path)
 {
     boost::filesystem::path p(path);

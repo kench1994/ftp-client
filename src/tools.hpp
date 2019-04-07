@@ -25,8 +25,6 @@ std::string get_command(const std::string & user_input);
 
 std::vector<std::string> get_arguments(const std::string & user_input);
 
-void add_line(std::string & source, const std::string & line);
-
 std::string get_filename(const std::string & path);
 
 } // namespace tools

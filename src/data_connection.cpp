@@ -7,9 +7,9 @@
  */
 
 #include "data_connection.hpp"
-#include "tools.hpp"
 #include <boost/asio/read.hpp>
 #include <fstream>
+#include <boost/asio/buffers_iterator.hpp>
 
 namespace ftp
 {
@@ -45,16 +45,13 @@ string data_connection::read()
         }
     }
 
-    istream is(&stream_buffer_);
-    string multiline_reply;
-    string reply_line;
+    string reply = string(boost::asio::buffers_begin(stream_buffer_.data()),
+                          boost::asio::buffers_end(stream_buffer_.data()));
 
-    while (getline(is, reply_line))
-    {
-        tools::add_line(multiline_reply, reply_line);
-    }
+    // Remove last '\n' character.
+    reply.pop_back();
 
-    return multiline_reply;
+    return reply;
 }
 
 void data_connection::read_file(ofstream & file)
