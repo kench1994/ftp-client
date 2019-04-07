@@ -65,8 +65,8 @@ void control_connection::write(const string & command)
 
 string control_connection::read_line()
 {
-    boost::asio::read_until(socket_, read_buf_, '\n');
-    istream is(&read_buf_);
+    boost::asio::read_until(socket_, stream_buffer_, '\n');
+    istream is(&stream_buffer_);
 
     string line;
     getline(is, line);
