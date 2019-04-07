@@ -23,7 +23,7 @@ class data_transfer_mode
 public:
     explicit data_transfer_mode(boost::asio::io_context & io_context);
 
-    virtual std::unique_ptr<data_connection> activate(control_connection & control_connection) = 0;
+    virtual std::unique_ptr<data_connection> open_data_connection(control_connection & control_connection) = 0;
 
     virtual ~data_transfer_mode() = default;
 
@@ -36,7 +36,7 @@ class passive_mode : public data_transfer_mode
 public:
     explicit passive_mode(boost::asio::io_context & io_context);
 
-    std::unique_ptr<data_connection> activate(control_connection & control_connection) override;
+    std::unique_ptr<data_connection> open_data_connection(control_connection & control_connection) override;
 
 private:
     boost::asio::ip::tcp::endpoint get_endpoint_from_server_reply(const std::string & reply);

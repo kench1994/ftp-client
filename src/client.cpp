@@ -62,7 +62,7 @@ void client::list(const optional<string> & remote_directory)
     }
 
     unique_ptr<data_connection> data_connection =
-            data_transfer_mode_->activate(*control_connection_);
+            data_transfer_mode_->open_data_connection(*control_connection_);
 
     data_connection->connect();
 
@@ -79,7 +79,7 @@ void client::list(const optional<string> & remote_directory)
 void client::get(const string & remote_path, ofstream & file)
 {
     unique_ptr<data_connection> data_connection =
-            data_transfer_mode_->activate(*control_connection_);
+            data_transfer_mode_->open_data_connection(*control_connection_);
 
     data_connection->connect();
 
