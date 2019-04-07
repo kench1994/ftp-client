@@ -46,10 +46,13 @@ string control_connection::read()
     string first_reply_line = reply_line;
     string multiline_reply = reply_line;
 
-    while (!is_end_of_multiline_reply(first_reply_line, reply_line))
+    while (1)
     {
         reply_line = read_line();
         tools::add_line(multiline_reply, reply_line);
+
+        if (is_end_of_multiline_reply(first_reply_line, reply_line))
+            break;
     }
 
     return multiline_reply;
