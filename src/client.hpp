@@ -50,7 +50,6 @@ public:
 
 private:
     std::unique_ptr<control_connection> control_connection_;
-
     std::unique_ptr<data_transfer_mode> data_transfer_mode_;
 };
 
