@@ -44,7 +44,12 @@ unique_ptr<data_connection> passive_mode::open_data_connection(control_connectio
     boost::asio::ip::tcp::endpoint server_endpoint =
             get_endpoint_from_server_reply(server_reply);
 
-    return make_unique<data_connection>(io_context_, server_endpoint);
+    unique_ptr<data_connection> connection =
+            make_unique<data_connection>(io_context_, server_endpoint);
+
+    connection->connect();
+
+    return connection;
 }
 
 /**

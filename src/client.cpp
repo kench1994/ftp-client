@@ -64,8 +64,6 @@ void client::list(const optional<string> & remote_directory)
     unique_ptr<data_connection> data_connection =
             data_transfer_mode_->open_data_connection(*control_connection_);
 
-    data_connection->connect();
-
     control_connection_->write(command);
     cout <<  control_connection_->read() << endl;
 
@@ -80,8 +78,6 @@ void client::get(const string & remote_path, ofstream & file)
 {
     unique_ptr<data_connection> data_connection =
             data_transfer_mode_->open_data_connection(*control_connection_);
-
-    data_connection->connect();
 
     control_connection_->write(command::remote::get + " " + remote_path);
     cout << control_connection_->read() << endl;
