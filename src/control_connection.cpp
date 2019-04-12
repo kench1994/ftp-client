@@ -46,7 +46,7 @@ string control_connection::read()
     string first_reply = reply;
     string multiline_reply = reply;
 
-    while (true)
+    for (;;)
     {
         reply = read_line();
         multiline_reply += "\n" + reply;

@@ -22,7 +22,7 @@ using std::endl;
 
 void user_interface::run()
 {
-    while (true)
+    for (;;)
     {
         try
         {
