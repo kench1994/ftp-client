@@ -80,6 +80,10 @@ void command_handler::execute(const string & command,
         {
             binary();
         }
+        else if (command == command::local::size)
+        {
+            size(arguments);
+        }
         else if (command == command::local::help)
         {
             help();
@@ -115,7 +119,8 @@ bool command_handler::is_needed_connection(const string & command) const
            command == command::local::pwd ||
            command == command::local::mkdir ||
            command == command::local::syst ||
-           command == command::local::binary;
+           command == command::local::binary ||
+           command == command::local::size;
 }
 
 void command_handler::open(const vector<string> & arguments)
@@ -282,6 +287,26 @@ void command_handler::binary()
     client_.binary();
 }
 
+void command_handler::size(const vector<string> & arguments)
+{
+    string filename;
+
+    if (arguments.empty())
+    {
+        filename = tools::read_line("filename: ");
+    }
+    else if (arguments.size() == 1)
+    {
+        filename = arguments[0];
+    }
+    else
+    {
+        throw local_exception("Usage: size <filename>");
+    }
+
+    client_.size(filename);
+}
+
 void command_handler::syst()
 {
     client_.syst();
@@ -303,6 +328,7 @@ void command_handler::help()
             "\tpwd - Print the current working directory name.\n"
             "\tmkdir <pathname> - Make a directory with the name \"pathname\".\n"
             "\tbinary - Set binary transfer type.\n"
+            "\tsize - Show size of remote file.\n"
             "\tsyst - Show remote system type.\n"
             "\tclose - Close current connection.\n"
             "\thelp - Print list of FTP commands.\n"

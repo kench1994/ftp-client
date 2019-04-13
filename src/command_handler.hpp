@@ -45,6 +45,8 @@ private:
 
     void binary();
 
+    void size(const std::vector<std::string> & arguments);
+
     void syst();
 
     void close();

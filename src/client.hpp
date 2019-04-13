@@ -42,6 +42,8 @@ public:
 
     void binary();
 
+    void size(const std::string & filename);
+
     void syst();
 
     void close();

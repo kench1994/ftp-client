@@ -107,6 +107,12 @@ void client::binary()
     cout << control_connection_->read() << endl;
 }
 
+void client::size(const string & filename)
+{
+    control_connection_->write(command::remote::size + " " + filename);
+    cout << control_connection_->read() << endl;
+}
+
 void client::syst()
 {
     control_connection_->write(command::remote::syst);
