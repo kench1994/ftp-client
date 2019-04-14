@@ -21,7 +21,7 @@ std::string read_line(const std::string & greeting);
 
 std::string read_not_empty_line(const std::string & greeting);
 
-std::string read_secure_line(const std::string & greeting);
+std::string read_hidden_line(const std::string & greeting);
 
 std::string get_filename(const std::string & path);
 

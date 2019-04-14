@@ -46,7 +46,7 @@ string read_not_empty_line(const string & greeting)
     return line;
 }
 
-string read_secure_line(const string & greeting)
+string read_hidden_line(const string & greeting)
 {
     struct termios old_settings;
     struct termios new_settings;

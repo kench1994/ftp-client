@@ -183,7 +183,7 @@ void command_handler::user(const vector<string> & arguments)
  */
 void command_handler::pass()
 {
-    string password = tools::read_secure_line("password: ");
+    string password = tools::read_hidden_line("password: ");
     client_.pass(password);
 }
 
