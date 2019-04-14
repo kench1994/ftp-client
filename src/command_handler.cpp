@@ -157,19 +157,22 @@ void command_handler::user()
 
 void command_handler::user(const vector<string> & arguments)
 {
+    string username;
+
     if (arguments.empty())
     {
-        string username = tools::read_line("username: ");
-        client_.user(username);
+        username = tools::read_line("username: ");
     }
     else if (arguments.size() == 1)
     {
-        client_.user(arguments[0]);
+        username = arguments[0];
     }
     else
     {
         throw local_exception("usage: user username");
     }
+
+    client_.user(username);
 }
 
 /**
