@@ -28,7 +28,7 @@ void user_interface::run()
     {
         try
         {
-            string user_input = tools::read_line("ftp> ");
+            string user_input = tools::read_not_empty_line("ftp> ");
             string command = parse_command(user_input);
             vector<string> arguments = parse_arguments(user_input);
 
