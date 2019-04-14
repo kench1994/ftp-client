@@ -68,6 +68,7 @@ vector<string> user_interface::parse_arguments(const string & user_input)
         arguments.push_back(argument);
     }
 
+    // Remove the command.
     if (!arguments.empty())
     {
         arguments.erase(arguments.begin());
