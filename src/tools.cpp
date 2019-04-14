@@ -62,15 +62,15 @@ string read_secure_line(const string & greeting)
 
     tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
 
-    string password;
+    string line;
     cout << greeting;
-    getline(cin, password);
+    getline(cin, line);
 
     tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
 
     cout << endl;
 
-    return password;
+    return line;
 }
 
 string get_filename(const string & path)
