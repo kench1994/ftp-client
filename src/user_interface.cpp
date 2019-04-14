@@ -12,6 +12,7 @@
 #include "tools.hpp"
 #include <iostream>
 #include <boost/algorithm/string.hpp>
+#include <iomanip>
 
 namespace ftp
 {
@@ -58,8 +59,14 @@ string user_interface::parse_command(const string & user_input)
 
 vector<string> user_interface::parse_arguments(const string & user_input)
 {
+    istringstream iss(user_input);
     vector<string> arguments;
-    boost::split(arguments, user_input, boost::is_any_of(" "));
+    string argument;
+
+    while (iss >> quoted(argument))
+    {
+        arguments.push_back(argument);
+    }
 
     if (!arguments.empty())
     {
