@@ -145,7 +145,7 @@ void command_handler::open(const vector<string> & arguments)
     }
     else
     {
-        throw local_exception("Usage: open <hostname> <port>");
+        throw local_exception("usage: open hostname [ port ]");
     }
 }
 
@@ -168,7 +168,7 @@ void command_handler::user(const vector<string> & arguments)
     }
     else
     {
-        throw local_exception("Usage: user <username>");
+        throw local_exception("usage: user username");
     }
 }
 
@@ -201,7 +201,7 @@ void command_handler::cd(const vector<string> & arguments)
     }
     else
     {
-        throw local_exception("Usage: cd <remote-directory>");
+        throw local_exception("usage: cd remote-directory");
     }
 
     client_.cd(remote_directory);
@@ -219,42 +219,42 @@ void command_handler::ls(const vector<string> & arguments)
     }
     else
     {
-        throw local_exception("Usage: ls <remote-directory>");
+        throw local_exception("usage: ls [ remote-directory ]");
     }
 }
 
 void command_handler::get(const vector<string> & arguments)
 {
-    string remote_path, local_filename;
+    string remote_file, local_file;
 
     if (arguments.empty())
     {
-        remote_path = tools::read_line("filename: ");
-        local_filename = tools::get_filename(remote_path);
+        remote_file = tools::read_line("remote-file: ");
+        local_file = tools::get_filename(remote_file);
     }
     else if (arguments.size() == 1)
     {
-        remote_path = arguments[0];
-        local_filename = tools::get_filename(remote_path);
+        remote_file = arguments[0];
+        local_file = tools::get_filename(remote_file);
     }
     else if (arguments.size() == 2)
     {
-        remote_path = arguments[0];
-        local_filename = arguments[1];
+        remote_file = arguments[0];
+        local_file = arguments[1];
     }
     else
     {
-        throw local_exception("Usage: get <remote-path> <local-filename>");
+        throw local_exception("usage: get remote-file [ local-filename ]");
     }
 
-    ofstream file(local_filename, ios_base::binary);
+    ofstream file(local_file, ios_base::binary);
 
     if (!file)
     {
-        throw local_exception("Can not create file: " + local_filename);
+        throw local_exception("Can not create file: " + local_file);
     }
 
-    client_.get(remote_path, file);
+    client_.get(remote_file, file);
 }
 
 void command_handler::pwd()
@@ -264,22 +264,22 @@ void command_handler::pwd()
 
 void command_handler::mkdir(const vector<string> & arguments)
 {
-    string pathname;
+    string directory_name;
 
     if (arguments.empty())
     {
-        pathname = tools::read_line("pathname: ");
+        directory_name = tools::read_line("directory-name: ");
     }
     else if (arguments.size() == 1)
     {
-        pathname = arguments[0];
+        directory_name = arguments[0];
     }
     else
     {
-        throw local_exception("Usage: mkdir <pathname>");
+        throw local_exception("usage: mkdir directory-name");
     }
 
-    client_.mkdir(pathname);
+    client_.mkdir(directory_name);
 }
 
 void command_handler::binary()
@@ -289,22 +289,22 @@ void command_handler::binary()
 
 void command_handler::size(const vector<string> & arguments)
 {
-    string filename;
+    string remote_file;
 
     if (arguments.empty())
     {
-        filename = tools::read_line("filename: ");
+        remote_file = tools::read_line("remote-file: ");
     }
     else if (arguments.size() == 1)
     {
-        filename = arguments[0];
+        remote_file = arguments[0];
     }
     else
     {
-        throw local_exception("Usage: size <filename>");
+        throw local_exception("usage: size remote-file");
     }
 
-    client_.size(filename);
+    client_.size(remote_file);
 }
 
 void command_handler::syst()
@@ -320,15 +320,15 @@ void command_handler::close()
 void command_handler::help()
 {
     cout << "List of FTP commands:\n"
-            "\topen <hostname> <port> - Open new connection.\n"
-            "\tuser <username> - Send new user information.\n"
-            "\tcd <remote-directory> - Change remote working directory.\n"
-            "\tls <remote-directory> - Print list of files in the remote directory.\n"
-            "\tget <remote-path> <local-filename> - Retrieve a copy of the file.\n"
+            "\topen hostname [ port ] - Open new connection.\n"
+            "\tuser username - Send new user information.\n"
+            "\tcd remote-directory - Change remote working directory.\n"
+            "\tls [ remote-directory ] - Print list of files in the remote directory.\n"
+            "\tget remote-file [ local-file ] - Retrieve a copy of the file.\n"
             "\tpwd - Print the current working directory name.\n"
-            "\tmkdir <pathname> - Make a directory with the name \"pathname\".\n"
+            "\tmkdir directory-name - Make a directory on the remote machine.\n"
             "\tbinary - Set binary transfer type.\n"
-            "\tsize - Show size of remote file.\n"
+            "\tsize remote-file - Show size of remote file.\n"
             "\tsyst - Show remote system type.\n"
             "\tclose - Close current connection.\n"
             "\thelp - Print list of FTP commands.\n"

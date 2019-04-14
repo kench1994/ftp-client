@@ -15,14 +15,16 @@ FTP may run in active or passive mode, which determines how the data connection 
 
 <h2>Available commands</h2>
 <ol>
-  <li>open host-name [port] - Open new connection.</li>
-  <li>syst - Return system type. </li>
-  <li>pwd - Print working directory.</li>
-  <li>cd remote-directory - Change working directory.</li>
-  <li>ls - Print list directory contents.</li>
-  <li>get remote-path [local-filename] - Retrieve a copy of the file.</li>
-  <li>mkdir directory-name - Make directory.</li>
-  <li>stat - Print server information.</li>
+  <li>open hostname [ port ] - Open new connection.</li>
+  <li>user username - Send new user information.</li>
+  <li>cd remote-directory - Change remote working directory.</li>
+  <li>ls [ remote-directory ] - Print list of files in the remote directory.</li>
+  <li>get remote-file [ local-file ] - Retrieve a copy of the file.</li>
+  <li>pwd - Print the current working directory name.</li>
+  <li>mkdir directory-name - Make a directory on the remote machine.</li>
+  <li>binary - Set binary transfer type.</li>
+  <li>size remote-file - Show size of remote file.</li>
+  <li>syst - Show remote system type.</li>
   <li>close - Close current connection.</li>
   <li>help - Print list of FTP commands.</li>
   <li>exit - Exit program.</li>
