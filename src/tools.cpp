@@ -60,13 +60,13 @@ string read_secure_line(const string & greeting)
     new_settings = old_settings;
     new_settings.c_lflag &= ~(ICANON | ECHO);
 
-    (void) tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
+    tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
 
     string password;
     cout << greeting;
     getline(cin, password);
 
-    (void) tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
+    tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
 
     cout << endl;
 
