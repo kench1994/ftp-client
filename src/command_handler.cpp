@@ -130,23 +130,28 @@ void command_handler::open(const vector<string> & arguments)
         throw local_exception("Already connected, use close first.");
     }
 
+    string hostname;
+    string port = "21";
+
     if (arguments.empty())
     {
-        string hostname = tools::read_line("hostname: ");
-        client_.open(hostname);
+        hostname = tools::read_line("hostname: ");
     }
     else if (arguments.size() == 1)
     {
-        client_.open(arguments[0]);
+        hostname = arguments[0];
     }
     else if (arguments.size() == 2)
     {
-        client_.open(arguments[0], arguments[1]);
+        hostname = arguments[0];
+        port = arguments[1];
     }
     else
     {
         throw local_exception("usage: open hostname [ port ]");
     }
+
+    client_.open(hostname, port);
 }
 
 void command_handler::user()
