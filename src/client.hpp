@@ -40,6 +40,8 @@ public:
 
     void mkdir(const std::string & pathname);
 
+    void ascii();
+
     void binary();
 
     void size(const std::string & filename);

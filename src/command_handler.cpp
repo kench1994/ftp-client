@@ -76,6 +76,10 @@ void command_handler::execute(const string & command,
         {
             syst();
         }
+        else if (command == command::local::ascii)
+        {
+            ascii();
+        }
         else if (command == command::local::binary)
         {
             binary();
@@ -119,6 +123,7 @@ bool command_handler::is_needed_connection(const string & command) const
            command == command::local::pwd ||
            command == command::local::mkdir ||
            command == command::local::syst ||
+           command == command::local::ascii ||
            command == command::local::binary ||
            command == command::local::size;
 }
@@ -290,6 +295,11 @@ void command_handler::mkdir(const vector<string> & arguments)
     client_.mkdir(directory_name);
 }
 
+void command_handler::ascii()
+{
+    client_.ascii();
+}
+
 void command_handler::binary()
 {
     client_.binary();
@@ -335,6 +345,7 @@ void command_handler::help()
             "\tget remote-file [ local-file ] - Retrieve a copy of the file.\n"
             "\tpwd - Print the current working directory name.\n"
             "\tmkdir directory-name - Make a directory on the remote machine.\n"
+            "\tascii - Set ascii transfer type.\n"
             "\tbinary - Set binary transfer type.\n"
             "\tsize remote-file - Show size of remote file.\n"
             "\tsyst - Show remote system type.\n"

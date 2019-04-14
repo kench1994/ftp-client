@@ -43,6 +43,8 @@ private:
 
     void mkdir(const std::vector<std::string> & arguments);
 
+    void ascii();
+
     void binary();
 
     void size(const std::vector<std::string> & arguments);

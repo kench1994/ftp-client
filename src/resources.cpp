@@ -25,6 +25,7 @@ namespace local
     const string pwd = "pwd";
     const string mkdir = "mkdir";
     const string syst = "syst";
+    const string ascii = "ascii";
     const string binary = "binary";
     const string size = "size";
     const string close = "close";
@@ -43,6 +44,7 @@ namespace remote
     const string mkdir = "MKD";
     const string pasv = "PASV";
     const string syst = "SYST";
+    const string ascii = "TYPE A";
     const string binary = "TYPE I";
     const string size = "SIZE";
     const string close = "QUIT";

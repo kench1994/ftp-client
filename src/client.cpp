@@ -101,6 +101,12 @@ void client::mkdir(const string & pathname)
     cout << control_connection_->read() << endl;
 }
 
+void client::ascii()
+{
+    control_connection_->write(command::remote::ascii);
+    cout << control_connection_->read() << endl;
+}
+
 void client::binary()
 {
     control_connection_->write(command::remote::binary);

@@ -22,6 +22,7 @@ FTP may run in active or passive mode, which determines how the data connection 
   <li>get remote-file [ local-file ] - Retrieve a copy of the file.</li>
   <li>pwd - Print the current working directory name.</li>
   <li>mkdir directory-name - Make a directory on the remote machine.</li>
+  <li>ascii - Set ascii transfer type.</li>
   <li>binary - Set binary transfer type.</li>
   <li>size remote-file - Show size of remote file.</li>
   <li>syst - Show remote system type.</li>
