@@ -20,6 +20,10 @@ public:
     void run();
 
 private:
+    std::string parse_command(const std::string & user_input);
+
+    std::vector<std::string> parse_arguments(const std::string & user_input);
+
     command_handler command_handler_;
 };
 

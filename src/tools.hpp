@@ -21,10 +21,6 @@ std::string read_line(const std::string & greeting);
 
 std::string read_secure_line(const std::string & greeting);
 
-std::string get_command(const std::string & user_input);
-
-std::vector<std::string> get_arguments(const std::string & user_input);
-
 std::string get_filename(const std::string & path);
 
 } // namespace tools

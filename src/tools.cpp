@@ -9,9 +9,6 @@
 #include <iostream>
 #include <zconf.h>
 #include <termio.h>
-#include <sstream>
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/classification.hpp>
 #include "tools.hpp"
 #include <boost/filesystem.hpp>
 
@@ -22,7 +19,6 @@ namespace tools
 
 using std::string;
 using std::vector;
-using std::istringstream;
 using std::cout;
 using std::cin;
 using std::endl;
@@ -65,29 +61,6 @@ string read_secure_line(const string & greeting)
     cout << endl;
 
     return password;
-}
-
-string get_command(const string & user_input)
-{
-    string command;
-
-    istringstream iss(user_input);
-    iss >> command;
-
-    return command;
-}
-
-vector<string> get_arguments(const string & user_input)
-{
-    vector<string> arguments;
-    boost::split(arguments, user_input, boost::is_any_of(" "));
-
-    if (!arguments.empty())
-    {
-        arguments.erase(arguments.begin());
-    }
-
-    return arguments;
 }
 
 string get_filename(const string & path)
