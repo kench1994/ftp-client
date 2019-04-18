@@ -74,12 +74,12 @@ void client::list(const optional<string> & remote_directory)
     cout << control_connection_->read() << endl;
 }
 
-void client::get(const string & remote_path, ofstream & file)
+void client::get(const string & remote_file, ofstream & file)
 {
     unique_ptr<data_connection> data_connection =
             data_transfer_mode_->open_data_connection(*control_connection_);
 
-    control_connection_->write(command::remote::get + " " + remote_path);
+    control_connection_->write(command::remote::get + " " + remote_file);
     cout << control_connection_->read() << endl;
 
     data_connection->read_file(file);
@@ -95,9 +95,9 @@ void client::pwd()
     cout << control_connection_->read() << endl;
 }
 
-void client::mkdir(const string & pathname)
+void client::mkdir(const string & directory_name)
 {
-    control_connection_->write(command::remote::mkdir + " " + pathname);
+    control_connection_->write(command::remote::mkdir + " " + directory_name);
     cout << control_connection_->read() << endl;
 }
 
@@ -113,9 +113,9 @@ void client::binary()
     cout << control_connection_->read() << endl;
 }
 
-void client::size(const string & filename)
+void client::size(const string & remote_file)
 {
-    control_connection_->write(command::remote::size + " " + filename);
+    control_connection_->write(command::remote::size + " " + remote_file);
     cout << control_connection_->read() << endl;
 }
 

@@ -34,17 +34,17 @@ public:
 
     void list(const std::optional<std::string> & remote_directory = std::nullopt);
 
-    void get(const std::string & remote_path, std::ofstream & file);
+    void get(const std::string & remote_file, std::ofstream & file);
 
     void pwd();
 
-    void mkdir(const std::string & pathname);
+    void mkdir(const std::string & directory_name);
 
     void ascii();
 
     void binary();
 
-    void size(const std::string & filename);
+    void size(const std::string & remote_file);
 
     void syst();
 
