@@ -8,7 +8,6 @@
 
 #include <iostream>
 #include "user_interface.hpp"
-#include "resources.hpp"
 
 using std::cout;
 using std::cin;

@@ -10,7 +10,6 @@
 #define FTP_CLIENT_TOOLS_HPP
 
 #include <string>
-#include <vector>
 
 namespace ftp
 {

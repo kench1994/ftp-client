@@ -18,7 +18,6 @@ namespace tools
 {
 
 using std::string;
-using std::vector;
 using std::cout;
 using std::cin;
 using std::endl;

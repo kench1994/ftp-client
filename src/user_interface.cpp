@@ -12,7 +12,6 @@
 #include "tools.hpp"
 #include "command_parser.hpp"
 #include <iostream>
-#include <boost/algorithm/string.hpp>
 
 namespace ftp
 {
@@ -21,7 +20,6 @@ using std::string;
 using std::vector;
 using std::cout;
 using std::endl;
-using std::istringstream;
 
 void user_interface::run()
 {
