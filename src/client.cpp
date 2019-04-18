@@ -52,7 +52,7 @@ void client::cd(const string & remote_directory)
     cout << control_connection_->read() << endl;
 }
 
-void client::list(const optional<string> & remote_directory)
+void client::ls(const optional<string> & remote_directory)
 {
     string command = command::remote::ls;
 

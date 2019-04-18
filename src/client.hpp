@@ -32,7 +32,7 @@ public:
 
     void cd(const std::string & remote_directory);
 
-    void list(const std::optional<std::string> & remote_directory = std::nullopt);
+    void ls(const std::optional<std::string> & remote_directory = std::nullopt);
 
     void get(const std::string & remote_file, std::ofstream & file);
 
