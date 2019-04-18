@@ -98,8 +98,7 @@ void command_handler::execute(const string & command,
         }
         else
         {
-            throw local_exception("Invalid command. "
-                                  "Use 'help' to display list of FTP commands.");
+            throw local_exception("%1%: invalid command", command);
         }
     }
     catch (const negative_completion_code & ex)
