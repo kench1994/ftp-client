@@ -9,16 +9,17 @@
 #ifndef FTP_CLIENT_LOCAL_EXCEPTION_HPP
 #define FTP_CLIENT_LOCAL_EXCEPTION_HPP
 
-#include <stdexcept>
+#include "base_exception.hpp"
 
 namespace ftp
 {
 
-class local_exception : public std::runtime_error
+class local_exception : public base_exception
 {
 public:
-    explicit local_exception(const std::string & message)
-            : std::runtime_error(message)
+    template<typename ...Args>
+    explicit local_exception(const std::string & message, Args && ...args)
+        : base_exception(message, std::forward<Args>(args)...)
     {
     }
 };
