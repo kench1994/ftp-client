@@ -26,11 +26,13 @@ void user_interface::run()
     {
         try
         {
-            string user_input = tools::read_not_empty_line("ftp> ");
+            string input;
             string command;
             vector<string> args;
 
-            command_parser::process(user_input, command, args);
+            input = tools::read_not_empty_line("ftp> ");
+
+            command_parser::process(input, command, args);
             command_handler_.execute(command, args);
 
             if (command == command::local::exit)
