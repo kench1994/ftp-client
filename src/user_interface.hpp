@@ -9,7 +9,6 @@
 #ifndef FTP_CLIENT_USER_INTERFACE_HPP
 #define FTP_CLIENT_USER_INTERFACE_HPP
 
-#include "command_parser.hpp"
 #include "command_handler.hpp"
 
 namespace ftp

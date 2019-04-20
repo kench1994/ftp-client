@@ -10,6 +10,7 @@
 #include "resources.hpp"
 #include "local_exception.hpp"
 #include "tools.hpp"
+#include "command_parser.hpp"
 #include <iostream>
 
 namespace ftp
