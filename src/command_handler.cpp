@@ -27,7 +27,7 @@ using std::ofstream;
 using std::ios_base;
 
 void command_handler::execute(const string & command,
-                              const vector<string> & arguments)
+                              const vector<string> & args)
 {
     if (is_needed_connection(command) && !client_.is_open())
     {
@@ -38,7 +38,7 @@ void command_handler::execute(const string & command,
     {
         if (command == command::local::open)
         {
-            open(arguments);
+            open(args);
             user();
             pass();
             // Use binary mode to transfer files by default.
@@ -46,7 +46,7 @@ void command_handler::execute(const string & command,
         }
         else if (command == command::local::user)
         {
-            user(arguments);
+            user(args);
             pass();
         }
         else if (command == command::local::close)
@@ -55,15 +55,15 @@ void command_handler::execute(const string & command,
         }
         else if (command == command::local::cd)
         {
-            cd(arguments);
+            cd(args);
         }
         else if (command == command::local::ls)
         {
-            ls(arguments);
+            ls(args);
         }
         else if (command == command::local::get)
         {
-            get(arguments);
+            get(args);
         }
         else if (command == command::local::pwd)
         {
@@ -71,7 +71,7 @@ void command_handler::execute(const string & command,
         }
         else if (command == command::local::mkdir)
         {
-            mkdir(arguments);
+            mkdir(args);
         }
         else if (command == command::local::syst)
         {
@@ -87,7 +87,7 @@ void command_handler::execute(const string & command,
         }
         else if (command == command::local::size)
         {
-            size(arguments);
+            size(args);
         }
         else if (command == command::local::noop)
         {
@@ -138,7 +138,7 @@ bool command_handler::is_needed_connection(const string & command) const
            command == command::local::noop;
 }
 
-void command_handler::open(const vector<string> & arguments)
+void command_handler::open(const vector<string> & args)
 {
     if (client_.is_open())
     {
@@ -148,18 +148,18 @@ void command_handler::open(const vector<string> & arguments)
     string hostname;
     string port = "21";
 
-    if (arguments.empty())
+    if (args.empty())
     {
         hostname = tools::read_line("hostname: ");
     }
-    else if (arguments.size() == 1)
+    else if (args.size() == 1)
     {
-        hostname = arguments[0];
+        hostname = args[0];
     }
-    else if (arguments.size() == 2)
+    else if (args.size() == 2)
     {
-        hostname = arguments[0];
-        port = arguments[1];
+        hostname = args[0];
+        port = args[1];
     }
     else
     {
@@ -175,17 +175,17 @@ void command_handler::user()
     client_.user(username);
 }
 
-void command_handler::user(const vector<string> & arguments)
+void command_handler::user(const vector<string> & args)
 {
     string username;
 
-    if (arguments.empty())
+    if (args.empty())
     {
         username = tools::read_line("username: ");
     }
-    else if (arguments.size() == 1)
+    else if (args.size() == 1)
     {
-        username = arguments[0];
+        username = args[0];
     }
     else
     {
@@ -210,17 +210,17 @@ void command_handler::pass()
     client_.pass(password);
 }
 
-void command_handler::cd(const vector<string> & arguments)
+void command_handler::cd(const vector<string> & args)
 {
     string remote_directory;
 
-    if (arguments.empty())
+    if (args.empty())
     {
         remote_directory = tools::read_line("remote directory: ");
     }
-    else if (arguments.size() == 1)
+    else if (args.size() == 1)
     {
-        remote_directory = arguments[0];
+        remote_directory = args[0];
     }
     else
     {
@@ -230,15 +230,15 @@ void command_handler::cd(const vector<string> & arguments)
     client_.cd(remote_directory);
 }
 
-void command_handler::ls(const vector<string> & arguments)
+void command_handler::ls(const vector<string> & args)
 {
-    if (arguments.empty())
+    if (args.empty())
     {
         client_.ls();
     }
-    else if (arguments.size() == 1)
+    else if (args.size() == 1)
     {
-        client_.ls(arguments[0]);
+        client_.ls(args[0]);
     }
     else
     {
@@ -246,24 +246,24 @@ void command_handler::ls(const vector<string> & arguments)
     }
 }
 
-void command_handler::get(const vector<string> & arguments)
+void command_handler::get(const vector<string> & args)
 {
     string remote_file, local_file;
 
-    if (arguments.empty())
+    if (args.empty())
     {
         remote_file = tools::read_line("remote-file: ");
         local_file = tools::get_filename(remote_file);
     }
-    else if (arguments.size() == 1)
+    else if (args.size() == 1)
     {
-        remote_file = arguments[0];
+        remote_file = args[0];
         local_file = tools::get_filename(remote_file);
     }
-    else if (arguments.size() == 2)
+    else if (args.size() == 2)
     {
-        remote_file = arguments[0];
-        local_file = arguments[1];
+        remote_file = args[0];
+        local_file = args[1];
     }
     else
     {
@@ -285,17 +285,17 @@ void command_handler::pwd()
     client_.pwd();
 }
 
-void command_handler::mkdir(const vector<string> & arguments)
+void command_handler::mkdir(const vector<string> & args)
 {
     string directory_name;
 
-    if (arguments.empty())
+    if (args.empty())
     {
         directory_name = tools::read_line("directory-name: ");
     }
-    else if (arguments.size() == 1)
+    else if (args.size() == 1)
     {
-        directory_name = arguments[0];
+        directory_name = args[0];
     }
     else
     {
@@ -315,17 +315,17 @@ void command_handler::binary()
     client_.binary();
 }
 
-void command_handler::size(const vector<string> & arguments)
+void command_handler::size(const vector<string> & args)
 {
     string remote_file;
 
-    if (arguments.empty())
+    if (args.empty())
     {
         remote_file = tools::read_line("remote-file: ");
     }
-    else if (arguments.size() == 1)
+    else if (args.size() == 1)
     {
-        remote_file = arguments[0];
+        remote_file = args[0];
     }
     else
     {
