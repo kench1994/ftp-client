@@ -28,6 +28,7 @@ namespace local
     const string ascii = "ascii";
     const string binary = "binary";
     const string size = "size";
+    const string noop = "noop";
     const string close = "close";
     const string help = "help";
     const string exit = "exit";
@@ -47,6 +48,7 @@ namespace remote
     const string ascii = "TYPE A";
     const string binary = "TYPE I";
     const string size = "SIZE";
+    const string noop = "NOOP";
     const string close = "QUIT";
 } // namespace remote
 } // namespace command

@@ -28,6 +28,7 @@ namespace local
     extern const std::string ascii;
     extern const std::string binary;
     extern const std::string size;
+    extern const std::string noop;
     extern const std::string close;
     extern const std::string help;
     extern const std::string exit;
@@ -47,6 +48,7 @@ namespace remote
     extern const std::string ascii;
     extern const std::string binary;
     extern const std::string size;
+    extern const std::string noop;
     extern const std::string close;
 } // namespace remote
 } // namespace command

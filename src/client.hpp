@@ -48,6 +48,8 @@ public:
 
     void syst();
 
+    void noop();
+
     void close();
 
     void reset();

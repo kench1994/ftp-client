@@ -89,6 +89,10 @@ void command_handler::execute(const string & command,
         {
             size(arguments);
         }
+        else if (command == command::local::noop)
+        {
+            noop();
+        }
         else if (command == command::local::help)
         {
             help();
@@ -130,7 +134,8 @@ bool command_handler::is_needed_connection(const string & command) const
            command == command::local::syst ||
            command == command::local::ascii ||
            command == command::local::binary ||
-           command == command::local::size;
+           command == command::local::size ||
+           command == command::local::noop;
 }
 
 void command_handler::open(const vector<string> & arguments)
@@ -335,6 +340,11 @@ void command_handler::syst()
     client_.syst();
 }
 
+void command_handler::noop()
+{
+    client_.noop();
+}
+
 void command_handler::close()
 {
     client_.close();
@@ -354,6 +364,7 @@ void command_handler::help()
             "\tbinary - Set binary transfer type.\n"
             "\tsize remote-file - Show size of remote file.\n"
             "\tsyst - Show remote system type.\n"
+            "\tnoop - No operation.\n"
             "\tclose - Close current connection.\n"
             "\thelp - Print list of FTP commands.\n"
             "\texit - Exit program." << endl;

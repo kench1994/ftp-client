@@ -125,6 +125,12 @@ void client::syst()
     cout << control_connection_->read() << endl;
 }
 
+void client::noop()
+{
+    control_connection_->write(command::remote::noop);
+    cout << control_connection_->read() << endl;
+}
+
 void client::close()
 {
     control_connection_->write(command::remote::close);

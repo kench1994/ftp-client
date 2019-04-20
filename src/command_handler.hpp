@@ -51,6 +51,8 @@ private:
 
     void syst();
 
+    void noop();
+
     void close();
 
     void help();
