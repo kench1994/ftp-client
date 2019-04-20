@@ -10,7 +10,6 @@
 #include "resources.hpp"
 #include "local_exception.hpp"
 #include "tools.hpp"
-#include "command_parser.hpp"
 #include <iostream>
 
 namespace ftp
@@ -28,11 +27,10 @@ void user_interface::run()
         try
         {
             string user_input = tools::read_not_empty_line("ftp> ");
+            string command;
+            vector<string> args;
 
-            command_parser parser(user_input);
-            const string & command = parser.get_command();
-            const vector<string> & args = parser.get_args();
-
+            command_parser_.process(user_input, command, args);
             command_handler_.execute(command, args);
 
             if (command == command::local::exit)

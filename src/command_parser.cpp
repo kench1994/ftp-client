@@ -17,27 +17,19 @@ using std::vector;
 using std::string;
 using std::istringstream;
 
-command_parser::command_parser(const std::string & command)
+void command_parser::process(const std::string & source_line,
+                             string & command,
+                             vector<string> & args)
 {
-    istringstream iss(command);
+    istringstream iss(source_line);
     string arg;
 
-    iss >> command_;
+    iss >> command;
 
     while (iss >> quoted(arg))
     {
-        args_.push_back(arg);
+        args.push_back(arg);
     }
-}
-
-const string & command_parser::get_command() const
-{
-    return command_;
-}
-
-const vector<string> & command_parser::get_args() const
-{
-    return args_;
 }
 
 } // namespace ftp

@@ -18,15 +18,9 @@ namespace ftp
 class command_parser
 {
 public:
-    explicit command_parser(const std::string & command);
-
-    const std::string & get_command() const;
-
-    const std::vector<std::string> & get_args() const;
-
-private:
-    std::string command_;
-    std::vector<std::string> args_;
+    static void process(const std::string & source_line,
+                        std::string & command,
+                        std::vector<std::string> & args);
 };
 
 } // namespace ftp
