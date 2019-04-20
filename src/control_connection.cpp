@@ -65,11 +65,14 @@ void control_connection::write(const string & command)
 
 string control_connection::read_line()
 {
-    boost::asio::read_until(socket_, stream_buffer_, '\n');
+    boost::asio::read_until(socket_, stream_buffer_, "\r\n");
     istream is(&stream_buffer_);
 
     string line;
     getline(is, line);
+
+    // Remove last '\r' character.
+    line.pop_back();
 
     /**
      * RFC 959: https://tools.ietf.org/html/rfc959

@@ -48,7 +48,8 @@ string data_connection::read()
     string reply = string(boost::asio::buffers_begin(stream_buffer_.data()),
                           boost::asio::buffers_end(stream_buffer_.data()));
 
-    // Remove last '\n' character.
+    // Remove last '\r\n' characters.
+    reply.pop_back();
     reply.pop_back();
 
     return reply;
