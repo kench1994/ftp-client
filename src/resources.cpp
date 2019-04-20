@@ -10,11 +10,11 @@
 
 namespace ftp
 {
+namespace command
+{
 
 using std::string;
 
-namespace command
-{
 namespace local
 {
     const string open = "open";

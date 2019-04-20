@@ -13,6 +13,9 @@
 #include "tools.hpp"
 #include <iostream>
 
+namespace ftp
+{
+
 using std::string;
 using std::vector;
 using std::cout;
@@ -21,9 +24,6 @@ using std::endl;
 using std::optional;
 using std::ofstream;
 using std::ios_base;
-
-namespace ftp
-{
 
 void command_handler::execute(const string & command,
                               const vector<string> & arguments)
