@@ -12,13 +12,13 @@
 #include <boost/asio/write.hpp>
 #include "control_connection.hpp"
 #include "negative_completion_code.hpp"
+#include "ftp_exception.hpp"
 
 namespace ftp
 {
 
 using std::string;
 using std::istream;
-using std::runtime_error;
 
 control_connection::control_connection(boost::asio::io_context & io_context,
                                        const string & hostname,
@@ -85,7 +85,7 @@ string control_connection::read_line()
      */
     if (line.size() < 4)
     {
-        throw runtime_error("Invalid server reply: " + line);
+        throw ftp_exception("Invalid server reply: " + line);
     }
 
     if (is_negative_completion_code(line))
