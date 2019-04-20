@@ -11,6 +11,7 @@
 #include "resources.hpp"
 #include "negative_completion_code.hpp"
 #include "tools.hpp"
+#include "ftp_exception.hpp"
 #include <iostream>
 
 namespace ftp
@@ -104,6 +105,11 @@ void command_handler::execute(const string & command,
     catch (const negative_completion_code & ex)
     {
         cout << ex.what() << endl;
+    }
+    catch (const ftp_exception & ex)
+    {
+        cout << ex.what() << endl;
+        client_.reset();
     }
     catch (const boost::system::system_error & ex)
     {
