@@ -30,7 +30,7 @@ void user_interface::run()
             string command;
             vector<string> args;
 
-            command_parser_.process(user_input, command, args);
+            command_parser::process(user_input, command, args);
             command_handler_.execute(command, args);
 
             if (command == command::local::exit)

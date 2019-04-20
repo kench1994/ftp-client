@@ -21,7 +21,6 @@ public:
     void run();
 
 private:
-    command_parser command_parser_;
     command_handler command_handler_;
 };
 
