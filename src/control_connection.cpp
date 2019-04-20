@@ -85,7 +85,7 @@ string control_connection::read_line()
      */
     if (line.size() < 4)
     {
-        throw ftp_exception("Invalid server reply: " + line);
+        throw ftp_exception("%1%: invalid server reply", line);
     }
 
     if (is_negative_completion_code(line))
