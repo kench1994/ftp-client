@@ -26,6 +26,7 @@ FTP may run in active or passive mode, which determines how the data connection 
   <li>binary - Set binary transfer type.</li>
   <li>size remote-file - Show size of remote file.</li>
   <li>syst - Show remote system type.</li>
+  <li>noop - No operation.</li>
   <li>close - Close current connection.</li>
   <li>help - Print list of FTP commands.</li>
   <li>exit - Exit program.</li>
