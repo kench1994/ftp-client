@@ -17,7 +17,7 @@ using std::vector;
 using std::string;
 using std::istringstream;
 
-void command_parser::process(const std::string & source_line,
+void command_parser::process(const string & source_line,
                              string & command,
                              vector<string> & args)
 {
