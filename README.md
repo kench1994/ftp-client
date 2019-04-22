@@ -34,7 +34,7 @@ FTP may run in active or passive mode, which determines how the data connection 
 
 <h2>Requirements</h2>
 
-* Compiler support for C++11/14
+* Compiler support for C++17
 * Makefile
 * <a href="https://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio.html" target="_blank">Boost.Asio</a>
 * <a href="https://www.boost.org/doc/libs/1_65_1/libs/filesystem/doc/index.htm" target="_blank">Boost.Filesystem</a>
