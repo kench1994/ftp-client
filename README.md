@@ -35,11 +35,11 @@ FTP may run in active or passive mode, which determines how the data connection 
 <h2>Requirements</h2>
 
 * Compiler support for C++17
-* Makefile
+* CMake 3.10
 * <a href="https://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio.html" target="_blank">Boost.Asio</a>
 * <a href="https://www.boost.org/doc/libs/1_65_1/libs/filesystem/doc/index.htm" target="_blank">Boost.Filesystem</a>
 
 <h2>References</h2>
 
-* File Transfer Protocol [Электронный ресурс]. – Режим доступа: https://en.wikipedia.org/wiki/File_Transfer_Protocol
+* File Transfer Protocol – https://en.wikipedia.org/wiki/File_Transfer_Protocol
 * <a href="https://github.com/deniskovalchuk/file-transfer-protocol/blob/master/RFC959.txt">RFC 959</a> File Transfer Protocol (FTP) Network Working Group J. Postel, J. Reynolds ISI October 1985
