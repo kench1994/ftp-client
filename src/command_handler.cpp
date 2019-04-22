@@ -352,22 +352,22 @@ void command_handler::close()
 
 void command_handler::help()
 {
-    cout << "List of FTP commands:\n"
-            "\topen hostname [ port ] - Open new connection.\n"
-            "\tuser username - Send new user information.\n"
-            "\tcd remote-directory - Change remote working directory.\n"
-            "\tls [ remote-directory ] - Print list of files in the remote directory.\n"
-            "\tget remote-file [ local-file ] - Retrieve a copy of the file.\n"
-            "\tpwd - Print the current working directory name.\n"
-            "\tmkdir directory-name - Make a directory on the remote machine.\n"
-            "\tascii - Set ascii transfer type.\n"
-            "\tbinary - Set binary transfer type.\n"
-            "\tsize remote-file - Show size of remote file.\n"
-            "\tsyst - Show remote system type.\n"
-            "\tnoop - No operation.\n"
-            "\tclose - Close current connection.\n"
-            "\thelp - Print list of FTP commands.\n"
-            "\texit - Exit program." << endl;
+    cout << "list of ftp commands:\n"
+            "\topen hostname [ port ] - open new connection\n"
+            "\tuser username - send new user information\n"
+            "\tcd remote-directory - change remote working directory\n"
+            "\tls [ remote-directory ] - print list of files in the remote directory\n"
+            "\tget remote-file [ local-file ] - retrieve a copy of the file\n"
+            "\tpwd - print the current working directory name\n"
+            "\tmkdir directory-name - make a directory on the remote machine\n"
+            "\tascii - set ascii transfer type\n"
+            "\tbinary - set binary transfer type\n"
+            "\tsize remote-file - show size of remote file\n"
+            "\tsyst - show remote system type\n"
+            "\tnoop - no operation\n"
+            "\tclose - close current connection\n"
+            "\thelp - print list of ftp commands\n"
+            "\texit - exit program" << endl;
 }
 
 void command_handler::exit()

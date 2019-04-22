@@ -15,21 +15,21 @@ FTP may run in active or passive mode, which determines how the data connection 
 
 <h2>Available commands</h2>
 <ol>
-  <li>open hostname [ port ] - Open new connection.</li>
-  <li>user username - Send new user information.</li>
-  <li>cd remote-directory - Change remote working directory.</li>
-  <li>ls [ remote-directory ] - Print list of files in the remote directory.</li>
-  <li>get remote-file [ local-file ] - Retrieve a copy of the file.</li>
-  <li>pwd - Print the current working directory name.</li>
-  <li>mkdir directory-name - Make a directory on the remote machine.</li>
-  <li>ascii - Set ascii transfer type.</li>
-  <li>binary - Set binary transfer type.</li>
-  <li>size remote-file - Show size of remote file.</li>
-  <li>syst - Show remote system type.</li>
-  <li>noop - No operation.</li>
-  <li>close - Close current connection.</li>
-  <li>help - Print list of FTP commands.</li>
-  <li>exit - Exit program.</li>
+  <li>open hostname [ port ] - open new connection</li>
+  <li>user username - send new user information</li>
+  <li>cd remote-directory - change remote working directory</li>
+  <li>ls [ remote-directory ] - print list of files in the remote directory</li>
+  <li>get remote-file [ local-file ] - retrieve a copy of the file</li>
+  <li>pwd - print the current working directory name</li>
+  <li>mkdir directory-name - make a directory on the remote machine</li>
+  <li>ascii - set ascii transfer type</li>
+  <li>binary - set binary transfer type</li>
+  <li>size remote-file - show size of remote file</li>
+  <li>syst - show remote system type</li>
+  <li>noop - no operation</li>
+  <li>close - close current connection</li>
+  <li>help - print list of ftp commands</li>
+  <li>exit - exit program</li>
 </ol>
 
 <h2>Requirements</h2>
