@@ -11,7 +11,7 @@ FTP may run in active or passive mode, which determines how the data connection 
 
 * In situations where the client is behind a firewall and unable to accept incoming TCP connections, passive mode may be used. In this mode, the client uses the control connection to send the FTP command "PASV" to the server and then receives a server IP address and server port numbuer from server, which the client then uses to open a data connection.
 
-<img src="https://gist.githubusercontent.com/deniskovalchuk/119c6b0134389b76129f7eda3ae602ff/raw/9f7aac03364943653bfe89c2901d00ae54648c30/ftp1.jpg">
+<img src="https://gist.githubusercontent.com/deniskovalchuk/189715f827a8a6a310fdd06755b11175/raw/aa40d30ab9ae2b148e996090649402f3a91a418f/ftp_modes.png">
 
 <h2>Available commands</h2>
 <ol>
