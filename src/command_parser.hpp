@@ -34,9 +34,7 @@ namespace ftp
 class command_parser
 {
 public:
-    static void parse(const std::string & source_line,
-                      std::string & command,
-                      std::vector<std::string> & args);
+    static std::pair<std::string, std::vector<std::string>> parse(const std::string & source_line);
 };
 
 } // namespace ftp

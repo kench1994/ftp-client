@@ -44,12 +44,10 @@ void user_interface::run()
         try
         {
             string input;
-            string command;
-            vector<string> args;
 
             input = tools::read_not_empty_line("ftp> ");
 
-            command_parser::parse(input, command, args);
+            auto [command, args] = command_parser::parse(input);
             command_handler_.execute(command, args);
 
             if (command == command::local::exit)

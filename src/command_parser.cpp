@@ -31,13 +31,15 @@ namespace ftp
 
 using std::vector;
 using std::string;
+using std::pair;
+using std::make_pair;
 using std::istringstream;
 
-void command_parser::parse(const string & source_line,
-                           string & command,
-                           vector<string> & args)
+pair<string, vector<string>> command_parser::parse(const string & source_line)
 {
     istringstream iss(source_line);
+    vector<string> args;
+    string command;
     string arg;
 
     iss >> command;
@@ -46,6 +48,8 @@ void command_parser::parse(const string & source_line,
     {
         args.push_back(arg);
     }
+
+    return make_pair(command, args);
 }
 
 } // namespace ftp
