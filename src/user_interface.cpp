@@ -49,7 +49,7 @@ void user_interface::run()
 
             input = tools::read_not_empty_line("ftp> ");
 
-            command_parser::process(input, command, args);
+            command_parser::parse(input, command, args);
             command_handler_.execute(command, args);
 
             if (command == command::local::exit)
