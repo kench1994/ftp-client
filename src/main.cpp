@@ -59,7 +59,7 @@ int main(int argc, char * argv[])
     }
     catch (...)
     {
-        cout << "Unknown error." << endl;
+        cout << "unknown error" << endl;
         return EXIT_FAILURE;
     }
 
