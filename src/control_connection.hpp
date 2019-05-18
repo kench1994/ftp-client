@@ -55,7 +55,7 @@ private:
 
     boost::asio::ip::tcp::socket socket_;
     boost::asio::ip::tcp::resolver resolver_;
-    boost::asio::streambuf stream_buffer_;
+    std::string string_buffer_;
 };
 
 } // namespace ftp
