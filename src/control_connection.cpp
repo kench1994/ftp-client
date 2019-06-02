@@ -45,11 +45,6 @@ control_connection::control_connection(boost::asio::io_context & io_context,
     boost::asio::connect(socket_, resolver_.resolve(hostname, port));
 }
 
-control_connection::~control_connection()
-{
-    socket_.shutdown(boost::asio::socket_base::shutdown_both);
-}
-
 string control_connection::read()
 {
     string reply = read_line();
