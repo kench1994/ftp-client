@@ -22,24 +22,54 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_TOOLS_HPP
-#define FTP_CLIENT_TOOLS_HPP
+#include "ncurses.hpp"
+#include "ncurses_exception.hpp"
 
-#include <string>
-
-namespace ftp
-{
-namespace tools
+namespace ncurses
 {
 
-std::string read_line(const std::string & greeting);
+using std::string;
 
-std::string read_not_empty_line(const std::string & greeting);
+void cbreak()
+{
+    if (::cbreak() ==  ERR)
+        throw ncurses_exception("ncurses: cannot activate cbreak mode.");
+}
 
-std::string read_hidden_line(const std::string & greeting, int len = 64);
+void printw(const string & str)
+{
+    if (::printw(str.data()) == ERR)
+        throw ncurses_exception("ncurses: cannot print.");
+}
 
-std::string get_filename(const std::string & path);
+void echo()
+{
+    if (::echo() == ERR)
+        throw ncurses_exception("ncurses: cannot activate echo mode.");
+}
 
-} // namespace tools
-} // namespace ftp
-#endif //FTP_CLIENT_TOOLS_HPP
+void noecho()
+{
+    if (::noecho() == ERR)
+        throw ncurses_exception("ncurses: cannot activate noecho mode.");
+}
+
+void clear()
+{
+    if (::clear() == ERR)
+        throw ncurses_exception("ncurses: cannot clear.");
+}
+
+void wgetnstr(WINDOW *window, char *str, int len)
+{
+    if (::wgetnstr(window, str, len) == ERR)
+        throw ncurses_exception("ncurses: cannot get string");
+}
+
+void refresh()
+{
+    if (::refresh() == ERR)
+        throw ncurses_exception("ncurses: cannot refresh");
+}
+
+} // namespace ncurses

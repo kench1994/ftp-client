@@ -22,24 +22,33 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_TOOLS_HPP
-#define FTP_CLIENT_TOOLS_HPP
+#include <ncurses.h>
+#include "ncurses_exception.hpp"
 
-#include <string>
+#ifndef FTP_CLIENT_NCURSES_INITIALIZER_HPP
+#define FTP_CLIENT_NCURSES_INITIALIZER_HPP
 
-namespace ftp
+namespace ncurses
 {
-namespace tools
+
+class ncurses_initializer
 {
+public:
+    ncurses_initializer()
+    {
+        if (!initscr())
+            throw ncurses_exception("ncurses: cannot initialize library.");
+    }
 
-std::string read_line(const std::string & greeting);
+    ncurses_initializer(const ncurses_initializer &) = delete;
 
-std::string read_not_empty_line(const std::string & greeting);
+    ncurses_initializer & operator=(const ncurses_initializer) = delete;
 
-std::string read_hidden_line(const std::string & greeting, int len = 64);
+    ~ncurses_initializer()
+    {
+        endwin();
+    }
+};
 
-std::string get_filename(const std::string & path);
-
-} // namespace tools
-} // namespace ftp
-#endif //FTP_CLIENT_TOOLS_HPP
+} // namespace ncurses
+#endif //FTP_CLIENT_NCURSES_INITIALIZER_HPP
