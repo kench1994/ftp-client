@@ -42,7 +42,7 @@ public:
 
     ncurses_initializer(const ncurses_initializer &) = delete;
 
-    ncurses_initializer & operator=(const ncurses_initializer) = delete;
+    ncurses_initializer & operator=(const ncurses_initializer &) = delete;
 
     ~ncurses_initializer()
     {
