@@ -23,10 +23,11 @@
  */
 
 #include <iostream>
-#include <zconf.h>
-#include <termio.h>
 #include "tools.hpp"
 #include <boost/filesystem.hpp>
+#include <vector>
+#include "ncurses_wrappers/ncurses_initializer.hpp"
+#include "ncurses_wrappers/ncurses.hpp"
 
 namespace ftp
 {
@@ -37,6 +38,8 @@ using std::string;
 using std::cout;
 using std::cin;
 using std::endl;
+using std::vector;
+using ncurses::ncurses_initializer;
 
 string read_line(const string & greeting)
 {
@@ -61,31 +64,23 @@ string read_not_empty_line(const string & greeting)
     return line;
 }
 
-string read_hidden_line(const string & greeting)
+string read_hidden_line(const string & greeting, int len)
 {
-    struct termios old_settings;
-    struct termios new_settings;
+    ncurses_initializer ncurses;
+    ncurses::cbreak();
 
-    /**
-     * Masking password input.
-     * http://www.cplusplus.com/articles/E6vU7k9E
-     * http://man7.org/linux/man-pages/man3/termios.3.html
-     */
-    tcgetattr(STDIN_FILENO, &old_settings);
-    new_settings = old_settings;
-    new_settings.c_lflag &= ~(ICANON | ECHO);
+    ncurses::printw(greeting);
+    ncurses::refresh();
 
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
+    ncurses::noecho();
 
-    string line;
-    cout << greeting;
-    getline(cin, line);
+    vector<char> line(len + 1);
+    ncurses::wgetnstr(stdscr, line.data(), len);
 
-    tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
+    ncurses::echo();
+    ncurses::clear();
 
-    cout << endl;
-
-    return line;
+    return string(line.data());
 }
 
 string get_filename(const string & path)

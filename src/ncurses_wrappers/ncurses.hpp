@@ -22,24 +22,28 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_TOOLS_HPP
-#define FTP_CLIENT_TOOLS_HPP
+#ifndef FTP_CLIENT_NCURSES_HPP
+#define FTP_CLIENT_NCURSES_HPP
 
+#include <ncurses.h>
 #include <string>
 
-namespace ftp
-{
-namespace tools
+namespace ncurses
 {
 
-std::string read_line(const std::string & greeting);
+void cbreak();
 
-std::string read_not_empty_line(const std::string & greeting);
+void printw(const std::string & str);
 
-std::string read_hidden_line(const std::string & greeting, int len = 64);
+void echo();
 
-std::string get_filename(const std::string & path);
+void noecho();
 
-} // namespace tools
-} // namespace ftp
-#endif //FTP_CLIENT_TOOLS_HPP
+void clear();
+
+void wgetnstr(WINDOW *window, char *str, int len);
+
+void refresh();
+
+} // namespace ncurses
+#endif //FTP_CLIENT_NCURSES_HPP

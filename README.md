@@ -38,6 +38,7 @@ FTP may run in active or passive mode, which determines how the data connection 
 * CMake 3.10
 * <a href="https://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio.html" target="_blank">Boost.Asio</a>
 * <a href="https://www.boost.org/doc/libs/1_65_1/libs/filesystem/doc/index.htm" target="_blank">Boost.Filesystem</a>
+* <a href="http://www.gnu.org/software/ncurses/ncurses.html">ncurses</a>
 
 <h2>References</h2>
 

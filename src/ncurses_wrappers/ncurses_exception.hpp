@@ -22,24 +22,23 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_TOOLS_HPP
-#define FTP_CLIENT_TOOLS_HPP
+#ifndef FTP_CLIENT_NCURSES_EXCEPTION_HPP
+#define FTP_CLIENT_NCURSES_EXCEPTION_HPP
 
-#include <string>
+#include "../base_exception.hpp"
 
-namespace ftp
-{
-namespace tools
+namespace ncurses
 {
 
-std::string read_line(const std::string & greeting);
+class ncurses_exception : public ftp::base_exception
+{
+public:
+    template<typename ...Args>
+    explicit ncurses_exception(const std::string & message, Args && ...args)
+        : base_exception(message, std::forward<Args>(args)...)
+    {
+    }
+};
 
-std::string read_not_empty_line(const std::string & greeting);
-
-std::string read_hidden_line(const std::string & greeting, int len = 64);
-
-std::string get_filename(const std::string & path);
-
-} // namespace tools
-} // namespace ftp
-#endif //FTP_CLIENT_TOOLS_HPP
+} // namespace ncurses
+#endif //FTP_CLIENT_NCURSES_EXCEPTION_HPP
