@@ -25,17 +25,17 @@
 #ifndef FTP_CLIENT_FTP_EXCEPTION_HPP
 #define FTP_CLIENT_FTP_EXCEPTION_HPP
 
-#include "../base_exception.hpp"
+#include <boost/format.hpp>
 
 namespace ftp
 {
 
-class ftp_exception : public base_exception
+class ftp_exception : public std::runtime_error
 {
 public:
     template<typename ...Args>
     explicit ftp_exception(const std::string & message, Args && ...args)
-        : base_exception(message, std::forward<Args>(args)...)
+        : std::runtime_error(boost::str((boost::format(message) % ... % args)))
     {
     }
 };

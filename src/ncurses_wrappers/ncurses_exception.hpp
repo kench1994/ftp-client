@@ -25,17 +25,17 @@
 #ifndef FTP_CLIENT_NCURSES_EXCEPTION_HPP
 #define FTP_CLIENT_NCURSES_EXCEPTION_HPP
 
-#include "../base_exception.hpp"
+#include <boost/format.hpp>
 
 namespace ncurses
 {
 
-class ncurses_exception : public base_exception
+class ncurses_exception : public std::runtime_error
 {
 public:
     template<typename ...Args>
     explicit ncurses_exception(const std::string & message, Args && ...args)
-        : base_exception(message, std::forward<Args>(args)...)
+        : std::runtime_error(boost::str((boost::format(message) % ... % args)))
     {
     }
 };

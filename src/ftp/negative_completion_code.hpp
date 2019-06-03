@@ -25,17 +25,17 @@
 #ifndef FTP_CLIENT_NEGATIVE_COMPLETION_CODE_HPP
 #define FTP_CLIENT_NEGATIVE_COMPLETION_CODE_HPP
 
-#include "../base_exception.hpp"
+#include <boost/format.hpp>
 
 namespace ftp
 {
 
-class negative_completion_code : public base_exception
+class negative_completion_code : public std::runtime_error
 {
 public:
     template<typename ...Args>
     explicit negative_completion_code(const std::string & message, Args && ...args)
-        : base_exception(message, std::forward<Args>(args)...)
+        : std::runtime_error(boost::str((boost::format(message) % ... % args)))
     {
     }
 };

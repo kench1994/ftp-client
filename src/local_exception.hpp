@@ -25,14 +25,14 @@
 #ifndef FTP_CLIENT_LOCAL_EXCEPTION_HPP
 #define FTP_CLIENT_LOCAL_EXCEPTION_HPP
 
-#include "base_exception.hpp"
+#include <boost/format.hpp>
 
-class local_exception : public base_exception
+class local_exception : public std::runtime_error
 {
 public:
     template<typename ...Args>
     explicit local_exception(const std::string & message, Args && ...args)
-        : base_exception(message, std::forward<Args>(args)...)
+        : std::runtime_error(boost::str((boost::format(message) % ... % args)))
     {
     }
 };
