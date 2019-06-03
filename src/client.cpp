@@ -23,7 +23,6 @@
  */
 
 #include "client.hpp"
-#include "resources.hpp"
 #include <iostream>
 
 namespace ftp
