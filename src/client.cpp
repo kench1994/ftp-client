@@ -52,25 +52,25 @@ bool client::is_open() const
 
 void client::user(const string & username)
 {
-    control_connection_->write(command::remote::user + " " + username);
+    control_connection_->write("USER " + username);
     cout << control_connection_->read() << endl;
 }
 
 void client::pass(const string & password)
 {
-    control_connection_->write(command::remote::password + " " + password);
+    control_connection_->write("PASS " + password);
     cout << control_connection_->read() << endl;
 }
 
 void client::cd(const string & remote_directory)
 {
-    control_connection_->write(command::remote::cd + " " + remote_directory);
+    control_connection_->write("CWD " + remote_directory);
     cout << control_connection_->read() << endl;
 }
 
 void client::ls(const optional<string> & remote_directory)
 {
-    string command = command::remote::ls;
+    string command = "LIST";
 
     if (remote_directory)
     {
@@ -95,7 +95,7 @@ void client::get(const string & remote_file, ofstream & file)
     unique_ptr<data_connection> data_connection =
             data_transfer_mode_->open_data_connection(*control_connection_);
 
-    control_connection_->write(command::remote::get + " " + remote_file);
+    control_connection_->write("RETR " + remote_file);
     cout << control_connection_->read() << endl;
 
     data_connection->read_file(file);
@@ -107,49 +107,49 @@ void client::get(const string & remote_file, ofstream & file)
 
 void client::pwd()
 {
-    control_connection_->write(command::remote::pwd);
+    control_connection_->write("PWD");
     cout << control_connection_->read() << endl;
 }
 
 void client::mkdir(const string & directory_name)
 {
-    control_connection_->write(command::remote::mkdir + " " + directory_name);
+    control_connection_->write("MKD " + directory_name);
     cout << control_connection_->read() << endl;
 }
 
 void client::ascii()
 {
-    control_connection_->write(command::remote::ascii);
+    control_connection_->write("TYPE A");
     cout << control_connection_->read() << endl;
 }
 
 void client::binary()
 {
-    control_connection_->write(command::remote::binary);
+    control_connection_->write("TYPE I");
     cout << control_connection_->read() << endl;
 }
 
 void client::size(const string & remote_file)
 {
-    control_connection_->write(command::remote::size + " " + remote_file);
+    control_connection_->write("SIZE " + remote_file);
     cout << control_connection_->read() << endl;
 }
 
 void client::syst()
 {
-    control_connection_->write(command::remote::syst);
+    control_connection_->write("SYST");
     cout << control_connection_->read() << endl;
 }
 
 void client::noop()
 {
-    control_connection_->write(command::remote::noop);
+    control_connection_->write("NOOP");
     cout << control_connection_->read() << endl;
 }
 
 void client::close()
 {
-    control_connection_->write(command::remote::close);
+    control_connection_->write("QUIT");
     cout << control_connection_->read() << endl;
     control_connection_.reset();
     data_transfer_mode_.reset();

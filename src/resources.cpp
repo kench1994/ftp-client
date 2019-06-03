@@ -49,23 +49,5 @@ namespace local
     const string help = "help";
     const string exit = "exit";
 } // namespace local
-
-namespace remote
-{
-    const string user = "USER";
-    const string password = "PASS";
-    const string cd = "CWD";
-    const string ls = "LIST";
-    const string get = "RETR";
-    const string pwd = "PWD";
-    const string mkdir = "MKD";
-    const string pasv = "PASV";
-    const string syst = "SYST";
-    const string ascii = "TYPE A";
-    const string binary = "TYPE I";
-    const string size = "SIZE";
-    const string noop = "NOOP";
-    const string close = "QUIT";
-} // namespace remote
 } // namespace command
 } // namespace ftp

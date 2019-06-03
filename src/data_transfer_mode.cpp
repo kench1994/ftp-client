@@ -52,7 +52,7 @@ passive_mode::passive_mode(boost::asio::io_context & io_context)
 
 unique_ptr<data_connection> passive_mode::open_data_connection(control_connection & control_connection)
 {
-    control_connection.write(command::remote::pasv);
+    control_connection.write("PASV");
     string server_reply = control_connection.read();
 
     cout << server_reply << endl;
