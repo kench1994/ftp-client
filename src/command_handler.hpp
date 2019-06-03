@@ -27,10 +27,7 @@
 
 #include <string>
 #include <vector>
-#include "client.hpp"
-
-namespace ftp
-{
+#include "ftp/client.hpp"
 
 class command_handler
 {
@@ -75,8 +72,7 @@ private:
 
     void exit();
 
-    client client_;
+    ftp::client client_;
 };
 
-} // namespace ftp
 #endif //FTP_CLIENT_COMMAND_HANDLER_HPP

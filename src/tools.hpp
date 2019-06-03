@@ -27,8 +27,6 @@
 
 #include <string>
 
-namespace ftp
-{
 namespace tools
 {
 
@@ -41,5 +39,4 @@ std::string read_hidden_line(const std::string & greeting, int len = 64);
 std::string get_filename(const std::string & path);
 
 } // namespace tools
-} // namespace ftp
 #endif //FTP_CLIENT_TOOLS_HPP

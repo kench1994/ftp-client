@@ -27,9 +27,6 @@
 
 #include "command_handler.hpp"
 
-namespace ftp
-{
-
 class user_interface
 {
 public:
@@ -39,5 +36,4 @@ private:
     command_handler command_handler_;
 };
 
-} // namespace ftp
 #endif //FTP_CLIENT_USER_INTERFACE_HPP

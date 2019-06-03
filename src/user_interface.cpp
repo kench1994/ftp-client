@@ -29,9 +29,6 @@
 #include "command_parser.hpp"
 #include <iostream>
 
-namespace ftp
-{
-
 using std::string;
 using std::vector;
 using std::cout;
@@ -61,5 +58,3 @@ void user_interface::run()
         }
     }
 }
-
-} // namespace ftp

@@ -28,9 +28,6 @@
 #include <stdexcept>
 #include <boost/format.hpp>
 
-namespace ftp
-{
-
 class base_exception : public std::runtime_error
 {
 public:
@@ -41,5 +38,4 @@ public:
     }
 };
 
-} // namespace ftp
 #endif //FTP_CLIENT_BASE_EXCEPTION_HPP

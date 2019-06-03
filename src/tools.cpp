@@ -29,8 +29,6 @@
 #include "ncurses_wrappers/ncurses_initializer.hpp"
 #include "ncurses_wrappers/ncurses.hpp"
 
-namespace ftp
-{
 namespace tools
 {
 
@@ -90,4 +88,3 @@ string get_filename(const string & path)
 }
 
 } // namespace tools
-} // namespace ftp

@@ -27,7 +27,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 #include "data_transfer_mode.hpp"
-#include "resources.hpp"
+#include "../resources.hpp"
 #include "ftp_exception.hpp"
 
 namespace ftp

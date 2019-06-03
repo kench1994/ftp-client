@@ -37,7 +37,7 @@ int main(int argc, char * argv[])
 
     try
     {
-        ftp::user_interface ui;
+        user_interface ui;
         ui.run();
     }
     catch (const istream::failure & ex)

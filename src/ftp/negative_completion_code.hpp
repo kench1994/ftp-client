@@ -22,23 +22,23 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_FTP_EXCEPTION_HPP
-#define FTP_CLIENT_FTP_EXCEPTION_HPP
+#ifndef FTP_CLIENT_NEGATIVE_COMPLETION_CODE_HPP
+#define FTP_CLIENT_NEGATIVE_COMPLETION_CODE_HPP
 
-#include "base_exception.hpp"
+#include "../base_exception.hpp"
 
 namespace ftp
 {
 
-class ftp_exception : public base_exception
+class negative_completion_code : public base_exception
 {
 public:
     template<typename ...Args>
-    explicit ftp_exception(const std::string & message, Args && ...args)
+    explicit negative_completion_code(const std::string & message, Args && ...args)
         : base_exception(message, std::forward<Args>(args)...)
     {
     }
 };
 
 } // namespace ftp
-#endif //FTP_CLIENT_FTP_EXCEPTION_HPP
+#endif //FTP_CLIENT_NEGATIVE_COMPLETION_CODE_HPP

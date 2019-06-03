@@ -30,7 +30,7 @@
 namespace ncurses
 {
 
-class ncurses_exception : public ftp::base_exception
+class ncurses_exception : public base_exception
 {
 public:
     template<typename ...Args>

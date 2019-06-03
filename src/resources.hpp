@@ -27,8 +27,6 @@
 
 #include <string>
 
-namespace ftp
-{
 namespace command
 {
 namespace local
@@ -50,5 +48,4 @@ namespace local
     extern const std::string exit;
 } // namespace local
 } // namespace command
-} // namespace ftp
 #endif //FTP_CLIENT_RESOURCES_HPP

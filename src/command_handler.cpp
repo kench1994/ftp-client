@@ -25,13 +25,10 @@
 #include "command_handler.hpp"
 #include "local_exception.hpp"
 #include "resources.hpp"
-#include "negative_completion_code.hpp"
+#include "ftp/negative_completion_code.hpp"
 #include "tools.hpp"
-#include "ftp_exception.hpp"
+#include "ftp/ftp_exception.hpp"
 #include <iostream>
-
-namespace ftp
-{
 
 using std::string;
 using std::vector;
@@ -41,6 +38,8 @@ using std::endl;
 using std::optional;
 using std::ofstream;
 using std::ios_base;
+using ftp::ftp_exception;
+using ftp::negative_completion_code;
 
 void command_handler::execute(const string & command,
                               const vector<string> & args)
@@ -393,5 +392,3 @@ void command_handler::exit()
         client_.close();
     }
 }
-
-} // namespace ftp

@@ -26,9 +26,6 @@
 #include <sstream>
 #include <iomanip>
 
-namespace ftp
-{
-
 using std::vector;
 using std::string;
 using std::pair;
@@ -51,5 +48,3 @@ pair<string, vector<string>> command_parser::parse(const string & source_line)
 
     return make_pair(command, args);
 }
-
-} // namespace ftp

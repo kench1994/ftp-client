@@ -24,8 +24,6 @@
 
 #include "resources.hpp"
 
-namespace ftp
-{
 namespace command
 {
 
@@ -50,4 +48,3 @@ namespace local
     const string exit = "exit";
 } // namespace local
 } // namespace command
-} // namespace ftp

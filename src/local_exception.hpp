@@ -27,9 +27,6 @@
 
 #include "base_exception.hpp"
 
-namespace ftp
-{
-
 class local_exception : public base_exception
 {
 public:
@@ -40,5 +37,4 @@ public:
     }
 };
 
-} // namespace ftp
 #endif //FTP_CLIENT_LOCAL_EXCEPTION_HPP
