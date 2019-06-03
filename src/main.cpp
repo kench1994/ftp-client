@@ -31,7 +31,7 @@ using std::endl;
 using std::istream;
 using std::exception;
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
     cin.exceptions(cin.exceptions() | istream::failbit | istream::badbit);
 
