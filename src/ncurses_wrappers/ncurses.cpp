@@ -63,13 +63,13 @@ void clear()
 void wgetnstr(WINDOW *window, char *str, int len)
 {
     if (::wgetnstr(window, str, len) == ERR)
-        throw ncurses_exception("ncurses: cannot get string");
+        throw ncurses_exception("ncurses: cannot get string.");
 }
 
 void refresh()
 {
     if (::refresh() == ERR)
-        throw ncurses_exception("ncurses: cannot refresh");
+        throw ncurses_exception("ncurses: cannot refresh.");
 }
 
 } // namespace ncurses
