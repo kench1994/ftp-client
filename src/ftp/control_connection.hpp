@@ -44,8 +44,6 @@ public:
 private:
     std::string read_line();
 
-    bool is_multiline_reply(const std::string & reply_line) const;
-
     bool is_end_of_multiline_reply(const std::string & first_reply,
                                    const std::string & current_reply) const;
 

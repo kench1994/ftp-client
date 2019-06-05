@@ -46,26 +46,35 @@ control_connection::control_connection(boost::asio::io_context & io_context,
 
 string control_connection::read()
 {
-    string reply = read_line();
+    string reply;
+    string line;
 
-    if (!is_multiline_reply(reply))
+    line = read_line();
+    reply += line;
+
+    /**
+     * RFC 959: https://tools.ietf.org/html/rfc959
+     *
+     * Thus the format for multi-line replies is that the first line
+     * will begin with the exact required reply code, followed
+     * immediately by a Hyphen, "-" (also known as Minus), followed by
+     * text.
+     */
+    if (line[3] == '-')
     {
-        return reply;
+        string first_line = line;
+
+        for (;;)
+        {
+            line = read_line();
+            reply += "\n" + line;
+
+            if (is_end_of_multiline_reply(first_line, line))
+                break;
+        }
     }
 
-    string first_reply = reply;
-    string multiline_reply = reply;
-
-    for (;;)
-    {
-        reply = read_line();
-        multiline_reply += "\n" + reply;
-
-        if (is_end_of_multiline_reply(first_reply, reply))
-            break;
-    }
-
-    return multiline_reply;
+    return reply;
 }
 
 void control_connection::write(const string & command)
@@ -97,19 +106,6 @@ string control_connection::read_line()
     }
 
     return line;
-}
-
-/**
- * RFC 959: https://tools.ietf.org/html/rfc959
- *
- * Thus the format for multi-line replies is that the first line
- * will begin with the exact required reply code, followed
- * immediately by a Hyphen, "-" (also known as Minus), followed by
- * text.
- */
-bool control_connection::is_multiline_reply(const string & reply) const
-{
-    return reply[3] == '-';
 }
 
 /**
