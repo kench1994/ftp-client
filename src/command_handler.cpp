@@ -25,7 +25,6 @@
 #include "command_handler.hpp"
 #include "local_exception.hpp"
 #include "resources.hpp"
-#include "ftp/negative_completion_code.hpp"
 #include "tools.hpp"
 #include "ftp/ftp_exception.hpp"
 #include <iostream>
@@ -39,7 +38,6 @@ using std::optional;
 using std::ofstream;
 using std::ios_base;
 using ftp::ftp_exception;
-using ftp::negative_completion_code;
 
 void command_handler::execute(const string & command,
                               const vector<string> & args)
@@ -120,10 +118,6 @@ void command_handler::execute(const string & command,
         {
             throw local_exception("%1%: invalid command", command);
         }
-    }
-    catch (const negative_completion_code & ex)
-    {
-        cout << ex.what() << endl;
     }
     catch (const ftp_exception & ex)
     {

@@ -33,7 +33,6 @@ add_executable(ftp_client
         src/ftp/data_transfer_mode.cpp
         src/ftp/data_transfer_mode.hpp
         src/ftp/ftp_exception.hpp
-        src/ftp/negative_completion_code.hpp
         # ncurses
         src/ncurses_wrappers/ncurses.cpp
         src/ncurses_wrappers/ncurses.hpp
