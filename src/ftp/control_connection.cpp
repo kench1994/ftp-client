@@ -50,6 +50,21 @@ string control_connection::read()
     string line;
 
     line = read_line();
+
+    /**
+     * RFC 959: https://tools.ietf.org/html/rfc959
+     *
+     * A reply is defined to contain the 3-digit code, followed by Space
+     * <SP>, followed by one line of text (where some maximum line length
+     * has been specified), and terminated by the Telnet end-of-line code.
+     *
+     * Make sure the line contains at least 3-digit code and followed Space <SP>.
+     */
+    if (line.size() < 4)
+    {
+        throw ftp_exception("%1%: invalid server reply", line);
+    }
+
     reply += line;
 
     /**
@@ -107,20 +122,6 @@ string control_connection::read_line()
         {
             line += ch;
         }
-    }
-
-    /**
-     * RFC 959: https://tools.ietf.org/html/rfc959
-     *
-     * A reply is defined to contain the 3-digit code, followed by Space
-     * <SP>, followed by one line of text (where some maximum line length
-     * has been specified), and terminated by the Telnet end-of-line code.
-     *
-     * Make sure the line contains at least 3-digit code and followed Space <SP>.
-     */
-    if (line.size() < 4)
-    {
-        throw ftp_exception("%1%: invalid server reply", line);
     }
 
     return line;
