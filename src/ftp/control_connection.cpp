@@ -85,15 +85,25 @@ string control_connection::read()
      */
     if (line[3] == '-')
     {
-        string first_line = line;
+        uint16_t reply_code = code;
 
         for (;;)
         {
             line = read_line();
             reply += '\n' + line;
 
-            if (is_end_of_multiline_reply(first_line, line))
-                break;
+            /**
+             * RFC 959: https://tools.ietf.org/html/rfc959
+             *
+             * The last line will begin with the same code, followed
+             * immediately by Space <SP>, optionally some text, and the Telnet
+             * end-of-line code.
+             */
+            if (line.size() > 3 && line[3] == ' ' && try_parse_code(line, code))
+            {
+                if (reply_code == code)
+                    break;
+            }
         }
     }
 
@@ -152,25 +162,6 @@ bool control_connection::try_parse_code(const std::string & line, uint16_t & cod
     {
         return false;
     }
-}
-
-/**
- * RFC 959: https://tools.ietf.org/html/rfc959
- *
- * An FTP reply consists of a three digit number (transmitted as
- * three alphanumeric characters) followed by some text.
- *
- * ...
- *
- * The last line will begin with the same code, followed
- * immediately by Space <SP>, optionally some text, and the Telnet
- * end-of-line code.
- */
-bool control_connection::is_end_of_multiline_reply(const string & first_reply,
-                                                   const string & current_reply) const
-{
-    return equal(first_reply.cbegin(), first_reply.cbegin() +  3,
-                 current_reply.cbegin()) && current_reply[3] == ' ';
 }
 
 } // namespace ftp

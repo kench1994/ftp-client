@@ -46,9 +46,6 @@ private:
 
     bool try_parse_code(const std::string & line, uint16_t & code);
 
-    bool is_end_of_multiline_reply(const std::string & first_reply,
-                                   const std::string & current_reply) const;
-
     boost::asio::ip::tcp::socket socket_;
     boost::asio::ip::tcp::resolver resolver_;
 };
