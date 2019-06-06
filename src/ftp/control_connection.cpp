@@ -67,7 +67,7 @@ string control_connection::read()
         for (;;)
         {
             line = read_line();
-            reply += "\n" + line;
+            reply += '\n' + line;
 
             if (is_end_of_multiline_reply(first_line, line))
                 break;
