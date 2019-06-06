@@ -73,7 +73,7 @@ void client::ls(const optional<string> & remote_directory)
 
     if (remote_directory)
     {
-        command += " " + remote_directory.value();
+        command += ' ' + remote_directory.value();
     }
 
     unique_ptr<data_connection> data_connection =
