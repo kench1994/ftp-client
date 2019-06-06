@@ -84,12 +84,30 @@ void control_connection::write(const string & command)
 
 string control_connection::read_line()
 {
-    size_t len = boost::asio::read_until(
-        socket_, boost::asio::dynamic_buffer(string_buffer_), "\r\n");
+    string line;
 
-    // Remove last '\r\n' characters.
-    string line = string_buffer_.substr(0, len - 2);
-    string_buffer_.erase(0, len);
+    while (true)
+    {
+        char ch;
+
+        size_t len = boost::asio::read(socket_, boost::asio::buffer(&ch, 1));
+
+        if (len != 1)
+            break;
+
+        if (ch == '\r')
+        {
+            continue;
+        }
+        else if (ch == '\n')
+        {
+            break;
+        }
+        else
+        {
+            line += ch;
+        }
+    }
 
     /**
      * RFC 959: https://tools.ietf.org/html/rfc959
