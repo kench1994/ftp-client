@@ -44,6 +44,8 @@ public:
 private:
     std::string read_line();
 
+    bool try_parse_code(const std::string & line, uint16_t & code);
+
     bool is_end_of_multiline_reply(const std::string & first_reply,
                                    const std::string & current_reply) const;
 

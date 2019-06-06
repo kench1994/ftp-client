@@ -26,6 +26,8 @@
 #include <boost/asio/read.hpp>
 #include <boost/asio/read_until.hpp>
 #include <boost/asio/write.hpp>
+#include <boost/lexical_cast/bad_lexical_cast.hpp>
+#include <boost/lexical_cast.hpp>
 #include "control_connection.hpp"
 #include "ftp_exception.hpp"
 
@@ -61,6 +63,12 @@ string control_connection::read()
      * Make sure the line contains at least 3-digit code and followed Space <SP>.
      */
     if (line.size() < 4)
+    {
+        throw ftp_exception("%1%: invalid server reply", line);
+    }
+
+    uint16_t code;
+    if (!try_parse_code(line, code))
     {
         throw ftp_exception("%1%: invalid server reply", line);
     }
@@ -125,6 +133,25 @@ string control_connection::read_line()
     }
 
     return line;
+}
+
+bool control_connection::try_parse_code(const std::string & line, uint16_t & code)
+{
+    if (line.size() < 3)
+    {
+        return false;
+    }
+
+    try
+    {
+        code = boost::lexical_cast<uint16_t>(line.substr(0, 3));
+
+        return true;
+    }
+    catch (const boost::bad_lexical_cast & ex)
+    {
+        return false;
+    }
 }
 
 /**
