@@ -27,6 +27,7 @@
 #include <boost/asio/read.hpp>
 #include <fstream>
 #include <boost/asio/buffers_iterator.hpp>
+#include <boost/algorithm/string/trim.hpp>
 
 namespace ftp
 {
@@ -69,9 +70,7 @@ string data_connection::recv()
     string reply = string(boost::asio::buffers_begin(stream_buffer_.data()),
                           boost::asio::buffers_end(stream_buffer_.data()));
 
-    // Remove last '\r\n' characters.
-    reply.pop_back();
-    reply.pop_back();
+    boost::algorithm::trim_if(reply, boost::algorithm::is_any_of("\r\n"));
 
     return reply;
 }
