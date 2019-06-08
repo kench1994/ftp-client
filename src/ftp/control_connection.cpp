@@ -148,7 +148,9 @@ string control_connection::read_line()
         }
 
         if (len != 1)
+        {
             break;
+        }
 
         if (ch == '\r')
         {
