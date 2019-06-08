@@ -71,13 +71,13 @@ string control_connection::recv()
      */
     if (line.size() < 4)
     {
-        throw ftp_exception("%1%: invalid server reply", line);
+        throw ftp_exception("invalid server reply: %1%", line);
     }
 
     uint16_t code;
     if (!try_parse_code(line, code))
     {
-        throw ftp_exception("%1%: invalid server reply", line);
+        throw ftp_exception("invalid server reply: %1%", line);
     }
 
     reply += line;
