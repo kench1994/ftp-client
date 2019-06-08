@@ -238,18 +238,22 @@ void command_handler::cd(const vector<string> & args)
 
 void command_handler::ls(const vector<string> & args)
 {
+    optional<string> remote_directory;
+
     if (args.empty())
     {
-        client_.ls();
+        // Remote directory is optional parameter.
     }
     else if (args.size() == 1)
     {
-        client_.ls(args[0]);
+        remote_directory = args[0];
     }
     else
     {
         throw local_exception("usage: ls [ remote-directory ]");
     }
+
+    client_.ls(remote_directory);
 }
 
 void command_handler::get(const vector<string> & args)
