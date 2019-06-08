@@ -62,7 +62,11 @@ string data_connection::recv()
 
     boost::asio::read(socket_, stream_buffer_, ec);
 
-    if (ec && ec != boost::asio::error::eof)
+    if (ec == boost::asio::error::eof)
+    {
+        // Ignore eof.
+    }
+    else if (ec)
     {
         throw ftp_exception("cannot receive reply: %1%", ec.message());
     }
