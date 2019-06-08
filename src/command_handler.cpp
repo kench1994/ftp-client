@@ -61,6 +61,8 @@ void command_handler::execute(const string & command,
         {
             user(args);
             pass();
+            // Use binary mode to transfer files by default.
+            binary();
         }
         else if (command == command::local::close)
         {
