@@ -202,11 +202,11 @@ void command_handler::user(const vector<string> & args)
 /**
  * Send password command.
  *
- * RFC 959: https://tools.ietf.org/html/rfc959
- *
  * This command must be immediately preceded by the
  * user name command, and, for some sites, completes the user's
  * identification for access control.
+ *
+ * RFC 959: https://tools.ietf.org/html/rfc959
  */
 void command_handler::pass()
 {

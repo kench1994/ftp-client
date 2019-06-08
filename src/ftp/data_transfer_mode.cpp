@@ -68,8 +68,6 @@ unique_ptr<data_connection> passive_mode::open_data_connection(control_connectio
 }
 
 /**
- * RFC 959: https://tools.ietf.org/html/rfc959
- *
  * This address information is broken into 8-bit fields and the
  * value of each field is transmitted as a decimal number (in
  * character string representation).  The fields are separated
@@ -78,6 +76,8 @@ unique_ptr<data_connection> passive_mode::open_data_connection(control_connectio
  * Format of server reply: 227 Entering Passive Mode (h1,h2,h3,h4,p1,p2)
  *
  * Where h1 is the high order 8 bits of the internet host address.
+ *
+ * RFC 959: https://tools.ietf.org/html/rfc959
  */
 boost::asio::ip::tcp::endpoint
 passive_mode::get_endpoint_from_server_reply(const string & server_reply)
