@@ -47,7 +47,7 @@ void data_connection::connect()
     socket_.connect(endpoint_);
 }
 
-string data_connection::read()
+string data_connection::recv()
 {
     try
     {
@@ -71,7 +71,7 @@ string data_connection::read()
     return reply;
 }
 
-void data_connection::read_file(ofstream & file)
+void data_connection::recv_file(ofstream & file)
 {
     for (;;)
     {

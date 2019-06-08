@@ -39,9 +39,9 @@ public:
 
     void connect();
 
-    std::string read();
+    std::string recv();
 
-    void read_file(std::ofstream & file);
+    void recv_file(std::ofstream & file);
 
 private:
     boost::asio::ip::tcp::endpoint endpoint_;

@@ -46,7 +46,7 @@ control_connection::control_connection(boost::asio::io_context & io_context,
     boost::asio::connect(socket_, resolver_.resolve(hostname, port));
 }
 
-string control_connection::read()
+string control_connection::recv()
 {
     string reply;
     string line;
@@ -110,7 +110,7 @@ string control_connection::read()
     return reply;
 }
 
-void control_connection::write(const string & command)
+void control_connection::send(const string & command)
 {
     boost::asio::write(socket_, boost::asio::buffer(command + "\r\n"));
 }

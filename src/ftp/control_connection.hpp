@@ -37,9 +37,9 @@ public:
     control_connection(boost::asio::io_context & io_context,
                        const std::string & hostname, const std::string & port);
 
-    std::string read();
+    void send(const std::string & command);
 
-    void write(const std::string & command);
+    std::string recv();
 
 private:
     std::string read_line();
