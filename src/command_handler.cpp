@@ -124,11 +124,6 @@ void command_handler::execute(const string & command,
         cout << ex.what() << endl;
         client_.reset();
     }
-    catch (const boost::system::system_error & ex)
-    {
-        cout << ex.what() << endl;
-        client_.reset();
-    }
 }
 
 bool command_handler::is_needed_connection(const string & command) const

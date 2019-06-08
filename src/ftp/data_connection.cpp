@@ -23,6 +23,7 @@
  */
 
 #include "data_connection.hpp"
+#include "ftp_exception.hpp"
 #include <boost/asio/read.hpp>
 #include <fstream>
 #include <boost/asio/buffers_iterator.hpp>
@@ -44,21 +45,25 @@ data_connection::data_connection(boost::asio::io_context & io_context,
 
 void data_connection::connect()
 {
-    socket_.connect(endpoint_);
+    boost::system::error_code ec;
+
+    socket_.connect(endpoint_, ec);
+
+    if (ec)
+    {
+        throw ftp_exception("cannot create data connection: %1%", ec.message());
+    }
 }
 
 string data_connection::recv()
 {
-    try
+    boost::system::error_code ec;
+
+    boost::asio::read(socket_, stream_buffer_, ec);
+
+    if (ec && ec != boost::asio::error::eof)
     {
-        boost::asio::read(socket_, stream_buffer_);
-    }
-    catch (const boost::system::system_error & ex)
-    {
-        if (ex.code() != boost::asio::error::eof)
-        {
-            throw;
-        }
+        throw ftp_exception("cannot receive reply: %1%", ec.message());
     }
 
     string reply = string(boost::asio::buffers_begin(stream_buffer_.data()),
@@ -85,7 +90,7 @@ void data_connection::recv_file(ofstream & file)
         }
         else if (error)
         {
-            throw boost::system::system_error(error);
+            throw ftp_exception("cannot receive file: %1%", error.message());
         }
 
         file.write(buffer_.data(), len);

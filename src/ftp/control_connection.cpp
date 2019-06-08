@@ -43,7 +43,14 @@ control_connection::control_connection(boost::asio::io_context & io_context,
         : socket_(io_context),
           resolver_(io_context)
 {
-    boost::asio::connect(socket_, resolver_.resolve(hostname, port));
+    boost::system::error_code ec;
+
+    boost::asio::connect(socket_, resolver_.resolve(hostname, port, ec), ec);
+
+    if (ec)
+    {
+        throw ftp_exception("cannot create control connection: %1%", ec.message());
+    }
 }
 
 string control_connection::recv()
@@ -114,7 +121,14 @@ string control_connection::recv()
 
 void control_connection::send(const string & command)
 {
-    boost::asio::write(socket_, boost::asio::buffer(command + "\r\n"));
+    boost::system::error_code ec;
+
+    boost::asio::write(socket_, boost::asio::buffer(command + "\r\n"), ec);
+
+    if (ec)
+    {
+        throw ftp_exception("cannot send command: %1%", ec.message());
+    }
 }
 
 string control_connection::read_line()
@@ -123,9 +137,15 @@ string control_connection::read_line()
 
     while (true)
     {
+        boost::system::error_code ec;
         char ch;
 
-        size_t len = boost::asio::read(socket_, boost::asio::buffer(&ch, 1));
+        size_t len = boost::asio::read(socket_, boost::asio::buffer(&ch, 1), ec);
+
+        if (ec)
+        {
+            throw ftp_exception("cannot receive reply: %1%", ec.message());
+        }
 
         if (len != 1)
             break;
