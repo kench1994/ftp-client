@@ -135,7 +135,7 @@ string control_connection::read_line()
 {
     string line;
 
-    while (true)
+    for (;;)
     {
         boost::system::error_code ec;
         char ch;
