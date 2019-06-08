@@ -102,7 +102,9 @@ string control_connection::recv()
             if (line.size() > 3 && line[3] == ' ' && try_parse_code(line, code))
             {
                 if (reply_code == code)
+                {
                     break;
+                }
             }
         }
     }
