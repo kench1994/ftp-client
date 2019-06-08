@@ -284,7 +284,7 @@ void command_handler::get(const vector<string> & args)
 
     if (!file)
     {
-        throw local_exception("%1%: can't create file", local_file);
+        throw local_exception("cannot create file: %1%", local_file);
     }
 
     client_.get(remote_file, file);
