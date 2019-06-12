@@ -85,13 +85,13 @@ passive_mode::get_endpoint_from_server_reply(const string & server_reply)
     size_t left_bracket = server_reply.find('(');
     if (left_bracket == string::npos)
     {
-        throw ftp_exception("invalid server reply to the 'pasv' command: %1%", server_reply);
+        throw ftp_exception("invalid server reply: %1%", server_reply);
     }
 
     size_t right_bracket = server_reply.find(')');
     if (right_bracket == string::npos)
     {
-        throw ftp_exception("invalid server reply to the 'pasv' command: %1%", server_reply);
+        throw ftp_exception("invalid server reply: %1%", server_reply);
     }
 
     // Transform from: 227 Entering Passive Mode (h1,h2,h3,h4,p1,p2)
@@ -104,7 +104,7 @@ passive_mode::get_endpoint_from_server_reply(const string & server_reply)
     static size_t needed_numbers_count = 6;
     if (numbers.size() != needed_numbers_count)
     {
-        throw ftp_exception("invalid server reply to the 'pasv' command: %1%", server_reply);
+        throw ftp_exception("invalid server reply: %1%", server_reply);
     }
 
     string ip = numbers[0] + '.' + numbers[1] + '.' + numbers[2] + '.' + numbers[3];
