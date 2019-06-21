@@ -40,11 +40,7 @@ private:
 
     void open(const std::vector<std::string> & args);
 
-    void user();
-
     void user(const std::vector<std::string> & args);
-
-    void pass();
 
     void cd(const std::vector<std::string> & args);
 

@@ -49,14 +49,20 @@ bool client::is_open() const
     return control_connection_ != nullptr;
 }
 
-void client::user(const string & username)
+void client::user(const string & username, const string & password)
 {
     control_connection_->send("USER " + username);
     cout << control_connection_->recv() << endl;
-}
 
-void client::pass(const string & password)
-{
+    /**
+     * Send PASS command.
+     *
+     * This command must be immediately preceded by the
+     * user name command, and, for some sites, completes the user's
+     * identification for access control.
+     *
+     * RFC 959: https://tools.ietf.org/html/rfc959
+     */
     control_connection_->send("PASS " + password);
     cout << control_connection_->recv() << endl;
 }

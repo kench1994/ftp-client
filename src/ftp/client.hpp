@@ -42,9 +42,7 @@ public:
 
     bool is_open() const;
 
-    void user(const std::string & username);
-
-    void pass(const std::string & password);
+    void user(const std::string & username, const std::string & password);
 
     void cd(const std::string & remote_directory);
 

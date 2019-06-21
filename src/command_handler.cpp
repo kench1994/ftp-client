@@ -52,15 +52,12 @@ void command_handler::execute(const string & command,
         if (command == command::local::open)
         {
             open(args);
-            user();
-            pass();
             // Use binary mode to transfer files by default.
             binary();
         }
         else if (command == command::local::user)
         {
             user(args);
-            pass();
             // Use binary mode to transfer files by default.
             binary();
         }
@@ -153,6 +150,8 @@ void command_handler::open(const vector<string> & args)
 
     string hostname;
     string port = "21";
+    string username;
+    string password;
 
     if (args.empty())
     {
@@ -173,47 +172,34 @@ void command_handler::open(const vector<string> & args)
     }
 
     client_.open(hostname, port);
-}
 
-void command_handler::user()
-{
-    string username = tools::read_line("username: ");
-    client_.user(username);
+    username = tools::read_line("username: ");
+    password = tools::read_hidden_line("password: ");
+
+    client_.user(username, password);
 }
 
 void command_handler::user(const vector<string> & args)
 {
     string username;
+    string password;
 
     if (args.empty())
     {
         username = tools::read_line("username: ");
+        password = tools::read_hidden_line("password: ");
     }
     else if (args.size() == 1)
     {
         username = args[0];
+        password = tools::read_hidden_line("password: ");
     }
     else
     {
         throw local_exception("usage: user username");
     }
 
-    client_.user(username);
-}
-
-/**
- * Send password command.
- *
- * This command must be immediately preceded by the
- * user name command, and, for some sites, completes the user's
- * identification for access control.
- *
- * RFC 959: https://tools.ietf.org/html/rfc959
- */
-void command_handler::pass()
-{
-    string password = tools::read_hidden_line("password: ");
-    client_.pass(password);
+    client_.user(username, password);
 }
 
 void command_handler::cd(const vector<string> & args)
