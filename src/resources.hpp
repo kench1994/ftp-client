@@ -39,7 +39,6 @@ namespace local
     extern const std::string pwd;
     extern const std::string mkdir;
     extern const std::string syst;
-    extern const std::string ascii;
     extern const std::string binary;
     extern const std::string size;
     extern const std::string noop;

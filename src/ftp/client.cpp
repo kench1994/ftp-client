@@ -122,12 +122,6 @@ void client::mkdir(const string & directory_name)
     cout << control_connection_->recv() << endl;
 }
 
-void client::ascii()
-{
-    control_connection_->send("TYPE A");
-    cout << control_connection_->recv() << endl;
-}
-
 void client::binary()
 {
     control_connection_->send("TYPE I");

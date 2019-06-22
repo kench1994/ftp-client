@@ -54,8 +54,6 @@ public:
 
     void mkdir(const std::string & directory_name);
 
-    void ascii();
-
     void binary();
 
     void size(const std::string & remote_file);

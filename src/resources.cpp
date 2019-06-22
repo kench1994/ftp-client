@@ -39,7 +39,6 @@ namespace local
     const string pwd = "pwd";
     const string mkdir = "mkdir";
     const string syst = "syst";
-    const string ascii = "ascii";
     const string binary = "binary";
     const string size = "size";
     const string noop = "noop";
