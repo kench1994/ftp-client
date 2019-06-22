@@ -28,6 +28,7 @@
 #include "tools.hpp"
 #include "ftp/ftp_exception.hpp"
 #include <iostream>
+#include <boost/algorithm/string/predicate.hpp>
 
 using std::string;
 using std::vector;
@@ -49,67 +50,67 @@ void command_handler::execute(const string & command,
 
     try
     {
-        if (command == command::local::open)
+        if (boost::iequals(command::local::open, command))
         {
             open(args);
             // Use binary mode to transfer files by default.
             binary();
         }
-        else if (command == command::local::user)
+        else if (boost::iequals(command::local::user, command))
         {
             user(args);
             // Use binary mode to transfer files by default.
             binary();
         }
-        else if (command == command::local::close)
+        else if (boost::iequals(command::local::close, command))
         {
             close();
         }
-        else if (command == command::local::cd)
+        else if (boost::iequals(command::local::cd, command))
         {
             cd(args);
         }
-        else if (command == command::local::ls)
+        else if (boost::iequals(command::local::ls, command))
         {
             ls(args);
         }
-        else if (command == command::local::get)
+        else if (boost::iequals(command::local::get, command))
         {
             get(args);
         }
-        else if (command == command::local::pwd)
+        else if (boost::iequals(command::local::pwd, command))
         {
             pwd();
         }
-        else if (command == command::local::mkdir)
+        else if (boost::iequals(command::local::mkdir, command))
         {
             mkdir(args);
         }
-        else if (command == command::local::syst)
+        else if (boost::iequals(command::local::syst, command))
         {
             syst();
         }
-        else if (command == command::local::ascii)
+        else if (boost::iequals(command::local::ascii, command))
         {
             ascii();
         }
-        else if (command == command::local::binary)
+        else if (boost::iequals(command::local::binary, command))
         {
             binary();
         }
-        else if (command == command::local::size)
+        else if (boost::iequals(command::local::size, command))
         {
             size(args);
         }
-        else if (command == command::local::noop)
+        else if (boost::iequals(command::local::noop, command))
         {
             noop();
         }
-        else if (command == command::local::help)
+        else if (boost::iequals(command::local::help, command))
         {
             help();
         }
-        else if (command == command::local::exit)
+        else if (boost::iequals(command::local::exit, command))
         {
             exit();
         }
@@ -127,18 +128,18 @@ void command_handler::execute(const string & command,
 
 bool command_handler::is_needed_connection(const string & command) const
 {
-    return command == command::local::close ||
-           command == command::local::cd ||
-           command == command::local::ls ||
-           command == command::local::get ||
-           command == command::local::user ||
-           command == command::local::pwd ||
-           command == command::local::mkdir ||
-           command == command::local::syst ||
-           command == command::local::ascii ||
-           command == command::local::binary ||
-           command == command::local::size ||
-           command == command::local::noop;
+    return boost::iequals(command::local::close, command) ||
+           boost::iequals(command::local::cd, command) ||
+           boost::iequals(command::local::ls, command) ||
+           boost::iequals(command::local::get, command) ||
+           boost::iequals(command::local::user, command) ||
+           boost::iequals(command::local::pwd, command) ||
+           boost::iequals(command::local::mkdir, command) ||
+           boost::iequals(command::local::syst, command) ||
+           boost::iequals(command::local::ascii, command) ||
+           boost::iequals(command::local::binary, command) ||
+           boost::iequals(command::local::size, command) ||
+           boost::iequals(command::local::noop, command);
 }
 
 void command_handler::open(const vector<string> & args)

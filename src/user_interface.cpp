@@ -28,6 +28,7 @@
 #include "tools.hpp"
 #include "command_parser.hpp"
 #include <iostream>
+#include <boost/algorithm/string/predicate.hpp>
 
 using std::string;
 using std::vector;
@@ -47,7 +48,7 @@ void user_interface::run()
             auto [command, args] = command_parser::parse(input);
             command_handler_.execute(command, args);
 
-            if (command == command::local::exit)
+            if (boost::iequals(command::local::exit, command))
             {
                 return;
             }
