@@ -44,7 +44,7 @@ data_connection::data_connection(boost::asio::io_context & io_context,
 {
 }
 
-void data_connection::connect()
+void data_connection::open()
 {
     boost::system::error_code ec;
 

@@ -37,7 +37,7 @@ public:
     data_connection(boost::asio::io_context & io_context,
                     const boost::asio::ip::tcp::endpoint & endpoint);
 
-    void connect();
+    void open();
 
     std::string recv();
 

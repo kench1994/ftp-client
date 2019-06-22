@@ -62,7 +62,7 @@ unique_ptr<data_connection> passive_mode::open_data_connection(control_connectio
     unique_ptr<data_connection> connection =
             make_unique<data_connection>(io_context_, server_endpoint);
 
-    connection->connect();
+    connection->open();
 
     return connection;
 }
