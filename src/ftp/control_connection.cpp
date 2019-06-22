@@ -57,7 +57,7 @@ void control_connection::open(const std::string & hostname, const std::string & 
          *
          * https://www.boost.org/doc/libs/1_70_0/doc/html/boost_asio/reference/basic_stream_socket/connect/overload2.html
          */
-        socket_.close();
+        socket_.close(ec);
 
         throw ftp_exception("cannot open control connection: %1%", ec.message());
     }
