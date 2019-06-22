@@ -50,7 +50,7 @@ void user_interface::run()
 
             if (boost::iequals(command::local::exit, command))
             {
-                return;
+                break;
             }
         }
         catch (const local_exception & ex)
