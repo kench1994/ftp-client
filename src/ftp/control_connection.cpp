@@ -83,66 +83,87 @@ void control_connection::close()
 string control_connection::recv()
 {
     string reply;
-    string line;
 
-    line = read_line();
+    reply = read_line();
 
     /**
      * A reply is defined to contain the 3-digit code, followed by Space
-     * <SP>, followed by one line of text (where some maximum line length
-     * has been specified), and terminated by the Telnet end-of-line code.
-     *
-     * Make sure the line contains at least 3-digit code and followed Space <SP>.
+     * <SP>, followed by one line of text.
      *
      * RFC 959: https://tools.ietf.org/html/rfc959
      */
-    if (line.size() < 4)
+    if (reply.size() < 4)
     {
-        throw ftp_exception("invalid server reply: %1%", line);
+        throw ftp_exception("invalid server reply: %1%", reply);
     }
 
     uint16_t reply_code;
-    if (!try_parse_code(line, reply_code))
+    if (!try_parse_code(reply, reply_code))
     {
-        throw ftp_exception("invalid server reply: %1%", line);
+        throw ftp_exception("invalid server reply: %1%", reply);
     }
 
-    reply += line;
-
-    /**
-     * Thus the format for multi-line replies is that the first line
-     * will begin with the exact required reply code, followed
-     * immediately by a Hyphen, "-" (also known as Minus), followed by
-     * text.
-     *
-     * RFC 959: https://tools.ietf.org/html/rfc959
-     */
-    if (line[3] == '-')
+    if (reply[3] == ' ')
     {
+        // It's one-line reply.
+    }
+    else if (reply[3] == '-')
+    {
+        /**
+         * Thus the format for multi-line replies is that the first line
+         * will begin with the exact required reply code, followed
+         * immediately by a Hyphen, "-" (also known as Minus), followed by
+         * text.
+         *
+         * RFC 959: https://tools.ietf.org/html/rfc959
+         */
         for (;;)
         {
+            string line;
+
             line = read_line();
             reply += '\n' + line;
 
-            /**
-             * The last line will begin with the same code, followed
-             * immediately by Space <SP>, optionally some text, and the Telnet
-             * end-of-line code.
-             *
-             * RFC 959: https://tools.ietf.org/html/rfc959
-             */
-            uint16_t code;
-            if (line.size() > 3 && line[3] == ' ' && try_parse_code(line, code))
+            if (is_last_line(line, reply_code))
             {
-                if (reply_code == code)
-                {
-                    break;
-                }
+                break;
             }
         }
     }
+    else
+    {
+        throw ftp_exception("invalid server reply: %1%", reply);
+    }
 
     return reply;
+}
+
+/**
+ * The last line will begin with the same code, followed
+ * immediately by Space <SP>, optionally some text, and the Telnet
+ * end-of-line code.
+ *
+ * RFC 959: https://tools.ietf.org/html/rfc959
+ */
+bool control_connection::is_last_line(const std::string & line, uint16_t reply_code)
+{
+    if (line.size() < 4)
+    {
+        return false;
+    }
+
+    if (line[3] != ' ')
+    {
+        return false;
+    }
+
+    uint16_t code;
+    if (!try_parse_code(line, code))
+    {
+        return false;
+    }
+
+    return reply_code == code;
 }
 
 void control_connection::send(const string & command)

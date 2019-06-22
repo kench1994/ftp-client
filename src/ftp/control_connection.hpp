@@ -51,6 +51,8 @@ private:
 
     bool try_parse_code(const std::string & line, uint16_t & code);
 
+    bool is_last_line(const std::string & line, uint16_t code);
+
     boost::asio::ip::tcp::socket socket_;
     boost::asio::ip::tcp::resolver resolver_;
 };
