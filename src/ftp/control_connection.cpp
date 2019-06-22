@@ -51,6 +51,14 @@ void control_connection::open(const std::string & hostname, const std::string & 
 
     if (ec)
     {
+        /*
+         * If the connect fails, and the socket was automatically opened,
+         * the socket is not returned to the closed state.
+         *
+         * https://www.boost.org/doc/libs/1_70_0/doc/html/boost_asio/reference/basic_stream_socket/connect/overload2.html
+         */
+        socket_.close();
+
         throw ftp_exception("cannot open control connection: %1%", ec.message());
     }
 }
