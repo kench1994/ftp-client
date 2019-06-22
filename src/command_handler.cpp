@@ -118,7 +118,6 @@ void command_handler::execute(const string & command,
     catch (const ftp_exception & ex)
     {
         cout << ex.what() << endl;
-        client_.reset();
     }
 }
 

@@ -34,8 +34,13 @@ namespace ftp
 class control_connection
 {
 public:
-    control_connection(boost::asio::io_context & io_context,
-                       const std::string & hostname, const std::string & port);
+    explicit control_connection(boost::asio::io_context & io_context);
+
+    void open(const std::string & hostname, const std::string & port);
+
+    bool is_open() const;
+
+    void close();
 
     void send(const std::string & command);
 

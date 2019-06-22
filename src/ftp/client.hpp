@@ -38,6 +38,8 @@ namespace ftp
 class client
 {
 public:
+    client();
+
     void open(const std::string & hostname, const std::string & port = "21");
 
     bool is_open() const;
@@ -64,11 +66,9 @@ public:
 
     void close();
 
-    void reset();
-
 private:
     boost::asio::io_context io_context_;
-    std::unique_ptr<control_connection> control_connection_;
+    control_connection control_connection_;
     std::unique_ptr<data_transfer_mode> data_transfer_mode_;
 };
 

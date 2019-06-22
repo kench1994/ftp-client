@@ -37,11 +37,13 @@ namespace ftp
 using std::string;
 using std::istream;
 
-control_connection::control_connection(boost::asio::io_context & io_context,
-                                       const string & hostname,
-                                       const string & port)
-        : socket_(io_context),
-          resolver_(io_context)
+control_connection::control_connection(boost::asio::io_context & io_context)
+    : socket_(io_context),
+      resolver_(io_context)
+{
+}
+
+void control_connection::open(const std::string & hostname, const std::string & port)
 {
     boost::system::error_code ec;
 
@@ -49,7 +51,25 @@ control_connection::control_connection(boost::asio::io_context & io_context,
 
     if (ec)
     {
+        // TODO: fix text
         throw ftp_exception("cannot create control connection: %1%", ec.message());
+    }
+}
+
+bool control_connection::is_open() const
+{
+    return socket_.is_open();
+}
+
+void control_connection::close()
+{
+    boost::system::error_code ec;
+
+    socket_.close(ec);
+
+    if (ec)
+    {
+        throw ftp_exception("cannot close control connection: %1%", ec.message());
     }
 }
 
