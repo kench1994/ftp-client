@@ -51,8 +51,7 @@ void control_connection::open(const std::string & hostname, const std::string & 
 
     if (ec)
     {
-        // TODO: fix text
-        throw ftp_exception("cannot create control connection: %1%", ec.message());
+        throw ftp_exception("cannot open control connection: %1%", ec.message());
     }
 }
 
