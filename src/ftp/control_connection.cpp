@@ -101,8 +101,8 @@ string control_connection::recv()
         throw ftp_exception("invalid server reply: %1%", line);
     }
 
-    uint16_t code;
-    if (!try_parse_code(line, code))
+    uint16_t reply_code;
+    if (!try_parse_code(line, reply_code))
     {
         throw ftp_exception("invalid server reply: %1%", line);
     }
@@ -119,8 +119,6 @@ string control_connection::recv()
      */
     if (line[3] == '-')
     {
-        uint16_t reply_code = code;
-
         for (;;)
         {
             line = read_line();
@@ -133,6 +131,7 @@ string control_connection::recv()
              *
              * RFC 959: https://tools.ietf.org/html/rfc959
              */
+            uint16_t code;
             if (line.size() > 3 && line[3] == ' ' && try_parse_code(line, code))
             {
                 if (reply_code == code)
