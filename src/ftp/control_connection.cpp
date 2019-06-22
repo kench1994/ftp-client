@@ -37,6 +37,25 @@ namespace ftp
 using std::string;
 using std::istream;
 
+static bool try_parse_code(const std::string & line, uint16_t & code)
+{
+    if (line.size() < 3)
+    {
+        return false;
+    }
+
+    try
+    {
+        code = boost::lexical_cast<uint16_t>(line.substr(0, 3));
+
+        return true;
+    }
+    catch (const boost::bad_lexical_cast & ex)
+    {
+        return false;
+    }
+}
+
 control_connection::control_connection(boost::asio::io_context & io_context)
     : socket_(io_context),
       resolver_(io_context)
@@ -214,25 +233,6 @@ string control_connection::read_line()
     }
 
     return line;
-}
-
-bool control_connection::try_parse_code(const std::string & line, uint16_t & code)
-{
-    if (line.size() < 3)
-    {
-        return false;
-    }
-
-    try
-    {
-        code = boost::lexical_cast<uint16_t>(line.substr(0, 3));
-
-        return true;
-    }
-    catch (const boost::bad_lexical_cast & ex)
-    {
-        return false;
-    }
 }
 
 } // namespace ftp
