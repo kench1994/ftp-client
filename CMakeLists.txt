@@ -7,8 +7,7 @@ set(CMAKE_CXX_FLAGS -pthread)
 find_package(Boost 1.67.0 REQUIRED COMPONENTS system filesystem)
 include_directories(${Boost_INCLUDE_DIRS})
 
-find_package(Curses REQUIRED)
-include_directories(${CURSES_INCLUDE_DIR})
+add_subdirectory(src/ncurses_wrappers)
 
 add_executable(ftp_client
         src/command_handler.cpp
@@ -32,12 +31,7 @@ add_executable(ftp_client
         src/ftp/data_connection.hpp
         src/ftp/data_transfer_mode.cpp
         src/ftp/data_transfer_mode.hpp
-        src/ftp/ftp_exception.hpp
-        # ncurses
-        src/ncurses_wrappers/ncurses.cpp
-        src/ncurses_wrappers/ncurses.hpp
-        src/ncurses_wrappers/ncurses_exception.hpp
-        src/ncurses_wrappers/ncurses_initializer.hpp)
+        src/ftp/ftp_exception.hpp)
 
 target_link_libraries(ftp_client ${Boost_LIBRARIES})
-target_link_libraries(ftp_client ${CURSES_LIBRARIES})
+target_link_libraries(ftp_client ncurses_wrappers)
