@@ -9,7 +9,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 add_subdirectory(src/ncurses_wrappers)
 
-add_executable(ftp_client
+add_executable(${PROJECT_NAME}
         src/command_handler.cpp
         src/command_handler.hpp
         src/command_parser.cpp
@@ -33,5 +33,5 @@ add_executable(ftp_client
         src/ftp/data_transfer_mode.hpp
         src/ftp/ftp_exception.hpp)
 
-target_link_libraries(ftp_client ${Boost_LIBRARIES})
-target_link_libraries(ftp_client ncurses_wrappers)
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ncurses_wrappers)
