@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.10)
 project(ftp_client)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS -pthread)
 
-find_package(Boost 1.67.0 REQUIRED COMPONENTS system filesystem)
+find_package(Boost 1.67.0 REQUIRED COMPONENTS filesystem)
 include_directories(${Boost_INCLUDE_DIRS})
 
+add_subdirectory(src/ftp)
 add_subdirectory(src/ncurses_wrappers)
 
 add_executable(${PROJECT_NAME}
@@ -21,17 +21,8 @@ add_executable(${PROJECT_NAME}
         src/tools.cpp
         src/tools.hpp
         src/user_interface.cpp
-        src/user_interface.hpp
-        # ftp
-        src/ftp/client.cpp
-        src/ftp/client.hpp
-        src/ftp/control_connection.cpp
-        src/ftp/control_connection.hpp
-        src/ftp/data_connection.cpp
-        src/ftp/data_connection.hpp
-        src/ftp/data_transfer_mode.cpp
-        src/ftp/data_transfer_mode.hpp
-        src/ftp/ftp_exception.hpp)
+        src/user_interface.hpp)
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ftp)
 target_link_libraries(${PROJECT_NAME} ncurses_wrappers)
