@@ -37,7 +37,7 @@ namespace ftp
 using std::string;
 using std::istream;
 
-static bool try_parse_code(const std::string & line, uint16_t & code)
+static bool try_parse_code(const string & line, uint16_t & code)
 {
     if (line.size() < 3)
     {
@@ -62,7 +62,7 @@ control_connection::control_connection(boost::asio::io_context & io_context)
 {
 }
 
-void control_connection::open(const std::string & hostname, const std::string & port)
+void control_connection::open(const string & hostname, const string & port)
 {
     boost::system::error_code ec;
 
@@ -164,7 +164,7 @@ string control_connection::recv()
  *
  * RFC 959: https://tools.ietf.org/html/rfc959
  */
-bool control_connection::is_last_line(const std::string & line, uint16_t reply_code)
+bool control_connection::is_last_line(const string & line, uint16_t reply_code)
 {
     if (line.size() < 4)
     {
