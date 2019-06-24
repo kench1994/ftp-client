@@ -43,7 +43,12 @@ void user_interface::run()
         {
             string input;
 
-            input = tools::read_not_empty_line("ftp> ");
+            input = tools::read_line("ftp> ");
+
+            if (input.empty())
+            {
+                continue;
+            }
 
             auto [command, args] = command_parser::parse(input);
             command_handler_.execute(command, args);
