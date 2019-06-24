@@ -6,14 +6,18 @@ set(CMAKE_CXX_FLAGS -pthread)
 
 find_package(Boost 1.67.0 REQUIRED COMPONENTS system)
 
-add_library(${PROJECT_NAME} STATIC
-        src/client.cpp
-        src/control_connection.cpp
-        src/data_connection.cpp
-        src/data_transfer_mode.cpp)
+add_library(${PROJECT_NAME}
+        STATIC
+            client.cpp
+            client.hpp
+            control_connection.cpp
+            control_connection.hpp
+            data_connection.cpp
+            data_connection.hpp
+            data_transfer_mode.cpp
+            data_transfer_mode.hpp)
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include/ftp)
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_include_directories(${PROJECT_NAME} PUBLIC ${Boost_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIRS})
