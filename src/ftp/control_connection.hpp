@@ -26,7 +26,6 @@
 #define FTP_CLIENT_CONTROL_CONNECTION_HPP
 
 #include <boost/asio/ip/tcp.hpp>
-#include <boost/asio/streambuf.hpp>
 
 namespace ftp
 {
