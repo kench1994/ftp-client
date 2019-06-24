@@ -1,12 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
-project(ftp)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS -pthread)
-
-find_package(Boost 1.67.0 REQUIRED COMPONENTS system)
-
-add_library(${PROJECT_NAME}
+add_library(ftp
         STATIC
             client.cpp
             client.hpp
@@ -17,9 +9,13 @@ add_library(${PROJECT_NAME}
             data_transfer_mode.cpp
             data_transfer_mode.hpp)
 
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
+find_package(Boost 1.67.0 REQUIRED COMPONENTS system)
 
-target_include_directories(${PROJECT_NAME}
+target_link_libraries(ftp
+        PRIVATE
+            ${Boost_LIBRARIES})
+
+target_include_directories(ftp
         PUBLIC
             ${CMAKE_CURRENT_SOURCE_DIR}
         PRIVATE

@@ -1,21 +1,21 @@
-cmake_minimum_required(VERSION 3.10)
-project(ncurses_wrappers)
-
-set(CMAKE_CXX_STANDARD 17)
-
-find_package(Curses REQUIRED)
-
-add_library(${PROJECT_NAME}
+add_library(ncurses_wrappers
         STATIC
             ncurses.cpp
             ncurses.hpp
             ncurses_exception.hpp
             ncurses_initializer.hpp)
 
-target_link_libraries(${PROJECT_NAME} ${CURSES_LIBRARIES})
+find_package(Curses REQUIRED)
+find_package(Boost 1.67.0 REQUIRED COMPONENTS system)
 
-target_include_directories(${PROJECT_NAME}
+target_link_libraries(ncurses_wrappers
+        PRIVATE
+            ${CURSES_LIBRARIES}
+            ${Boost_LIBRARIES})
+
+target_include_directories(ncurses_wrappers
         PUBLIC
             ${CMAKE_CURRENT_SOURCE_DIR}
         PRIVATE
-            ${CURSES_INCLUDE_DIR})
+            ${CURSES_INCLUDE_DIR}
+            ${Boost_INCLUDE_DIRS})
