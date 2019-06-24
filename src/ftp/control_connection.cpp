@@ -35,7 +35,6 @@ namespace ftp
 {
 
 using std::string;
-using std::istream;
 
 static bool try_parse_code(const string & line, uint16_t & code)
 {

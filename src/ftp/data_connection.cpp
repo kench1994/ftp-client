@@ -33,7 +33,6 @@ namespace ftp
 {
 
 using std::string;
-using std::istream;
 using std::ofstream;
 using std::array;
 
