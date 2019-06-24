@@ -19,5 +19,8 @@ add_library(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME}
+        PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}
+        PRIVATE
+            ${Boost_INCLUDE_DIRS})
