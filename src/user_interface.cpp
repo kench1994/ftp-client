@@ -23,7 +23,7 @@
  */
 
 #include "user_interface.hpp"
-#include "resources.hpp"
+#include "commands.hpp"
 #include "local_exception.hpp"
 #include "tools.hpp"
 #include "command_parser.hpp"

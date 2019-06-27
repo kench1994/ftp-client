@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_RESOURCES_HPP
-#define FTP_CLIENT_RESOURCES_HPP
+#ifndef FTP_CLIENT_COMMANDS_HPP
+#define FTP_CLIENT_COMMANDS_HPP
 
 #include <string>
 
@@ -44,4 +44,4 @@ namespace command
     inline const char * help = "help";
     inline const char * exit = "exit";
 } // namespace command
-#endif //FTP_CLIENT_RESOURCES_HPP
+#endif //FTP_CLIENT_COMMANDS_HPP
