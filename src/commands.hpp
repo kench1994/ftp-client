@@ -29,19 +29,19 @@
 
 namespace command
 {
-    inline const char * open = "open";
-    inline const char * user = "user";
-    inline const char * cd = "cd";
-    inline const char * ls = "ls";
-    inline const char * get = "get";
-    inline const char * pwd = "pwd";
-    inline const char * mkdir = "mkdir";
-    inline const char * syst = "syst";
-    inline const char * binary = "binary";
-    inline const char * size = "size";
-    inline const char * noop = "noop";
-    inline const char * close = "close";
-    inline const char * help = "help";
-    inline const char * exit = "exit";
+    inline const char * const open = "open";
+    inline const char * const user = "user";
+    inline const char * const cd = "cd";
+    inline const char * const ls = "ls";
+    inline const char * const get = "get";
+    inline const char * const pwd = "pwd";
+    inline const char * const mkdir = "mkdir";
+    inline const char * const syst = "syst";
+    inline const char * const binary = "binary";
+    inline const char * const size = "size";
+    inline const char * const noop = "noop";
+    inline const char * const close = "close";
+    inline const char * const help = "help";
+    inline const char * const exit = "exit";
 } // namespace command
 #endif //FTP_CLIENT_COMMANDS_HPP
