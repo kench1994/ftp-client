@@ -29,8 +29,6 @@
 
 namespace command
 {
-namespace local
-{
     inline const char * open = "open";
     inline const char * user = "user";
     inline const char * cd = "cd";
@@ -45,6 +43,5 @@ namespace local
     inline const char * close = "close";
     inline const char * help = "help";
     inline const char * exit = "exit";
-} // namespace local
 } // namespace command
 #endif //FTP_CLIENT_RESOURCES_HPP

@@ -50,63 +50,63 @@ void command_handler::execute(const string & command,
 
     try
     {
-        if (boost::iequals(command::local::open, command))
+        if (boost::iequals(command::open, command))
         {
             open(args);
             // Use binary mode to transfer files by default.
             binary();
         }
-        else if (boost::iequals(command::local::user, command))
+        else if (boost::iequals(command::user, command))
         {
             user(args);
             // Use binary mode to transfer files by default.
             binary();
         }
-        else if (boost::iequals(command::local::close, command))
+        else if (boost::iequals(command::close, command))
         {
             close();
         }
-        else if (boost::iequals(command::local::cd, command))
+        else if (boost::iequals(command::cd, command))
         {
             cd(args);
         }
-        else if (boost::iequals(command::local::ls, command))
+        else if (boost::iequals(command::ls, command))
         {
             ls(args);
         }
-        else if (boost::iequals(command::local::get, command))
+        else if (boost::iequals(command::get, command))
         {
             get(args);
         }
-        else if (boost::iequals(command::local::pwd, command))
+        else if (boost::iequals(command::pwd, command))
         {
             pwd();
         }
-        else if (boost::iequals(command::local::mkdir, command))
+        else if (boost::iequals(command::mkdir, command))
         {
             mkdir(args);
         }
-        else if (boost::iequals(command::local::syst, command))
+        else if (boost::iequals(command::syst, command))
         {
             syst();
         }
-        else if (boost::iequals(command::local::binary, command))
+        else if (boost::iequals(command::binary, command))
         {
             binary();
         }
-        else if (boost::iequals(command::local::size, command))
+        else if (boost::iequals(command::size, command))
         {
             size(args);
         }
-        else if (boost::iequals(command::local::noop, command))
+        else if (boost::iequals(command::noop, command))
         {
             noop();
         }
-        else if (boost::iequals(command::local::help, command))
+        else if (boost::iequals(command::help, command))
         {
             help();
         }
-        else if (boost::iequals(command::local::exit, command))
+        else if (boost::iequals(command::exit, command))
         {
             exit();
         }
@@ -123,17 +123,17 @@ void command_handler::execute(const string & command,
 
 bool command_handler::is_needed_connection(const string & command) const
 {
-    return boost::iequals(command::local::close, command) ||
-           boost::iequals(command::local::cd, command) ||
-           boost::iequals(command::local::ls, command) ||
-           boost::iequals(command::local::get, command) ||
-           boost::iequals(command::local::user, command) ||
-           boost::iequals(command::local::pwd, command) ||
-           boost::iequals(command::local::mkdir, command) ||
-           boost::iequals(command::local::syst, command) ||
-           boost::iequals(command::local::binary, command) ||
-           boost::iequals(command::local::size, command) ||
-           boost::iequals(command::local::noop, command);
+    return boost::iequals(command::close, command) ||
+           boost::iequals(command::cd, command) ||
+           boost::iequals(command::ls, command) ||
+           boost::iequals(command::get, command) ||
+           boost::iequals(command::user, command) ||
+           boost::iequals(command::pwd, command) ||
+           boost::iequals(command::mkdir, command) ||
+           boost::iequals(command::syst, command) ||
+           boost::iequals(command::binary, command) ||
+           boost::iequals(command::size, command) ||
+           boost::iequals(command::noop, command);
 }
 
 void command_handler::open(const vector<string> & args)

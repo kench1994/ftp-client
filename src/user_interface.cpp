@@ -53,7 +53,7 @@ void user_interface::run()
             auto [command, args] = command_parser::parse(line);
             command_handler_.execute(command, args);
 
-            if (boost::iequals(command::local::exit, command))
+            if (boost::iequals(command::exit, command))
             {
                 break;
             }
