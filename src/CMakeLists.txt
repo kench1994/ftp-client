@@ -5,7 +5,6 @@ add_executable(ftp_client
         command_parser.hpp
         local_exception.hpp
         main.cpp
-        resources.cpp
         resources.hpp
         tools.cpp
         tools.hpp

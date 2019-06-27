@@ -31,20 +31,20 @@ namespace command
 {
 namespace local
 {
-    extern const std::string open;
-    extern const std::string user;
-    extern const std::string cd;
-    extern const std::string ls;
-    extern const std::string get;
-    extern const std::string pwd;
-    extern const std::string mkdir;
-    extern const std::string syst;
-    extern const std::string binary;
-    extern const std::string size;
-    extern const std::string noop;
-    extern const std::string close;
-    extern const std::string help;
-    extern const std::string exit;
+    inline const char * open = "open";
+    inline const char * user = "user";
+    inline const char * cd = "cd";
+    inline const char * ls = "ls";
+    inline const char * get = "get";
+    inline const char * pwd = "pwd";
+    inline const char * mkdir = "mkdir";
+    inline const char * syst = "syst";
+    inline const char * binary = "binary";
+    inline const char * size = "size";
+    inline const char * noop = "noop";
+    inline const char * close = "close";
+    inline const char * help = "help";
+    inline const char * exit = "exit";
 } // namespace local
 } // namespace command
 #endif //FTP_CLIENT_RESOURCES_HPP
