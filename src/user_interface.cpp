@@ -41,16 +41,16 @@ void user_interface::run()
     {
         try
         {
-            string input;
+            string line;
 
-            input = tools::read_line("ftp> ");
+            line = tools::read_line("ftp> ");
 
-            if (input.empty())
+            if (line.empty())
             {
                 continue;
             }
 
-            auto [command, args] = command_parser::parse(input);
+            auto [command, args] = command_parser::parse(line);
             command_handler_.execute(command, args);
 
             if (boost::iequals(command::local::exit, command))
