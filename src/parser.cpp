@@ -32,9 +32,9 @@ using std::pair;
 using std::make_pair;
 using std::istringstream;
 
-pair<string, vector<string>> parse_command(const string & source_line)
+pair<string, vector<string>> parse_command(const string & line)
 {
-    istringstream iss(source_line);
+    istringstream iss(line);
     string command;
 
     iss >> command;

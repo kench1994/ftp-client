@@ -28,6 +28,6 @@
 #include <vector>
 #include <string>
 
-std::pair<std::string, std::vector<std::string>> parse_command(const std::string & source_line);
+std::pair<std::string, std::vector<std::string>> parse_command(const std::string & line);
 
 #endif //FTP_CLIENT_PARSER_HPP
