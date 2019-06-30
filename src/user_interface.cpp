@@ -51,6 +51,7 @@ void user_interface::run()
             }
 
             auto [command, args] = parse_command(line);
+
             command_handler_.execute(command, args);
 
             if (boost::iequals(command, command::exit))
