@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "command_parser.hpp"
+#include "parser.hpp"
 #include <sstream>
 #include <iomanip>
 
@@ -32,7 +32,7 @@ using std::pair;
 using std::make_pair;
 using std::istringstream;
 
-pair<string, vector<string>> command_parser::parse(const string & source_line)
+pair<string, vector<string>> parse_command(const string & source_line)
 {
     istringstream iss(source_line);
     string command;

@@ -26,7 +26,7 @@
 #include "commands.hpp"
 #include "local_exception.hpp"
 #include "tools.hpp"
-#include "command_parser.hpp"
+#include "parser.hpp"
 #include <iostream>
 #include <boost/algorithm/string/predicate.hpp>
 
@@ -50,7 +50,7 @@ void user_interface::run()
                 continue;
             }
 
-            auto [command, args] = command_parser::parse(line);
+            auto [command, args] = parse_command(line);
             command_handler_.execute(command, args);
 
             if (boost::iequals(command, command::exit))
