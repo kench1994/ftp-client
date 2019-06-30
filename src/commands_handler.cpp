@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "command_handler.hpp"
+#include "commands_handler.hpp"
 #include "local_exception.hpp"
 #include "commands.hpp"
 #include "tools.hpp"
@@ -40,7 +40,7 @@ using std::ofstream;
 using std::ios_base;
 using ftp::ftp_exception;
 
-void command_handler::execute(const string & command,
+void commands_handler::execute(const string & command,
                               const vector<string> & args)
 {
     if (is_needed_connection(command) && !client_.is_open())
@@ -121,7 +121,7 @@ void command_handler::execute(const string & command,
     }
 }
 
-bool command_handler::is_needed_connection(const string & command) const
+bool commands_handler::is_needed_connection(const string & command) const
 {
     return boost::iequals(command, command::close) ||
            boost::iequals(command, command::cd) ||
@@ -136,7 +136,7 @@ bool command_handler::is_needed_connection(const string & command) const
            boost::iequals(command, command::noop);
 }
 
-void command_handler::open(const vector<string> & args)
+void commands_handler::open(const vector<string> & args)
 {
     if (client_.is_open())
     {
@@ -174,7 +174,7 @@ void command_handler::open(const vector<string> & args)
     client_.user(username, password);
 }
 
-void command_handler::user(const vector<string> & args)
+void commands_handler::user(const vector<string> & args)
 {
     string username;
     string password;
@@ -197,7 +197,7 @@ void command_handler::user(const vector<string> & args)
     client_.user(username, password);
 }
 
-void command_handler::cd(const vector<string> & args)
+void commands_handler::cd(const vector<string> & args)
 {
     string remote_directory;
 
@@ -217,7 +217,7 @@ void command_handler::cd(const vector<string> & args)
     client_.cd(remote_directory);
 }
 
-void command_handler::ls(const vector<string> & args)
+void commands_handler::ls(const vector<string> & args)
 {
     optional<string> remote_directory;
 
@@ -237,7 +237,7 @@ void command_handler::ls(const vector<string> & args)
     client_.ls(remote_directory);
 }
 
-void command_handler::get(const vector<string> & args)
+void commands_handler::get(const vector<string> & args)
 {
     string remote_file, local_file;
 
@@ -271,12 +271,12 @@ void command_handler::get(const vector<string> & args)
     client_.get(remote_file, file);
 }
 
-void command_handler::pwd()
+void commands_handler::pwd()
 {
     client_.pwd();
 }
 
-void command_handler::mkdir(const vector<string> & args)
+void commands_handler::mkdir(const vector<string> & args)
 {
     string directory_name;
 
@@ -296,12 +296,12 @@ void command_handler::mkdir(const vector<string> & args)
     client_.mkdir(directory_name);
 }
 
-void command_handler::binary()
+void commands_handler::binary()
 {
     client_.binary();
 }
 
-void command_handler::size(const vector<string> & args)
+void commands_handler::size(const vector<string> & args)
 {
     string remote_file;
 
@@ -321,22 +321,22 @@ void command_handler::size(const vector<string> & args)
     client_.size(remote_file);
 }
 
-void command_handler::syst()
+void commands_handler::syst()
 {
     client_.syst();
 }
 
-void command_handler::noop()
+void commands_handler::noop()
 {
     client_.noop();
 }
 
-void command_handler::close()
+void commands_handler::close()
 {
     client_.close();
 }
 
-void command_handler::help()
+void commands_handler::help()
 {
     cout << "list of ftp commands:\n"
             "\topen hostname [ port ] - open new connection\n"
@@ -355,7 +355,7 @@ void command_handler::help()
             "\texit - exit program" << endl;
 }
 
-void command_handler::exit()
+void commands_handler::exit()
 {
     if (client_.is_open())
     {
