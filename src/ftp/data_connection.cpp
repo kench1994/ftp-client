@@ -50,7 +50,7 @@ void data_connection::open()
 
     if (ec)
     {
-        throw ftp_exception("cannot create data connection: %1%", ec.message());
+        throw ftp_exception("cannot open data connection: %1%", ec.message());
     }
 }
 
