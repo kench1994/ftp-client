@@ -70,8 +70,6 @@ string data_connection::recv()
         throw ftp_exception("cannot receive reply: %1%", ec.message());
     }
 
-    boost::algorithm::trim_if(reply, boost::algorithm::is_any_of("\r\n"));
-
     return reply;
 }
 

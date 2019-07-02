@@ -94,7 +94,7 @@ void client::ls(const optional<string> & remote_directory)
     control_connection_.send(command);
     cout <<  control_connection_.recv() << endl;
 
-    cout << data_connection->recv() << endl;
+    cout << data_connection->recv();
     // Don't keep the data connection.
     data_connection.reset();
 
