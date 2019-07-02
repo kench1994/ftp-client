@@ -41,7 +41,7 @@ using std::ios_base;
 using ftp::ftp_exception;
 
 void commands_handler::execute(const string & command,
-                              const vector<string> & args)
+                               const vector<string> & args)
 {
     if (is_needed_connection(command) && !client_.is_open())
     {
