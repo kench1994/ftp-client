@@ -47,7 +47,6 @@ public:
 private:
     boost::asio::ip::tcp::endpoint endpoint_;
     boost::asio::ip::tcp::socket socket_;
-    boost::asio::streambuf stream_buffer_;
     std::array<char, 4096> buffer_;
 };
 

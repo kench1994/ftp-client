@@ -57,8 +57,9 @@ void data_connection::open()
 string data_connection::recv()
 {
     boost::system::error_code ec;
+    string reply;
 
-    boost::asio::read(socket_, stream_buffer_, ec);
+    boost::asio::read(socket_, boost::asio::dynamic_buffer(reply), ec);
 
     if (ec == boost::asio::error::eof)
     {
@@ -68,9 +69,6 @@ string data_connection::recv()
     {
         throw ftp_exception("cannot receive reply: %1%", ec.message());
     }
-
-    string reply = string(boost::asio::buffers_begin(stream_buffer_.data()),
-                          boost::asio::buffers_end(stream_buffer_.data()));
 
     boost::algorithm::trim_if(reply, boost::algorithm::is_any_of("\r\n"));
 
