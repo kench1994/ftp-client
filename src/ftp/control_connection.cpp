@@ -206,16 +206,11 @@ string control_connection::read_line()
         boost::system::error_code ec;
         char ch;
 
-        size_t len = boost::asio::read(socket_, boost::asio::buffer(&ch, 1), ec);
+        boost::asio::read(socket_, boost::asio::buffer(&ch, 1), ec);
 
         if (ec)
         {
             throw ftp_exception("cannot receive reply: %1%", ec.message());
-        }
-
-        if (len != 1)
-        {
-            break;
         }
 
         if (ch == '\r')
