@@ -25,7 +25,7 @@
 #include "commands_handler.hpp"
 #include "local_exception.hpp"
 #include "commands.hpp"
-#include "tools.hpp"
+#include "utils.hpp"
 #include "ftp/ftp_exception.hpp"
 #include <iostream>
 #include <boost/algorithm/string/predicate.hpp>
@@ -150,7 +150,7 @@ void commands_handler::open(const vector<string> & args)
 
     if (args.empty())
     {
-        hostname = tools::read_line("hostname: ");
+        hostname = utils::read_line("hostname: ");
     }
     else if (args.size() == 1)
     {
@@ -168,8 +168,8 @@ void commands_handler::open(const vector<string> & args)
 
     client_.open(hostname, port);
 
-    username = tools::read_line("username: ");
-    password = tools::read_hidden_line("password: ");
+    username = utils::read_line("username: ");
+    password = utils::read_hidden_line("password: ");
 
     client_.user(username, password);
 }
@@ -181,13 +181,13 @@ void commands_handler::user(const vector<string> & args)
 
     if (args.empty())
     {
-        username = tools::read_line("username: ");
-        password = tools::read_hidden_line("password: ");
+        username = utils::read_line("username: ");
+        password = utils::read_hidden_line("password: ");
     }
     else if (args.size() == 1)
     {
         username = args[0];
-        password = tools::read_hidden_line("password: ");
+        password = utils::read_hidden_line("password: ");
     }
     else
     {
@@ -203,7 +203,7 @@ void commands_handler::cd(const vector<string> & args)
 
     if (args.empty())
     {
-        remote_directory = tools::read_line("remote directory: ");
+        remote_directory = utils::read_line("remote directory: ");
     }
     else if (args.size() == 1)
     {
@@ -243,13 +243,13 @@ void commands_handler::get(const vector<string> & args)
 
     if (args.empty())
     {
-        remote_file = tools::read_line("remote-file: ");
-        local_file = tools::get_filename(remote_file);
+        remote_file = utils::read_line("remote-file: ");
+        local_file = utils::get_filename(remote_file);
     }
     else if (args.size() == 1)
     {
         remote_file = args[0];
-        local_file = tools::get_filename(remote_file);
+        local_file = utils::get_filename(remote_file);
     }
     else if (args.size() == 2)
     {
@@ -282,7 +282,7 @@ void commands_handler::mkdir(const vector<string> & args)
 
     if (args.empty())
     {
-        directory_name = tools::read_line("directory-name: ");
+        directory_name = utils::read_line("directory-name: ");
     }
     else if (args.size() == 1)
     {
@@ -307,7 +307,7 @@ void commands_handler::size(const vector<string> & args)
 
     if (args.empty())
     {
-        remote_file = tools::read_line("remote-file: ");
+        remote_file = utils::read_line("remote-file: ");
     }
     else if (args.size() == 1)
     {

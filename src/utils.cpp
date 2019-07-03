@@ -22,19 +22,56 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_TOOLS_HPP
-#define FTP_CLIENT_TOOLS_HPP
+#include <iostream>
+#include "utils.hpp"
+#include <boost/filesystem.hpp>
+#include <vector>
+#include "ncurses_wrappers/ncurses_initializer.hpp"
+#include "ncurses_wrappers/ncurses.hpp"
 
-#include <string>
-
-namespace tools
+namespace utils
 {
 
-std::string read_line(const std::string & greeting);
+using std::string;
+using std::cout;
+using std::cin;
+using std::endl;
+using std::vector;
+using ncurses::ncurses_initializer;
 
-std::string read_hidden_line(const std::string & greeting, int len = 64);
+string read_line(const string & greeting)
+{
+    string line;
 
-std::string get_filename(const std::string & path);
+    cout << greeting;
+    getline(cin, line);
 
-} // namespace tools
-#endif //FTP_CLIENT_TOOLS_HPP
+    return line;
+}
+
+string read_hidden_line(const string & greeting, int len)
+{
+    ncurses_initializer ncurses;
+    ncurses::cbreak();
+
+    ncurses::printw(greeting);
+    ncurses::refresh();
+
+    ncurses::noecho();
+
+    vector<char> line(len + 1);
+    ncurses::wgetnstr(stdscr, line.data(), len);
+
+    ncurses::echo();
+    ncurses::clear();
+
+    return string(line.data());
+}
+
+string get_filename(const string & path)
+{
+    boost::filesystem::path p(path);
+    return p.filename().string();
+}
+
+} // namespace utils

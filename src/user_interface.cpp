@@ -25,7 +25,7 @@
 #include "user_interface.hpp"
 #include "commands.hpp"
 #include "local_exception.hpp"
-#include "tools.hpp"
+#include "utils.hpp"
 #include "parser.hpp"
 #include <iostream>
 #include <boost/algorithm/string/predicate.hpp>
@@ -43,7 +43,7 @@ void user_interface::run()
         {
             string line;
 
-            line = tools::read_line("ftp> ");
+            line = utils::read_line("ftp> ");
 
             if (line.empty())
             {
