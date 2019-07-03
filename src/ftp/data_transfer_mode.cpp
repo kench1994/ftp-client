@@ -98,17 +98,17 @@ passive_mode::get_endpoint_from_server_reply(const string & server_reply)
     //            to:  h1,h2,h3,h4,p1,p2
     string ip_port = server_reply.substr(left_bracket + 1, right_bracket - left_bracket - 1);
 
-    vector<string> numbers;
-    boost::split(numbers, ip_port, boost::is_any_of(","));
+    vector<string> tokens;
+    boost::split(tokens, ip_port, boost::is_any_of(","));
 
-    if (numbers.size() != 6)
+    if (tokens.size() != 6)
     {
         throw ftp_exception("invalid server reply: %1%", server_reply);
     }
 
-    string ip = numbers[0] + '.' + numbers[1] + '.' + numbers[2] + '.' + numbers[3];
-    uint16_t port = (boost::lexical_cast<uint16_t>(numbers[4]) * uint16_t (256)) +
-                     boost::lexical_cast<uint16_t>(numbers[5]);
+    string ip = tokens[0] + '.' + tokens[1] + '.' + tokens[2] + '.' + tokens[3];
+    uint16_t port = (boost::lexical_cast<uint16_t>(tokens[4]) * uint16_t (256)) +
+                     boost::lexical_cast<uint16_t>(tokens[5]);
 
     return boost::asio::ip::tcp::endpoint(
             boost::asio::ip::address::from_string(ip), port);
