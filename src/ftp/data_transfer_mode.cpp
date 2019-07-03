@@ -101,8 +101,7 @@ passive_mode::get_endpoint_from_server_reply(const string & server_reply)
     vector<string> numbers;
     boost::split(numbers, ip_port, boost::is_any_of(","));
 
-    static size_t needed_numbers_count = 6;
-    if (numbers.size() != needed_numbers_count)
+    if (numbers.size() != 6)
     {
         throw ftp_exception("invalid server reply: %1%", server_reply);
     }
