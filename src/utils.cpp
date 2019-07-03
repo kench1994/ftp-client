@@ -70,8 +70,7 @@ string read_hidden_line(const string & greeting, int len)
 
 string get_filename(const string & path)
 {
-    boost::filesystem::path p(path);
-    return p.filename().string();
+    return boost::filesystem::path(path).filename().string();
 }
 
 } // namespace utils
