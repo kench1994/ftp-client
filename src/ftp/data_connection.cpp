@@ -75,11 +75,13 @@ string data_connection::recv()
 
 void data_connection::recv_file(ofstream & file)
 {
+    boost::system::error_code ec;
+    array<char, 4096> buffer = {};
+    size_t len;
+
     for (;;)
     {
-        boost::system::error_code ec;
-
-        size_t len = socket_.read_some(boost::asio::buffer(buffer_), ec);
+        len = socket_.read_some(boost::asio::buffer(buffer), ec);
 
         if (ec == boost::asio::error::eof)
         {
@@ -90,7 +92,7 @@ void data_connection::recv_file(ofstream & file)
             throw ftp_exception("cannot receive file: %1%", ec.message());
         }
 
-        file.write(buffer_.data(), len);
+        file.write(buffer.data(), len);
     }
 }
 
