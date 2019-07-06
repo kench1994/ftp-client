@@ -28,7 +28,7 @@
 #include <string>
 #include <vector>
 #include "control_connection.hpp"
-#include "data_transfer_mode.hpp"
+#include "data_connection.hpp"
 #include <optional>
 #include <fstream>
 #include <list>
@@ -80,11 +80,14 @@ public:
     void remove_observer(reply_observer *observer);
 
 private:
+    std::unique_ptr<data_connection> create_data_connection();
+
+    boost::asio::ip::tcp::endpoint get_endpoint_from_reply(const std::string & reply);
+
     void notify_observers(const std::string & reply);
 
     boost::asio::io_context io_context_;
     control_connection control_connection_;
-    std::unique_ptr<data_transfer_mode> data_transfer_mode_;
     std::list<reply_observer *> observers_;
 };
 

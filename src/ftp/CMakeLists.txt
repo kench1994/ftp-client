@@ -5,9 +5,7 @@ add_library(ftp
             control_connection.cpp
             control_connection.hpp
             data_connection.cpp
-            data_connection.hpp
-            data_transfer_mode.cpp
-            data_transfer_mode.hpp)
+            data_connection.hpp)
 
 find_package(Boost 1.67.0 REQUIRED COMPONENTS system)
 
