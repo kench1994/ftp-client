@@ -27,11 +27,14 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 #include "ftp/client.hpp"
 
 class commands_handler
 {
 public:
+    commands_handler();
+
     void execute(const std::string & command,
                  const std::vector<std::string> & args);
 
@@ -66,6 +69,16 @@ private:
 
     void exit();
 
+    class output_reply_observer : public ftp::client::reply_observer
+    {
+    public:
+        void handle_reply(const std::string & reply) override
+        {
+            std::cout << reply << std::endl;
+        }
+    };
+
+    output_reply_observer output_reply_observer_;
     ftp::client client_;
 };
 

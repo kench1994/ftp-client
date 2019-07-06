@@ -31,6 +31,7 @@
 #include "data_transfer_mode.hpp"
 #include <optional>
 #include <fstream>
+#include <list>
 
 namespace ftp
 {
@@ -66,10 +67,25 @@ public:
 
     void close();
 
+    class reply_observer
+    {
+    public:
+        virtual void handle_reply(const std::string & reply) = 0;
+
+        virtual ~reply_observer() = default;
+    };
+
+    void add_observer(reply_observer *observer);
+
+    void remove_observer(reply_observer *observer);
+
 private:
+    void notify_observers(const std::string & reply);
+
     boost::asio::io_context io_context_;
     control_connection control_connection_;
     std::unique_ptr<data_transfer_mode> data_transfer_mode_;
+    std::list<reply_observer *> observers_;
 };
 
 } // namespace ftp
