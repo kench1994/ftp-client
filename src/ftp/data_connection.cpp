@@ -35,18 +35,25 @@ using std::string;
 using std::ofstream;
 using std::array;
 
-data_connection::data_connection(boost::asio::io_context & io_context,
-                                 const boost::asio::ip::tcp::endpoint & endpoint)
-    : endpoint_(endpoint),
-      socket_(io_context, endpoint_.protocol())
+data_connection::data_connection(boost::asio::io_context & io_context)
+    : socket_(io_context)
 {
 }
 
-void data_connection::open()
+void data_connection::open(const string & ip, uint16_t port)
 {
+    boost::asio::ip::address address;
     boost::system::error_code ec;
 
-    socket_.connect(endpoint_, ec);
+    address = boost::asio::ip::address::from_string(ip, ec);
+
+    if (ec)
+    {
+        throw ftp_exception("cannot get ip address: %1%", ec.message());
+    }
+
+    boost::asio::ip::tcp::endpoint remote_endpoint(address, port);
+    socket_.connect(remote_endpoint, ec);
 
     if (ec)
     {

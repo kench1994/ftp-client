@@ -29,6 +29,7 @@
 #include "ftp/ftp_exception.hpp"
 #include <iostream>
 #include <boost/algorithm/string/predicate.hpp>
+#include <boost/lexical_cast/try_lexical_convert.hpp>
 
 using std::string;
 using std::vector;
@@ -149,7 +150,7 @@ void commands_handler::open(const vector<string> & args)
     }
 
     string hostname;
-    string port = "21";
+    uint16_t port = 21;
     string username;
     string password;
 
@@ -164,7 +165,11 @@ void commands_handler::open(const vector<string> & args)
     else if (args.size() == 2)
     {
         hostname = args[0];
-        port = args[1];
+
+        if (!boost::conversion::try_lexical_convert(args[1], port))
+        {
+            throw local_exception("Invalid port number.");
+        }
     }
     else
     {

@@ -41,7 +41,7 @@ class client
 public:
     client();
 
-    void open(const std::string & hostname, const std::string & port = "21");
+    void open(const std::string & hostname, uint16_t port = 21);
 
     bool is_open() const;
 
@@ -82,7 +82,7 @@ public:
 private:
     std::unique_ptr<data_connection> create_data_connection();
 
-    boost::asio::ip::tcp::endpoint get_endpoint_from_reply(const std::string & reply);
+    std::pair<std::string, uint16_t> get_endpoint_from_reply(const std::string & reply);
 
     void notify_observers(const std::string & reply);
 

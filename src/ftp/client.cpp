@@ -44,7 +44,7 @@ client::client()
 {
 }
 
-void client::open(const string & hostname, const string & port)
+void client::open(const string & hostname, uint16_t port)
 {
     control_connection_.open(hostname, port);
     notify_observers(control_connection_.recv());
@@ -164,12 +164,12 @@ unique_ptr<data_connection> client::create_data_connection()
 
     notify_observers(reply);
 
-    boost::asio::ip::tcp::endpoint server_endpoint = get_endpoint_from_reply(reply);
+    auto [ip, port] = get_endpoint_from_reply(reply);
 
     unique_ptr<data_connection> connection =
-            make_unique<data_connection>(io_context_, server_endpoint);
+            make_unique<data_connection>(io_context_);
 
-    connection->open();
+    connection->open(ip, port);
 
     return connection;
 }
@@ -186,8 +186,7 @@ unique_ptr<data_connection> client::create_data_connection()
  *
  * RFC 959: https://tools.ietf.org/html/rfc959
  */
-boost::asio::ip::tcp::endpoint
-client::get_endpoint_from_reply(const string & reply)
+std::pair<std::string, uint16_t> client::get_endpoint_from_reply(const string & reply)
 {
     size_t left_bracket = reply.find('(');
     if (left_bracket == string::npos)
@@ -217,8 +216,7 @@ client::get_endpoint_from_reply(const string & reply)
     uint16_t port = (boost::lexical_cast<uint16_t>(tokens[4]) * uint16_t (256)) +
             boost::lexical_cast<uint16_t>(tokens[5]);
 
-    return boost::asio::ip::tcp::endpoint(
-            boost::asio::ip::address::from_string(ip), port);
+    return std::pair(ip, port);
 }
 
 void client::add_observer(reply_observer *observer)

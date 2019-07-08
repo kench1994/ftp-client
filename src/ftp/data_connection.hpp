@@ -35,17 +35,15 @@ namespace ftp
 class data_connection
 {
 public:
-    data_connection(boost::asio::io_context & io_context,
-                    const boost::asio::ip::tcp::endpoint & endpoint);
+    explicit data_connection(boost::asio::io_context & io_context);
 
-    void open();
+    void open(const std::string & ip, uint16_t port);
 
     std::string recv();
 
     void recv_file(std::ofstream & file);
 
 private:
-    boost::asio::ip::tcp::endpoint endpoint_;
     boost::asio::ip::tcp::socket socket_;
 };
 

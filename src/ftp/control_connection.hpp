@@ -35,7 +35,7 @@ class control_connection
 public:
     explicit control_connection(boost::asio::io_context & io_context);
 
-    void open(const std::string & hostname, const std::string & port);
+    void open(const std::string & hostname, uint16_t port);
 
     bool is_open() const;
 

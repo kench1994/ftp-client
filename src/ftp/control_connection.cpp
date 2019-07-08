@@ -34,6 +34,7 @@ namespace ftp
 {
 
 using std::string;
+using std::to_string;
 
 static bool try_parse_code(const string & line, uint16_t & code)
 {
@@ -60,11 +61,11 @@ control_connection::control_connection(boost::asio::io_context & io_context)
 {
 }
 
-void control_connection::open(const string & hostname, const string & port)
+void control_connection::open(const string & hostname, uint16_t port)
 {
     boost::system::error_code ec;
 
-    boost::asio::connect(socket_, resolver_.resolve(hostname, port, ec), ec);
+    boost::asio::connect(socket_, resolver_.resolve(hostname, to_string(port), ec), ec);
 
     if (ec)
     {
