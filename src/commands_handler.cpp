@@ -151,8 +151,6 @@ void commands_handler::open(const vector<string> & args)
 
     string hostname;
     uint16_t port = 21;
-    string username;
-    string password;
 
     if (args.empty())
     {
@@ -178,8 +176,8 @@ void commands_handler::open(const vector<string> & args)
 
     client_.open(hostname, port);
 
-    username = utils::read_line("username: ");
-    password = utils::read_hidden_line("password: ");
+    string username = utils::read_line("username: ");
+    string password = utils::read_hidden_line("password: ");
 
     client_.user(username, password);
 }
