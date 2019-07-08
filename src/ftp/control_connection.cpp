@@ -100,6 +100,28 @@ void control_connection::close()
     }
 }
 
+string control_connection::ip() const
+{
+    boost::asio::ip::tcp::endpoint remote_endpoint;
+    boost::system::error_code ec;
+
+    remote_endpoint = socket_.remote_endpoint(ec);
+
+    if (ec)
+    {
+        throw ftp_exception("cannot get ip address: %1%", ec.message());
+    }
+
+    string ip = remote_endpoint.address().to_string(ec);
+
+    if (ec)
+    {
+        throw ftp_exception("cannot get ip address: %1%", ec.message());
+    }
+
+    return ip;
+}
+
 string control_connection::recv()
 {
     string reply;

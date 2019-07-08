@@ -41,6 +41,8 @@ public:
 
     void close();
 
+    std::string ip() const;
+
     void send(const std::string & command);
 
     std::string recv();

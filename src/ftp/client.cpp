@@ -159,64 +159,68 @@ void client::close()
 
 unique_ptr<data_connection> client::create_data_connection()
 {
-    control_connection_.send("PASV");
+    control_connection_.send("EPSV");
     string reply = control_connection_.recv();
 
     notify_observers(reply);
 
-    auto [ip, port] = get_endpoint_from_reply(reply);
+    uint16_t port = parse_epsv_port(reply);
 
     unique_ptr<data_connection> connection =
             make_unique<data_connection>(io_context_);
 
-    connection->open(ip, port);
+    connection->open(control_connection_.ip(), port);
 
     return connection;
 }
 
 /**
- * This address information is broken into 8-bit fields and the
- * value of each field is transmitted as a decimal number (in
- * character string representation).  The fields are separated
- * by commas.
+ * The text returned in response to the EPSV command MUST be:
  *
- * Format of server reply: 227 Entering Passive Mode (h1,h2,h3,h4,p1,p2)
+ *     <text indicating server is entering extended passive mode> \
+ *       (<d><d><d><tcp-port><d>)
  *
- * Where h1 is the high order 8 bits of the internet host address.
+ * The first two fields contained in the parenthesis MUST be blank.  The
+ * third field MUST be the string representation of the TCP port number
+ * on which the server is listening for a data connection.  The network
+ * protocol used by the data connection will be the same network
+ * protocol used by the control connection.  In addition, the network
+ * address used to establish the data connection will be the same
+ * network address used for the control connection.  An example response
+ * string follows:
  *
- * RFC 959: https://tools.ietf.org/html/rfc959
+ *     Entering Extended Passive Mode (|||6446|)
+ *
+ * RFC 2428: https://tools.ietf.org/html/rfc2428
  */
-std::pair<std::string, uint16_t> client::get_endpoint_from_reply(const string & reply)
+uint16_t client::parse_epsv_port(const string & reply)
 {
-    size_t left_bracket = reply.find('(');
-    if (left_bracket == string::npos)
+    uint16_t port;
+    size_t begin;
+    size_t end;
+
+    begin = reply.find('|');
+    if (begin == string::npos)
     {
         throw ftp_exception("invalid server reply: %1%", reply);
     }
 
-    size_t right_bracket = reply.find(')');
-    if (right_bracket == string::npos)
+    // Skip '|||' characters.
+    begin = begin + 3;
+
+    end = reply.rfind('|');
+    if (end == string::npos)
     {
         throw ftp_exception("invalid server reply: %1%", reply);
     }
 
-    // Transform from: 227 Entering Passive Mode (h1,h2,h3,h4,p1,p2)
-    //            to:  h1,h2,h3,h4,p1,p2
-    string ip_port = reply.substr(left_bracket + 1, right_bracket - left_bracket - 1);
-
-    vector<string> tokens;
-    boost::split(tokens, ip_port, boost::is_any_of(","));
-
-    if (tokens.size() != 6)
+    string port_str = reply.substr(begin, end - begin);
+    if (!boost::conversion::try_lexical_convert(port_str, port))
     {
         throw ftp_exception("invalid server reply: %1%", reply);
     }
 
-    string ip = tokens[0] + '.' + tokens[1] + '.' + tokens[2] + '.' + tokens[3];
-    uint16_t port = (boost::lexical_cast<uint16_t>(tokens[4]) * uint16_t (256)) +
-            boost::lexical_cast<uint16_t>(tokens[5]);
-
-    return std::pair(ip, port);
+    return port;
 }
 
 void client::add_observer(reply_observer *observer)

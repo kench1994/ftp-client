@@ -82,7 +82,7 @@ public:
 private:
     std::unique_ptr<data_connection> create_data_connection();
 
-    std::pair<std::string, uint16_t> get_endpoint_from_reply(const std::string & reply);
+    uint16_t parse_epsv_port(const std::string & reply);
 
     void notify_observers(const std::string & reply);
 
