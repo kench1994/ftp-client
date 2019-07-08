@@ -69,7 +69,7 @@ private:
 
     void exit();
 
-    class output_reply_observer : public ftp::client::reply_observer
+    class stdout_reply_observer : public ftp::client::reply_observer
     {
     public:
         void handle_reply(const std::string & reply) override
@@ -78,7 +78,7 @@ private:
         }
     };
 
-    output_reply_observer output_reply_observer_;
+    stdout_reply_observer stdout_reply_observer_;
     ftp::client client_;
 };
 

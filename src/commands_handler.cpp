@@ -43,7 +43,7 @@ using ftp::ftp_exception;
 
 commands_handler::commands_handler()
 {
-    client_.add_observer(&output_reply_observer_);
+    client_.add_observer(&stdout_reply_observer_);
 }
 
 void commands_handler::execute(const string & command,
