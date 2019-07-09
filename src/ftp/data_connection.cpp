@@ -49,7 +49,7 @@ void data_connection::open(const string & ip, uint16_t port)
 
     if (ec)
     {
-        throw ftp_exception("cannot get ip address: %1%", ec.message());
+        throw ftp_exception("Cannot get ip address: %1%", ec.message());
     }
 
     boost::asio::ip::tcp::endpoint remote_endpoint(address, port);
@@ -57,7 +57,7 @@ void data_connection::open(const string & ip, uint16_t port)
 
     if (ec)
     {
-        throw ftp_exception("cannot open data connection: %1%", ec.message());
+        throw ftp_exception("Cannot open connection: %1%", ec.message());
     }
 }
 
@@ -74,7 +74,7 @@ string data_connection::recv()
     }
     else if (ec)
     {
-        throw ftp_exception("cannot receive reply: %1%", ec.message());
+        throw ftp_exception("Cannot receive reply: %1%", ec.message());
     }
 
     return reply;
@@ -96,7 +96,7 @@ void data_connection::recv_file(ofstream & file)
         }
         else if (ec)
         {
-            throw ftp_exception("cannot receive file: %1%", ec.message());
+            throw ftp_exception("Cannot receive file: %1%", ec.message());
         }
 
         file.write(buffer.data(), len);

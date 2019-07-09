@@ -79,7 +79,7 @@ void control_connection::open(const string & hostname, uint16_t port)
          */
         socket_.close(ignored);
 
-        throw ftp_exception("cannot open control connection: %1%", ec.message());
+        throw ftp_exception("Cannot open connection: %1%", ec.message());
     }
 }
 
@@ -96,7 +96,7 @@ void control_connection::close()
 
     if (ec)
     {
-        throw ftp_exception("cannot close control connection: %1%", ec.message());
+        throw ftp_exception("Cannot close connection: %1%", ec.message());
     }
 }
 
@@ -109,14 +109,14 @@ string control_connection::ip() const
 
     if (ec)
     {
-        throw ftp_exception("cannot get ip address: %1%", ec.message());
+        throw ftp_exception("Cannot get ip address: %1%", ec.message());
     }
 
     string ip = remote_endpoint.address().to_string(ec);
 
     if (ec)
     {
-        throw ftp_exception("cannot get ip address: %1%", ec.message());
+        throw ftp_exception("Cannot get ip address: %1%", ec.message());
     }
 
     return ip;
@@ -136,13 +136,13 @@ string control_connection::recv()
      */
     if (reply.size() < 4)
     {
-        throw ftp_exception("invalid server reply: %1%", reply);
+        throw ftp_exception("Invalid server reply: %1%", reply);
     }
 
     uint16_t reply_code;
     if (!try_parse_code(reply, reply_code))
     {
-        throw ftp_exception("invalid server reply: %1%", reply);
+        throw ftp_exception("Invalid server reply: %1%", reply);
     }
 
     if (reply[3] == ' ')
@@ -174,7 +174,7 @@ string control_connection::recv()
     }
     else
     {
-        throw ftp_exception("invalid server reply: %1%", reply);
+        throw ftp_exception("Invalid server reply: %1%", reply);
     }
 
     return reply;
@@ -216,7 +216,7 @@ void control_connection::send(const string & command)
 
     if (ec)
     {
-        throw ftp_exception("cannot send command: %1%", ec.message());
+        throw ftp_exception("Cannot send command: %1%", ec.message());
     }
 }
 
@@ -233,7 +233,7 @@ string control_connection::read_line()
 
         if (ec)
         {
-            throw ftp_exception("cannot receive reply: %1%", ec.message());
+            throw ftp_exception("Cannot receive reply: %1%", ec.message());
         }
 
         if (ch == '\r')
