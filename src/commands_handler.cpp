@@ -346,21 +346,22 @@ void commands_handler::close()
 
 void commands_handler::help()
 {
-    cout << "list of ftp commands:\n"
-            "\topen hostname [ port ] - open new connection\n"
-            "\tuser username - send new user information\n"
-            "\tcd remote-directory - change remote working directory\n"
-            "\tls [ remote-directory ] - print list of files in the remote directory\n"
-            "\tget remote-file [ local-file ] - retrieve a copy of the file\n"
-            "\tpwd - print the current working directory name\n"
-            "\tmkdir directory-name - make a directory on the remote machine\n"
-            "\tbinary - set binary transfer type\n"
-            "\tsize remote-file - show size of remote file\n"
-            "\tsyst - show remote system type\n"
-            "\tnoop - no operation\n"
-            "\tclose - close current connection\n"
-            "\thelp - print list of ftp commands\n"
-            "\texit - exit program" << endl;
+    cout <<
+    "List of ftp commands:\n"
+    "    open hostname [ port ] - open new connection\n"
+    "    user username - send new user information\n"
+    "    cd remote-directory - change remote working directory\n"
+    "    ls [ remote-directory ] - print list of files in the remote directory\n"
+    "    get remote-file [ local-file ] - retrieve a copy of the file\n"
+    "    pwd - print the current working directory name\n"
+    "    mkdir directory-name - make a directory on the remote machine\n"
+    "    binary - set binary transfer type\n"
+    "    size remote-file - show size of remote file\n"
+    "    syst - show remote system type\n"
+    "    noop - no operation\n"
+    "    close - close current connection\n"
+    "    help - print list of ftp commands\n"
+    "    exit - exit program\n";
 }
 
 void commands_handler::exit()
