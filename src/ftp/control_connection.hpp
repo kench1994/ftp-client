@@ -52,9 +52,9 @@ private:
 
     bool is_last_line(const std::string & line, uint16_t code);
 
+    std::string buffer_;
     boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;
-    std::string buffer_;
 };
 
 } // namespace ftp
