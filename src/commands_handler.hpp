@@ -74,7 +74,7 @@ private:
     public:
         void handle_reply(const std::string & reply) override
         {
-            std::cout << reply << std::endl;
+            std::cout << reply;
         }
     };
 

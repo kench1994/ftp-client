@@ -54,6 +54,7 @@ private:
 
     boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;
+    std::string buffer_;
 };
 
 } // namespace ftp

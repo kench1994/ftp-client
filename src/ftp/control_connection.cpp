@@ -23,7 +23,7 @@
  */
 
 #include <boost/asio/connect.hpp>
-#include <boost/asio/read.hpp>
+#include <boost/asio/read_until.hpp>
 #include <boost/asio/write.hpp>
 #include <boost/lexical_cast/bad_lexical_cast.hpp>
 #include <boost/lexical_cast.hpp>
@@ -165,7 +165,7 @@ string control_connection::recv()
             string line;
 
             line = read_line();
-            reply += '\n' + line;
+            reply += line;
 
             if (is_last_line(line, reply_code))
             {
@@ -223,33 +223,23 @@ void control_connection::send(const string & command)
 
 string control_connection::read_line()
 {
+    boost::system::error_code ec;
     string line;
+    size_t len;
 
-    for (;;)
+    len = boost::asio::read_until(socket_, boost::asio::dynamic_buffer(buffer_), '\n', ec);
+
+    if (ec == boost::asio::error::eof)
     {
-        boost::system::error_code ec;
-        char ch;
-
-        boost::asio::read(socket_, boost::asio::buffer(&ch, 1), ec);
-
-        if (ec)
-        {
-            throw ftp_exception("Cannot receive reply: %1%", ec.message());
-        }
-
-        if (ch == '\r')
-        {
-            continue;
-        }
-        else if (ch == '\n')
-        {
-            break;
-        }
-        else
-        {
-            line += ch;
-        }
+        // Ignore eof.
     }
+    else if (ec)
+    {
+        throw ftp_exception("Cannot receive reply: %1%", ec.message());
+    }
+
+    line = buffer_.substr(0, len);
+    buffer_.erase(0, len);
 
     return line;
 }
