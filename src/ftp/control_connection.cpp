@@ -57,16 +57,16 @@ static bool try_parse_code(const string & line, uint16_t & code)
 
 control_connection::control_connection()
     : io_context_(),
-      socket_(io_context_),
-      resolver_(io_context_)
+      socket_(io_context_)
 {
 }
 
 void control_connection::open(const string & hostname, uint16_t port)
 {
+    boost::asio::ip::tcp::resolver resolver(io_context_);
     boost::system::error_code ec;
 
-    boost::asio::connect(socket_, resolver_.resolve(hostname, to_string(port), ec), ec);
+    boost::asio::connect(socket_, resolver.resolve(hostname, to_string(port), ec), ec);
 
     if (ec)
     {
