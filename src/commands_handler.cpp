@@ -118,7 +118,7 @@ void commands_handler::execute(const string & command,
         }
         else
         {
-            throw local_exception("Invalid command.", command);
+            throw local_exception("Invalid command.");
         }
     }
     catch (const ftp_exception & ex)
