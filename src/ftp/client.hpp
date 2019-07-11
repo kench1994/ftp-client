@@ -47,7 +47,7 @@ public:
 
     void cd(const std::string & remote_directory);
 
-    void ls(const std::optional<std::string> & remote_directory = std::nullopt);
+    void ls(const std::string & remote_directory = {});
 
     void get(const std::string & remote_file, std::ofstream & file);
 

@@ -73,13 +73,17 @@ void client::cd(const string & remote_directory)
     notify_observers(control_connection_.recv());
 }
 
-void client::ls(const optional<string> & remote_directory)
+void client::ls(const string & remote_directory)
 {
-    string command = "LIST";
+    string command;
 
-    if (remote_directory)
+    if (remote_directory.empty())
     {
-        command += ' ' + remote_directory.value();
+        command = "LIST";
+    }
+    else
+    {
+        command = "LIST " + remote_directory;
     }
 
     unique_ptr<data_connection> data_connection = create_data_connection();
