@@ -29,7 +29,6 @@
 #include <vector>
 #include "control_connection.hpp"
 #include "data_connection.hpp"
-#include <optional>
 #include <fstream>
 #include <list>
 
