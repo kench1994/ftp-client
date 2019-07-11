@@ -75,6 +75,7 @@ private:
         void handle_reply(const std::string & reply) override
         {
             std::cout << reply;
+            std::cout.flush();
         }
     };
 
