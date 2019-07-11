@@ -25,8 +25,6 @@
 #include "data_connection.hpp"
 #include "ftp_exception.hpp"
 #include <boost/asio/read.hpp>
-#include <boost/asio/buffers_iterator.hpp>
-#include <boost/algorithm/string/trim.hpp>
 
 namespace ftp
 {
