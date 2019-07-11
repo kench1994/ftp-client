@@ -35,8 +35,9 @@ using std::string;
 using std::ofstream;
 using std::array;
 
-data_connection::data_connection(boost::asio::io_context & io_context)
-    : socket_(io_context)
+data_connection::data_connection()
+    : io_context_(),
+      socket_(io_context_)
 {
 }
 

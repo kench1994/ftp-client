@@ -38,12 +38,6 @@ using std::optional;
 using std::ofstream;
 using std::unique_ptr;
 
-client::client()
-    : io_context_(),
-      control_connection_(io_context_)
-{
-}
-
 void client::open(const string & hostname, uint16_t port)
 {
     control_connection_.open(hostname, port);
@@ -166,8 +160,7 @@ unique_ptr<data_connection> client::create_data_connection()
 
     uint16_t port = parse_epsv_port(reply);
 
-    unique_ptr<data_connection> connection =
-            make_unique<data_connection>(io_context_);
+    unique_ptr<data_connection> connection = make_unique<data_connection>();
 
     connection->open(control_connection_.ip(), port);
 

@@ -55,9 +55,10 @@ static bool try_parse_code(const string & line, uint16_t & code)
     }
 }
 
-control_connection::control_connection(boost::asio::io_context & io_context)
-    : socket_(io_context),
-      resolver_(io_context)
+control_connection::control_connection()
+    : io_context_(),
+      socket_(io_context_),
+      resolver_(io_context_)
 {
 }
 

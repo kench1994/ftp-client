@@ -39,8 +39,6 @@ namespace ftp
 class client
 {
 public:
-    client();
-
     void open(const std::string & hostname, uint16_t port = 21);
 
     bool is_open() const;
@@ -86,7 +84,6 @@ private:
 
     void notify_observers(const std::string & reply);
 
-    boost::asio::io_context io_context_;
     control_connection control_connection_;
     std::list<reply_observer *> observers_;
 };

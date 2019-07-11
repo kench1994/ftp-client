@@ -33,7 +33,7 @@ namespace ftp
 class control_connection
 {
 public:
-    explicit control_connection(boost::asio::io_context & io_context);
+    control_connection();
 
     void open(const std::string & hostname, uint16_t port);
 
@@ -52,6 +52,7 @@ private:
 
     bool is_last_line(const std::string & line, uint16_t code);
 
+    boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;
     boost::asio::ip::tcp::resolver resolver_;
 };
