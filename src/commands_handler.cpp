@@ -262,7 +262,7 @@ void commands_handler::get(const vector<string> & args)
     }
     else
     {
-        throw local_exception("usage: get remote-file [ local-filename ]");
+        throw local_exception("usage: get remote-file [ local-file ]");
     }
 
     ofstream file(local_file, ios_base::binary);
