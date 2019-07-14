@@ -70,6 +70,23 @@ void data_connection::open(const string & ip, uint16_t port)
     }
 }
 
+bool data_connection::is_open() const
+{
+    return socket_.is_open();
+}
+
+void data_connection::close()
+{
+    boost::system::error_code ec;
+
+    socket_.close(ec);
+
+    if (ec)
+    {
+        throw ftp_exception("Cannot close connection: %1%", ec.message());
+    }
+}
+
 string data_connection::recv()
 {
     boost::system::error_code ec;

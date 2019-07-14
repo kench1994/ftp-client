@@ -38,6 +38,10 @@ public:
 
     void open(const std::string & ip, uint16_t port);
 
+    bool is_open() const;
+
+    void close();
+
     std::string recv();
 
     void recv_file(std::ofstream & file);
