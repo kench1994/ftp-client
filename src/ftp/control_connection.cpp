@@ -146,20 +146,16 @@ string control_connection::recv()
         throw ftp_exception("Invalid server reply: %1%", reply);
     }
 
-    if (reply[3] == ' ')
+    /**
+     * Thus the format for multi-line replies is that the first line
+     * will begin with the exact required reply code, followed
+     * immediately by a Hyphen, "-" (also known as Minus), followed by
+     * text.
+     *
+     * RFC 959: https://tools.ietf.org/html/rfc959
+     */
+    if (reply[3] == '-')
     {
-        // It's one-line reply.
-    }
-    else if (reply[3] == '-')
-    {
-        /**
-         * Thus the format for multi-line replies is that the first line
-         * will begin with the exact required reply code, followed
-         * immediately by a Hyphen, "-" (also known as Minus), followed by
-         * text.
-         *
-         * RFC 959: https://tools.ietf.org/html/rfc959
-         */
         for (;;)
         {
             string line;
@@ -172,10 +168,6 @@ string control_connection::recv()
                 break;
             }
         }
-    }
-    else
-    {
-        throw ftp_exception("Invalid server reply: %1%", reply);
     }
 
     return reply;
