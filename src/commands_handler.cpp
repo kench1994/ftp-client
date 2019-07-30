@@ -37,8 +37,6 @@ using std::cout;
 using std::cin;
 using std::endl;
 using std::optional;
-using std::ofstream;
-using std::ios_base;
 using ftp::ftp_exception;
 
 commands_handler::commands_handler()
@@ -265,14 +263,7 @@ void commands_handler::get(const vector<string> & args)
         throw local_exception("usage: get remote-file [ local-file ]");
     }
 
-    ofstream file(local_file, ios_base::binary);
-
-    if (!file)
-    {
-        throw local_exception("cannot create file: %1%", local_file);
-    }
-
-    client_.get(remote_file, file);
+    client_.get(remote_file, local_file);
 }
 
 void commands_handler::pwd()

@@ -35,6 +35,7 @@ using std::make_unique;
 using std::optional;
 using std::ofstream;
 using std::unique_ptr;
+using std::ios_base;
 
 void client::open(const string & hostname, uint16_t port)
 {
@@ -114,8 +115,16 @@ void client::ls(const string & remote_directory)
     notify_observers(control_connection_.recv());
 }
 
-void client::get(const string & remote_file, ofstream & file)
+void client::get(const string & remote_file, const string & local_file)
 {
+    ofstream file(local_file, ios_base::binary);
+
+    if (!file)
+    {
+        // TODO: Handle this error.
+        return;
+    }
+
     unique_ptr<data_connection> data_connection = create_data_connection();
 
     if (!data_connection)

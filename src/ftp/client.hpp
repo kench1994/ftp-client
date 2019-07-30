@@ -48,7 +48,7 @@ public:
 
     void ls(const std::string & remote_directory = {});
 
-    void get(const std::string & remote_file, std::ofstream & file);
+    void get(const std::string & remote_file, const std::string & local_file);
 
     void pwd();
 
