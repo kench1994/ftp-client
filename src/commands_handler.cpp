@@ -179,7 +179,7 @@ void commands_handler::open(const vector<string> & args)
     string username = utils::read_line("username: ");
     string password = utils::read_hidden_line("password: ");
 
-    client_.user(username, password);
+    client_.login(username, password);
 }
 
 void commands_handler::user(const vector<string> & args)
@@ -202,7 +202,7 @@ void commands_handler::user(const vector<string> & args)
         throw local_exception("usage: user username");
     }
 
-    client_.user(username, password);
+    client_.login(username, password);
 }
 
 void commands_handler::cd(const vector<string> & args)
