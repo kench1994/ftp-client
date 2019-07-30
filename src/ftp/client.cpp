@@ -95,8 +95,17 @@ void client::ls(const string & remote_directory)
         command = "LIST " + remote_directory;
     }
 
+    reply_t reply;
+
     control_connection_.send(command);
-    notify_observers(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_observers(reply);
+
+    if (reply.code >= 400)
+    {
+        return;
+    }
 
     notify_observers(data_connection->recv());
     // Don't keep the data connection.
