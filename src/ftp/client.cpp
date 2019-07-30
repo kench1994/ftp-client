@@ -90,6 +90,11 @@ void client::ls(const string & remote_directory)
 
     unique_ptr<data_connection> data_connection = create_data_connection();
 
+    if (!data_connection)
+    {
+        return;
+    }
+
     control_connection_.send(command);
     notify_observers(control_connection_.recv());
 
@@ -103,6 +108,11 @@ void client::ls(const string & remote_directory)
 void client::get(const string & remote_file, ofstream & file)
 {
     unique_ptr<data_connection> data_connection = create_data_connection();
+
+    if (!data_connection)
+    {
+        return;
+    }
 
     control_connection_.send("RETR " + remote_file);
     notify_observers(control_connection_.recv());
@@ -165,6 +175,11 @@ unique_ptr<data_connection> client::create_data_connection()
     reply = control_connection_.recv();
 
     notify_observers(reply);
+
+    if (reply.code >= 400)
+    {
+        return nullptr;
+    }
 
     uint16_t port = parse_epsv_port(reply.status_line);
 
