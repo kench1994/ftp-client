@@ -77,6 +77,13 @@ void client::cd(const string & remote_directory)
 
 void client::ls(const string & remote_directory)
 {
+    unique_ptr<data_connection> data_connection = create_data_connection();
+
+    if (!data_connection)
+    {
+        return;
+    }
+
     string command;
 
     if (remote_directory.empty())
@@ -86,13 +93,6 @@ void client::ls(const string & remote_directory)
     else
     {
         command = "LIST " + remote_directory;
-    }
-
-    unique_ptr<data_connection> data_connection = create_data_connection();
-
-    if (!data_connection)
-    {
-        return;
     }
 
     control_connection_.send(command);
