@@ -123,8 +123,17 @@ void client::get(const string & remote_file, ofstream & file)
         return;
     }
 
+    reply_t reply;
+
     control_connection_.send("RETR " + remote_file);
-    notify_observers(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_observers(reply);
+
+    if (reply.code >= 400)
+    {
+        return;
+    }
 
     data_connection->recv_file(file);
     // Don't keep the data connection.
