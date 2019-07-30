@@ -40,7 +40,7 @@ using std::ios_base;
 void client::open(const string & hostname, uint16_t port)
 {
     control_connection_.open(hostname, port);
-    notify_observers(control_connection_.recv());
+    notify_of_reply(control_connection_.recv());
 }
 
 bool client::is_open() const
@@ -55,13 +55,13 @@ void client::login(const string & username, const string & password)
     control_connection_.send("USER " + username);
     reply = control_connection_.recv();
 
-    notify_observers(reply);
+    notify_of_reply(reply);
 
     if (reply.code == 331)
     {
         // 331 User name okay, need password.
         control_connection_.send("PASS " + password);
-        notify_observers(control_connection_.recv());
+        notify_of_reply(control_connection_.recv());
     }
     else if (reply.code == 332)
     {
@@ -73,7 +73,7 @@ void client::login(const string & username, const string & password)
 void client::cd(const string & remote_directory)
 {
     control_connection_.send("CWD " + remote_directory);
-    notify_observers(control_connection_.recv());
+    notify_of_reply(control_connection_.recv());
 }
 
 void client::ls(const string & remote_directory)
@@ -101,18 +101,18 @@ void client::ls(const string & remote_directory)
     control_connection_.send(command);
     reply = control_connection_.recv();
 
-    notify_observers(reply);
+    notify_of_reply(reply);
 
     if (reply.code >= 400)
     {
         return;
     }
 
-    notify_observers(data_connection->recv());
+    notify_of_reply(data_connection->recv());
     // Don't keep the data connection.
     data_connection.reset();
 
-    notify_observers(control_connection_.recv());
+    notify_of_reply(control_connection_.recv());
 }
 
 void client::get(const string & remote_file, const string & local_file)
@@ -137,7 +137,7 @@ void client::get(const string & remote_file, const string & local_file)
     control_connection_.send("RETR " + remote_file);
     reply = control_connection_.recv();
 
-    notify_observers(reply);
+    notify_of_reply(reply);
 
     if (reply.code >= 400)
     {
@@ -148,49 +148,49 @@ void client::get(const string & remote_file, const string & local_file)
     // Don't keep the data connection.
     data_connection.reset();
 
-    notify_observers(control_connection_.recv());
+    notify_of_reply(control_connection_.recv());
 }
 
 void client::pwd()
 {
     control_connection_.send("PWD");
-    notify_observers(control_connection_.recv());
+    notify_of_reply(control_connection_.recv());
 }
 
 void client::mkdir(const string & directory_name)
 {
     control_connection_.send("MKD " + directory_name);
-    notify_observers(control_connection_.recv());
+    notify_of_reply(control_connection_.recv());
 }
 
 void client::binary()
 {
     control_connection_.send("TYPE I");
-    notify_observers(control_connection_.recv());
+    notify_of_reply(control_connection_.recv());
 }
 
 void client::size(const string & remote_file)
 {
     control_connection_.send("SIZE " + remote_file);
-    notify_observers(control_connection_.recv());
+    notify_of_reply(control_connection_.recv());
 }
 
 void client::syst()
 {
     control_connection_.send("SYST");
-    notify_observers(control_connection_.recv());
+    notify_of_reply(control_connection_.recv());
 }
 
 void client::noop()
 {
     control_connection_.send("NOOP");
-    notify_observers(control_connection_.recv());
+    notify_of_reply(control_connection_.recv());
 }
 
 void client::close()
 {
     control_connection_.send("QUIT");
-    notify_observers(control_connection_.recv());
+    notify_of_reply(control_connection_.recv());
     control_connection_.close();
 }
 
@@ -201,7 +201,7 @@ unique_ptr<data_connection> client::create_data_connection()
     control_connection_.send("EPSV");
     reply = control_connection_.recv();
 
-    notify_observers(reply);
+    notify_of_reply(reply);
 
     if (reply.code >= 400)
     {
@@ -276,13 +276,13 @@ void client::remove_observer(reply_observer *observer)
     observers_.remove(observer);
 }
 
-void client::notify_observers(const string & reply)
+void client::notify_of_reply(const string & reply)
 {
     for (const auto & observer : observers_)
         observer->handle_reply(reply);
 }
 
-void client::notify_observers(const reply_t & reply)
+void client::notify_of_reply(const reply_t & reply)
 {
     for (const auto & observer : observers_)
         observer->handle_reply(reply.status_line);

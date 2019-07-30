@@ -81,9 +81,9 @@ private:
 
     uint16_t parse_epsv_port(const std::string & reply);
 
-    void notify_observers(const std::string & reply);
+    void notify_of_reply(const std::string & reply);
 
-    void notify_observers(const reply_t & reply);
+    void notify_of_reply(const reply_t & reply);
 
     control_connection control_connection_;
     std::list<reply_observer *> observers_;
