@@ -49,20 +49,24 @@ bool client::is_open() const
 
 void client::user(const string & username, const string & password)
 {
-    control_connection_.send("USER " + username);
-    notify_observers(control_connection_.recv());
+    reply_t reply;
 
-    /**
-     * Send PASS command.
-     *
-     * This command must be immediately preceded by the
-     * user name command, and, for some sites, completes the user's
-     * identification for access control.
-     *
-     * RFC 959: https://tools.ietf.org/html/rfc959
-     */
-    control_connection_.send("PASS " + password);
-    notify_observers(control_connection_.recv());
+    control_connection_.send("USER " + username);
+    reply = control_connection_.recv();
+
+    notify_observers(reply);
+
+    if (reply.code == 331)
+    {
+        // 331 User name okay, need password.
+        control_connection_.send("PASS " + password);
+        notify_observers(control_connection_.recv());
+    }
+    else if (reply.code == 332)
+    {
+        // 332 Need account for login.
+        // Sorry, we don't support ACCT command.
+    }
 }
 
 void client::cd(const string & remote_directory)
