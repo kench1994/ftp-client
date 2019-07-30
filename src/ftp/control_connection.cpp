@@ -123,11 +123,11 @@ string control_connection::ip() const
     return ip;
 }
 
-string control_connection::recv()
+reply_t control_connection::recv()
 {
-    string reply;
+    reply_t reply;
 
-    reply = read_line();
+    reply.status_line = read_line();
 
     /**
      * A reply is defined to contain the 3-digit code, followed by Space
@@ -135,15 +135,14 @@ string control_connection::recv()
      *
      * RFC 959: https://tools.ietf.org/html/rfc959
      */
-    if (reply.size() < 4)
+    if (reply.status_line.size() < 4)
     {
-        throw ftp_exception("Invalid server reply: %1%", reply);
+        throw ftp_exception("Invalid server reply: %1%", reply.status_line);
     }
 
-    uint16_t reply_code;
-    if (!try_parse_code(reply, reply_code))
+    if (!try_parse_code(reply.status_line, reply.code))
     {
-        throw ftp_exception("Invalid server reply: %1%", reply);
+        throw ftp_exception("Invalid server reply: %1%", reply.status_line);
     }
 
     /**
@@ -154,16 +153,16 @@ string control_connection::recv()
      *
      * RFC 959: https://tools.ietf.org/html/rfc959
      */
-    if (reply[3] == '-')
+    if (reply.status_line[3] == '-')
     {
+        string line;
+
         for (;;)
         {
-            string line;
-
             line = read_line();
-            reply += line;
+            reply.status_line += line;
 
-            if (is_last_line(line, reply_code))
+            if (is_last_line(line, reply.code))
             {
                 break;
             }

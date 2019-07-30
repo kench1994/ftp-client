@@ -83,6 +83,8 @@ private:
 
     void notify_observers(const std::string & reply);
 
+    void notify_observers(const reply_t & reply);
+
     control_connection control_connection_;
     std::list<reply_observer *> observers_;
 };

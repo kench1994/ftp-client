@@ -155,12 +155,14 @@ void client::close()
 
 unique_ptr<data_connection> client::create_data_connection()
 {
+    reply_t reply;
+
     control_connection_.send("EPSV");
-    string reply = control_connection_.recv();
+    reply = control_connection_.recv();
 
     notify_observers(reply);
 
-    uint16_t port = parse_epsv_port(reply);
+    uint16_t port = parse_epsv_port(reply.status_line);
 
     unique_ptr<data_connection> connection = make_unique<data_connection>();
 
@@ -232,6 +234,12 @@ void client::notify_observers(const string & reply)
 {
     for (const auto & observer : observers_)
         observer->handle_reply(reply);
+}
+
+void client::notify_observers(const reply_t & reply)
+{
+    for (const auto & observer : observers_)
+        observer->handle_reply(reply.status_line);
 }
 
 } // namespace ftp

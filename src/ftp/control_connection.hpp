@@ -30,6 +30,12 @@
 namespace ftp
 {
 
+struct reply_t
+{
+    std::uint16_t code;
+    std::string status_line;
+};
+
 class control_connection
 {
 public:
@@ -45,7 +51,7 @@ public:
 
     void send(const std::string & command);
 
-    std::string recv();
+    reply_t recv();
 
 private:
     std::string read_line();
