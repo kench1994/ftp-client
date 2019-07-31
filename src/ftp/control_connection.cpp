@@ -155,11 +155,10 @@ reply_t control_connection::recv()
      */
     if (reply.status_line[3] == '-')
     {
-        string line;
-
         for (;;)
         {
-            line = read_line();
+            string line = read_line();
+
             reply.status_line += line;
 
             if (is_last_line(line, reply.code))
