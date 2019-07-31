@@ -69,6 +69,8 @@ public:
     public:
         virtual void handle_reply(const std::string & reply) = 0;
 
+        virtual void handle_error(const std::string & error) = 0;
+
         virtual ~reply_observer() = default;
     };
 
@@ -84,6 +86,8 @@ private:
     void notify_of_reply(const std::string & reply);
 
     void notify_of_reply(const reply_t & reply);
+
+    void notify_of_error(const std::string & error);
 
     control_connection control_connection_;
     std::list<reply_observer *> observers_;

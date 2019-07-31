@@ -77,6 +77,11 @@ private:
             std::cout << reply;
             std::cout.flush();
         }
+
+        void handle_error(const std::string & error) override
+        {
+            std::cout << error << std::endl;
+        }
     };
 
     stdout_reply_observer stdout_reply_observer_;

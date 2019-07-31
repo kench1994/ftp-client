@@ -121,7 +121,8 @@ void client::get(const string & remote_file, const string & local_file)
 
     if (!file)
     {
-        // TODO: Handle this error.
+        notify_of_error(
+            (boost::format("Cannot create file: '%1%'.") % local_file).str());
         return;
     }
 
@@ -286,6 +287,12 @@ void client::notify_of_reply(const reply_t & reply)
 {
     for (const auto & observer : observers_)
         observer->handle_reply(reply.status_line);
+}
+
+void client::notify_of_error(const string & error)
+{
+    for (const auto & observer : observers_)
+        observer->handle_error(error);
 }
 
 } // namespace ftp
