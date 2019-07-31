@@ -36,6 +36,10 @@ class data_connection
 public:
     data_connection();
 
+    data_connection(const data_connection &) = delete;
+
+    data_connection & operator=(const data_connection &) = delete;
+
     void open(const std::string & ip, uint16_t port);
 
     bool is_open() const;

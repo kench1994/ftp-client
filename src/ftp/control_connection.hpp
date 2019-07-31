@@ -41,6 +41,10 @@ class control_connection
 public:
     control_connection();
 
+    control_connection(const control_connection &) = delete;
+
+    control_connection & operator=(const control_connection &) = delete;
+
     void open(const std::string & hostname, uint16_t port);
 
     bool is_open() const;

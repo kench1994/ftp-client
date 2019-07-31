@@ -38,6 +38,12 @@ namespace ftp
 class client
 {
 public:
+    client() = default;
+
+    client(const control_connection &) = delete;
+
+    client & operator=(const control_connection &) = delete;
+
     void open(const std::string & hostname, uint16_t port = 21);
 
     bool is_open() const;
