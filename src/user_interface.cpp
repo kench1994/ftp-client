@@ -41,9 +41,7 @@ void user_interface::run()
     {
         try
         {
-            string line;
-
-            line = utils::read_line("ftp> ");
+            string line = utils::read_line("ftp> ");
 
             if (line.empty())
             {

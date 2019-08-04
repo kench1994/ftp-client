@@ -103,10 +103,9 @@ void control_connection::close()
 
 string control_connection::ip() const
 {
-    boost::asio::ip::tcp::endpoint remote_endpoint;
     boost::system::error_code ec;
 
-    remote_endpoint = socket_.remote_endpoint(ec);
+    boost::asio::ip::tcp::endpoint remote_endpoint = socket_.remote_endpoint(ec);
 
     if (ec)
     {
@@ -214,10 +213,8 @@ void control_connection::send(const string & command)
 string control_connection::read_line()
 {
     boost::system::error_code ec;
-    string line;
-    size_t len;
 
-    len = boost::asio::read_until(socket_, boost::asio::dynamic_buffer(buffer_), '\n', ec);
+    size_t len = boost::asio::read_until(socket_, boost::asio::dynamic_buffer(buffer_), '\n', ec);
 
     if (ec == boost::asio::error::eof)
     {
@@ -228,7 +225,7 @@ string control_connection::read_line()
         throw ftp_exception("Cannot receive reply: %1%", ec.message());
     }
 
-    line = buffer_.substr(0, len);
+    string line = buffer_.substr(0, len);
     buffer_.erase(0, len);
 
     return line;

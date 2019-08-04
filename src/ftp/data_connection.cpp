@@ -41,10 +41,9 @@ data_connection::data_connection()
 
 void data_connection::open(const string & ip, uint16_t port)
 {
-    boost::asio::ip::address address;
     boost::system::error_code ec;
 
-    address = boost::asio::ip::address::from_string(ip, ec);
+    boost::asio::ip::address address = boost::asio::ip::address::from_string(ip, ec);
 
     if (ec)
     {
@@ -110,11 +109,10 @@ void data_connection::recv_file(ofstream & file)
 {
     boost::system::error_code ec;
     array<char, 4096> buffer = {};
-    size_t len;
 
     for (;;)
     {
-        len = socket_.read_some(boost::asio::buffer(buffer), ec);
+        size_t len = socket_.read_some(boost::asio::buffer(buffer), ec);
 
         if (ec == boost::asio::error::eof)
         {
