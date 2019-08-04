@@ -43,5 +43,5 @@ namespace command
     inline const char * const close = "close";
     inline const char * const help = "help";
     inline const char * const exit = "exit";
-} // namespace command
+} // namespace commands
 #endif //FTP_CLIENT_COMMANDS_HPP
