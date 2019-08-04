@@ -69,22 +69,22 @@ private:
 
     void exit();
 
-    class stdout_reply_observer : public ftp::client::reply_observer
+    class stdout_writer : public ftp::client::event_observer
     {
     public:
-        void handle_reply(const std::string & reply) override
+        void on_reply(const std::string & reply) override
         {
             std::cout << reply;
             std::cout.flush();
         }
 
-        void handle_error(const std::string & error) override
+        void on_error(const std::string & error) override
         {
             std::cout << error << std::endl;
         }
     };
 
-    stdout_reply_observer stdout_reply_observer_;
+    stdout_writer stdout_writer_;
     ftp::client client_;
 };
 

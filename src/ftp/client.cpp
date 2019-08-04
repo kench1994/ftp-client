@@ -267,12 +267,12 @@ uint16_t client::parse_epsv_port(const string & reply)
     return port;
 }
 
-void client::add_observer(reply_observer *observer)
+void client::add_observer(event_observer *observer)
 {
     observers_.push_back(observer);
 }
 
-void client::remove_observer(reply_observer *observer)
+void client::remove_observer(event_observer *observer)
 {
     observers_.remove(observer);
 }
@@ -280,19 +280,19 @@ void client::remove_observer(reply_observer *observer)
 void client::notify_of_reply(const string & reply)
 {
     for (const auto & observer : observers_)
-        observer->handle_reply(reply);
+        observer->on_reply(reply);
 }
 
 void client::notify_of_reply(const reply_t & reply)
 {
     for (const auto & observer : observers_)
-        observer->handle_reply(reply.status_line);
+        observer->on_reply(reply.status_line);
 }
 
 void client::notify_of_error(const string & error)
 {
     for (const auto & observer : observers_)
-        observer->handle_error(error);
+        observer->on_error(error);
 }
 
 } // namespace ftp

@@ -70,19 +70,19 @@ public:
 
     void close();
 
-    class reply_observer
+    class event_observer
     {
     public:
-        virtual void handle_reply(const std::string & reply) = 0;
+        virtual void on_reply(const std::string & reply) = 0;
 
-        virtual void handle_error(const std::string & error) = 0;
+        virtual void on_error(const std::string & error) = 0;
 
-        virtual ~reply_observer() = default;
+        virtual ~event_observer() = default;
     };
 
-    void add_observer(reply_observer *observer);
+    void add_observer(event_observer *observer);
 
-    void remove_observer(reply_observer *observer);
+    void remove_observer(event_observer *observer);
 
 private:
     std::unique_ptr<data_connection> create_data_connection();
@@ -96,7 +96,7 @@ private:
     void notify_of_error(const std::string & error);
 
     control_connection control_connection_;
-    std::list<reply_observer *> observers_;
+    std::list<event_observer *> observers_;
 };
 
 } // namespace ftp
