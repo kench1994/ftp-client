@@ -80,9 +80,9 @@ public:
         virtual ~event_observer() = default;
     };
 
-    void add_observer(event_observer *observer);
+    void subscribe(event_observer *observer);
 
-    void remove_observer(event_observer *observer);
+    void unsubscribe(event_observer *observer);
 
 private:
     std::unique_ptr<data_connection> create_data_connection();

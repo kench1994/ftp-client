@@ -267,12 +267,12 @@ uint16_t client::parse_epsv_port(const string & reply)
     return port;
 }
 
-void client::add_observer(event_observer *observer)
+void client::subscribe(event_observer *observer)
 {
     observers_.push_back(observer);
 }
 
-void client::remove_observer(event_observer *observer)
+void client::unsubscribe(event_observer *observer)
 {
     observers_.remove(observer);
 }
