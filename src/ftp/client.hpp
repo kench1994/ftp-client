@@ -52,7 +52,7 @@ public:
 
     void cd(const std::string & remote_directory);
 
-    void ls(const std::string & remote_directory = {});
+    void ls(const std::optional<std::string> & remote_directory = std::nullopt);
 
     void get(const std::string & remote_file, const std::string & local_file);
 
@@ -64,7 +64,7 @@ public:
 
     void size(const std::string & remote_file);
 
-    void stat(const std::string & remote_file = {});
+    void stat(const std::optional<std::string> & remote_file = std::nullopt);
 
     void syst();
 

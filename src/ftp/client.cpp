@@ -76,7 +76,7 @@ void client::cd(const string & remote_directory)
     notify_of_reply(control_connection_.recv());
 }
 
-void client::ls(const string & remote_directory)
+void client::ls(const optional<string> & remote_directory)
 {
     unique_ptr<data_connection> data_connection = create_data_connection();
 
@@ -87,13 +87,13 @@ void client::ls(const string & remote_directory)
 
     string command;
 
-    if (remote_directory.empty())
+    if (remote_directory)
     {
-        command = "LIST";
+        command = "LIST " + remote_directory.value();
     }
     else
     {
-        command = "LIST " + remote_directory;
+        command = "LIST";
     }
 
     reply_t reply;
@@ -176,17 +176,17 @@ void client::size(const string & remote_file)
     notify_of_reply(control_connection_.recv());
 }
 
-void client::stat(const string & remote_file)
+void client::stat(const optional<string> & remote_file)
 {
     string command;
 
-    if (remote_file.empty())
+    if (remote_file)
     {
-        command = "STAT";
+        command = "STAT " + remote_file.value();
     }
     else
     {
-        command = "STAT " + remote_file;
+        command = "STAT";
     }
 
     control_connection_.send(command);
