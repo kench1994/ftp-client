@@ -176,6 +176,23 @@ void client::size(const string & remote_file)
     notify_of_reply(control_connection_.recv());
 }
 
+void client::stat(const string & remote_file)
+{
+    string command;
+
+    if (remote_file.empty())
+    {
+        command = "STAT";
+    }
+    else
+    {
+        command = "STAT " + remote_file;
+    }
+
+    control_connection_.send(command);
+    notify_of_reply(control_connection_.recv());
+}
+
 void client::syst()
 {
     control_connection_.send("SYST");

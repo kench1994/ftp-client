@@ -59,6 +59,8 @@ private:
 
     void size(const std::vector<std::string> & args);
 
+    void stat(const std::vector<std::string> & args);
+
     void syst();
 
     void noop();

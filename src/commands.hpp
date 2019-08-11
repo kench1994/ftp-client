@@ -36,6 +36,7 @@ namespace command
     inline const char * const get = "get";
     inline const char * const pwd = "pwd";
     inline const char * const mkdir = "mkdir";
+    inline const char * const stat = "stat";
     inline const char * const syst = "syst";
     inline const char * const binary = "binary";
     inline const char * const size = "size";

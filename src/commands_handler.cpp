@@ -90,6 +90,10 @@ void commands_handler::execute(const string & command,
         {
             mkdir(args);
         }
+        else if (boost::iequals(command, command::stat))
+        {
+            stat(args);
+        }
         else if (boost::iequals(command, command::syst))
         {
             syst();
@@ -316,6 +320,22 @@ void commands_handler::size(const vector<string> & args)
     client_.size(remote_file);
 }
 
+void commands_handler::stat(const vector<string> & args)
+{
+    if (args.empty())
+    {
+        client_.stat();
+    }
+    else if (args.size() == 1)
+    {
+        client_.stat(args[0]);
+    }
+    else
+    {
+        throw local_exception("usage: stat [ remote-file ]");
+    }
+}
+
 void commands_handler::syst()
 {
     client_.syst();
@@ -344,6 +364,7 @@ void commands_handler::help()
         "  mkdir directory-name - make a directory on the remote machine\n"
         "  binary - set binary transfer type\n"
         "  size remote-file - show size of remote file\n"
+        "  stat [ remote-file ] - print server information\n"
         "  syst - show remote system type\n"
         "  noop - no operation\n"
         "  close - close current connection\n"

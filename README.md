@@ -24,6 +24,7 @@ FTP may run in active or passive mode, which determines how the data connection 
   <li>mkdir directory-name - make a directory on the remote machine</li>
   <li>binary - set binary transfer type</li>
   <li>size remote-file - show size of remote file</li>
+  <li>stat [ remote-file ]- print server information</li>
   <li>syst - show remote system type</li>
   <li>noop - no operation</li>
   <li>close - close current connection</li>

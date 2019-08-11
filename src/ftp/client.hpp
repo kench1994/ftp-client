@@ -64,6 +64,8 @@ public:
 
     void size(const std::string & remote_file);
 
+    void stat(const std::string & remote_file = {});
+
     void syst();
 
     void noop();
