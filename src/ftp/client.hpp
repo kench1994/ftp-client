@@ -48,21 +48,21 @@ public:
 
     bool is_open() const;
 
-    void login(const std::string & username, const std::string & password);
+    void user(const std::string & username, const std::string & password);
 
-    void cd(const std::string & remote_directory);
+    void cwd(const std::string & remote_directory);
 
-    void ls(const std::optional<std::string> & remote_directory = std::nullopt);
+    void list(const std::optional<std::string> & remote_directory = std::nullopt);
 
     void stor(const std::string & local_file, const std::string & remote_file);
 
-    void get(const std::string & remote_file, const std::string & local_file);
+    void retr(const std::string & remote_file, const std::string & local_file);
 
     void pwd();
 
-    void mkdir(const std::string & directory_name);
+    void mkd(const std::string & directory_name);
 
-    void binary();
+    void type_i();
 
     void size(const std::string & remote_file);
 
@@ -72,7 +72,7 @@ public:
 
     void noop();
 
-    void close();
+    void quit();
 
     class event_observer
     {

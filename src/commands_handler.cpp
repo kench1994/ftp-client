@@ -190,7 +190,7 @@ void commands_handler::open(const vector<string> & args)
     string username = utils::read_line("username: ");
     string password = utils::read_hidden_line("password: ");
 
-    client_.login(username, password);
+    client_.user(username, password);
 }
 
 void commands_handler::user(const vector<string> & args)
@@ -213,7 +213,7 @@ void commands_handler::user(const vector<string> & args)
         throw local_exception("usage: user username");
     }
 
-    client_.login(username, password);
+    client_.user(username, password);
 }
 
 void commands_handler::cd(const vector<string> & args)
@@ -233,18 +233,18 @@ void commands_handler::cd(const vector<string> & args)
         throw local_exception("usage: cd remote-directory");
     }
 
-    client_.cd(remote_directory);
+    client_.cwd(remote_directory);
 }
 
 void commands_handler::ls(const vector<string> & args)
 {
     if (args.empty())
     {
-        client_.ls();
+        client_.list();
     }
     else if (args.size() == 1)
     {
-        client_.ls(args[0]);
+        client_.list(args[0]);
     }
     else
     {
@@ -303,7 +303,7 @@ void commands_handler::get(const vector<string> & args)
         throw local_exception("usage: get remote-file [ local-file ]");
     }
 
-    client_.get(remote_file, local_file);
+    client_.retr(remote_file, local_file);
 }
 
 void commands_handler::pwd()
@@ -328,12 +328,12 @@ void commands_handler::mkdir(const vector<string> & args)
         throw local_exception("usage: mkdir directory-name");
     }
 
-    client_.mkdir(directory_name);
+    client_.mkd(directory_name);
 }
 
 void commands_handler::binary()
 {
-    client_.binary();
+    client_.type_i();
 }
 
 void commands_handler::size(const vector<string> & args)
@@ -384,7 +384,7 @@ void commands_handler::noop()
 
 void commands_handler::close()
 {
-    client_.close();
+    client_.quit();
 }
 
 void commands_handler::help()
@@ -413,6 +413,6 @@ void commands_handler::exit()
 {
     if (client_.is_open())
     {
-        client_.close();
+        client_.quit();
     }
 }

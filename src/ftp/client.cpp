@@ -49,7 +49,7 @@ bool client::is_open() const
     return control_connection_.is_open();
 }
 
-void client::login(const string & username, const string & password)
+void client::user(const string & username, const string & password)
 {
     reply_t reply;
 
@@ -71,13 +71,13 @@ void client::login(const string & username, const string & password)
     }
 }
 
-void client::cd(const string & remote_directory)
+void client::cwd(const string & remote_directory)
 {
     control_connection_.send("CWD " + remote_directory);
     notify_of_reply(control_connection_.recv());
 }
 
-void client::ls(const optional<string> & remote_directory)
+void client::list(const optional<string> & remote_directory)
 {
     unique_ptr<data_connection> data_connection = create_data_connection();
 
@@ -153,7 +153,7 @@ void client::stor(const string & local_file, const string & remote_file)
     notify_of_reply(control_connection_.recv());
 }
 
-void client::get(const string & remote_file, const string & local_file)
+void client::retr(const string & remote_file, const string & local_file)
 {
     ofstream file(local_file, ios_base::binary);
 
@@ -196,13 +196,13 @@ void client::pwd()
     notify_of_reply(control_connection_.recv());
 }
 
-void client::mkdir(const string & directory_name)
+void client::mkd(const string & directory_name)
 {
     control_connection_.send("MKD " + directory_name);
     notify_of_reply(control_connection_.recv());
 }
 
-void client::binary()
+void client::type_i()
 {
     control_connection_.send("TYPE I");
     notify_of_reply(control_connection_.recv());
@@ -243,7 +243,7 @@ void client::noop()
     notify_of_reply(control_connection_.recv());
 }
 
-void client::close()
+void client::quit()
 {
     control_connection_.send("QUIT");
     notify_of_reply(control_connection_.recv());
