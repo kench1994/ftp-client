@@ -31,6 +31,7 @@ namespace ftp
 {
 
 using std::string;
+using std::ifstream;
 using std::ofstream;
 using std::array;
 
@@ -106,7 +107,7 @@ string data_connection::recv()
     return reply;
 }
 
-void data_connection::send_file(std::ifstream & file)
+void data_connection::send_file(ifstream & file)
 {
     boost::system::error_code ec;
 
