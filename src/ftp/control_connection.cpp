@@ -25,8 +25,7 @@
 #include <boost/asio/connect.hpp>
 #include <boost/asio/read_until.hpp>
 #include <boost/asio/write.hpp>
-#include <boost/lexical_cast/bad_lexical_cast.hpp>
-#include <boost/lexical_cast.hpp>
+#include <boost/lexical_cast/try_lexical_convert.hpp>
 #include "control_connection.hpp"
 #include "ftp_exception.hpp"
 
@@ -43,16 +42,7 @@ static bool try_parse_code(const string & line, uint16_t & code)
         return false;
     }
 
-    try
-    {
-        code = boost::lexical_cast<uint16_t>(line.substr(0, 3));
-
-        return true;
-    }
-    catch (const boost::bad_lexical_cast & ex)
-    {
-        return false;
-    }
+    return boost::conversion::try_lexical_convert(line.substr(0, 3), code);
 }
 
 control_connection::control_connection()
