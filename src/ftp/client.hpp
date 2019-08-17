@@ -54,6 +54,8 @@ public:
 
     void ls(const std::optional<std::string> & remote_directory = std::nullopt);
 
+    void stor(const std::string & local_file, const std::string & remote_file);
+
     void get(const std::string & remote_file, const std::string & local_file);
 
     void pwd();

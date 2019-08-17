@@ -25,6 +25,7 @@
 #include "data_connection.hpp"
 #include "ftp_exception.hpp"
 #include <boost/asio/read.hpp>
+#include <boost/asio/write.hpp>
 
 namespace ftp
 {
@@ -105,14 +106,40 @@ string data_connection::recv()
     return reply;
 }
 
-void data_connection::recv_file(ofstream & file)
+void data_connection::send_file(std::ifstream & file)
 {
     boost::system::error_code ec;
-    array<char, 4096> buffer = {};
 
     for (;;)
     {
-        size_t len = socket_.read_some(boost::asio::buffer(buffer), ec);
+        file.read(buffer_.data(), buffer_.size());
+
+        if (file.fail() && !file.eof())
+        {
+            throw ftp_exception("Cannot send file.");
+        }
+
+        boost::asio::write(socket_, boost::asio::buffer(buffer_, file.gcount()), ec);
+
+        if (ec)
+        {
+            throw ftp_exception("Cannot send file: %1%", ec.message());
+        }
+
+        if (file.eof())
+        {
+            break;
+        }
+    }
+}
+
+void data_connection::recv_file(ofstream & file)
+{
+    boost::system::error_code ec;
+
+    for (;;)
+    {
+        size_t len = socket_.read_some(boost::asio::buffer(buffer_), ec);
 
         if (ec == boost::asio::error::eof)
         {
@@ -123,7 +150,7 @@ void data_connection::recv_file(ofstream & file)
             throw ftp_exception("Cannot receive file: %1%", ec.message());
         }
 
-        file.write(buffer.data(), len);
+        file.write(buffer_.data(), len);
     }
 }
 

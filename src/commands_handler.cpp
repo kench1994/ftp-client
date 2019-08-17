@@ -75,6 +75,10 @@ void commands_handler::execute(command command, const vector<string> & args)
         {
             ls(args);
         }
+        else if (command == command::put)
+        {
+            put(args);
+        }
         else if (command == command::get)
         {
             get(args);
@@ -133,6 +137,7 @@ bool commands_handler::is_needed_connection(command command) const
     case command::user:
     case command::cd:
     case command::ls:
+    case command::put:
     case command::get:
     case command::pwd:
     case command::mkdir:
@@ -245,6 +250,33 @@ void commands_handler::ls(const vector<string> & args)
     {
         throw local_exception("usage: ls [ remote-directory ]");
     }
+}
+
+void commands_handler::put(const vector<string> & args)
+{
+    string local_file, remote_file;
+
+    if (args.empty())
+    {
+        local_file = utils::read_line("local-file: ");
+        remote_file = utils::get_filename(local_file);
+    }
+    else if (args.size() == 1)
+    {
+        local_file = args[0];
+        remote_file = utils::get_filename(local_file);
+    }
+    else if (args.size() == 2)
+    {
+        local_file = args[0];
+        remote_file = args[1];
+    }
+    else
+    {
+        throw local_exception("usage: put local-file [ remote-file ]");
+    }
+
+    client_.stor(local_file, remote_file);
 }
 
 void commands_handler::get(const vector<string> & args)
@@ -363,6 +395,7 @@ void commands_handler::help()
         "  user username - send new user information\n"
         "  cd remote-directory - change remote working directory\n"
         "  ls [ remote-directory ] - print list of files in the remote directory\n"
+        "  put local-file [ remote-file ] - store a file at the server\n"
         "  get remote-file [ local-file ] - retrieve a copy of the file\n"
         "  pwd - print the current working directory name\n"
         "  mkdir directory-name - make a directory on the remote machine\n"

@@ -31,6 +31,7 @@ enum class command
     user,
     cd,
     ls,
+    put,
     get,
     pwd,
     mkdir,

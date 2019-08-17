@@ -48,11 +48,14 @@ public:
 
     std::string recv();
 
+    void send_file(std::ifstream & file);
+
     void recv_file(std::ofstream & file);
 
 private:
     boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;
+    std::array<char, 4096> buffer_;
 };
 
 } // namespace ftp

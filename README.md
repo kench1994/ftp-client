@@ -19,6 +19,7 @@ FTP may run in active or passive mode, which determines how the data connection 
   <li>user username - send new user information</li>
   <li>cd remote-directory - change remote working directory</li>
   <li>ls [ remote-directory ] - print list of files in the remote directory</li>
+  <li>put local-file [ remote-file ] - store a file at the server</li>
   <li>get remote-file [ local-file ] - retrieve a copy of the file</li>
   <li>pwd - print the current working directory name</li>
   <li>mkdir directory-name - make a directory on the remote machine</li>

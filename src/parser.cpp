@@ -56,6 +56,10 @@ static command get_command_from_string(const string & str)
     {
         return command::ls;
     }
+    else if (boost::iequals(str, "put"))
+    {
+        return command::put;
+    }
     else if (boost::iequals(str, "get"))
     {
         return command::get;

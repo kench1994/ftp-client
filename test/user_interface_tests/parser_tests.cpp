@@ -20,6 +20,9 @@ TEST(ParserTest, ParseCommandTest)
 
     EXPECT_EQ(parse_command("ls ."), pair(command::ls, vector<string>{"."s}));
 
+    EXPECT_EQ(parse_command("put local_file remote_file"),
+              pair(command::put, vector{"local_file"s, "remote_file"s}));
+    
     EXPECT_EQ(parse_command("get remote_file local_file"),
               pair(command::get, vector{"remote_file"s, "local_file"s}));
 

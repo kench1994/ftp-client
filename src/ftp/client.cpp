@@ -33,6 +33,7 @@ using std::string;
 using std::vector;
 using std::make_unique;
 using std::optional;
+using std::ifstream;
 using std::ofstream;
 using std::unique_ptr;
 using std::ios_base;
@@ -109,6 +110,43 @@ void client::ls(const optional<string> & remote_directory)
     }
 
     notify_of_reply(data_connection->recv());
+    // Don't keep the data connection.
+    data_connection.reset();
+
+    notify_of_reply(control_connection_.recv());
+}
+
+void client::stor(const string & local_file, const string & remote_file)
+{
+    ifstream file(local_file, ios_base::binary);
+
+    if (!file)
+    {
+        notify_of_error(
+                (boost::format("Cannot open file: '%1%'.") % local_file).str());
+        return;
+    }
+
+    unique_ptr<data_connection> data_connection = create_data_connection();
+
+    if (!data_connection)
+    {
+        return;
+    }
+
+    reply_t reply;
+
+    control_connection_.send("STOR " + remote_file);
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
+
+    if (reply.code >= 400)
+    {
+        return;
+    }
+
+    data_connection->send_file(file);
     // Don't keep the data connection.
     data_connection.reset();
 

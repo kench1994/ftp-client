@@ -49,6 +49,8 @@ private:
 
     void ls(const std::vector<std::string> & args);
 
+    void put(const std::vector<std::string> & args);
+
     void get(const std::vector<std::string> & args);
 
     void pwd();
