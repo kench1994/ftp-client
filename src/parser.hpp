@@ -27,7 +27,8 @@
 
 #include <vector>
 #include <string>
+#include "command.hpp"
 
-std::pair<std::string, std::vector<std::string>> parse_command(const std::string & line);
+std::pair<command, std::vector<std::string>> parse_command(const std::string & line);
 
 #endif //FTP_CLIENT_PARSER_HPP

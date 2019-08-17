@@ -23,15 +23,13 @@
  */
 
 #include "user_interface.hpp"
-#include "commands.hpp"
+#include "command.hpp"
 #include "local_exception.hpp"
 #include "utils.hpp"
 #include "parser.hpp"
 #include <iostream>
-#include <boost/algorithm/string/predicate.hpp>
 
 using std::string;
-using std::vector;
 using std::cout;
 using std::endl;
 
@@ -52,7 +50,7 @@ void user_interface::run()
 
             commands_handler_.execute(command, args);
 
-            if (boost::iequals(command, command::exit))
+            if (command == command::exit)
             {
                 break;
             }

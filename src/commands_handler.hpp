@@ -29,17 +29,17 @@
 #include <vector>
 #include <iostream>
 #include "ftp/client.hpp"
+#include "command.hpp"
 
 class commands_handler
 {
 public:
     commands_handler();
 
-    void execute(const std::string & command,
-                 const std::vector<std::string> & args);
+    void execute(command command, const std::vector<std::string> & args);
 
 private:
-    bool is_needed_connection(const std::string & command) const;
+    bool is_needed_connection(command command) const;
 
     void open(const std::vector<std::string> & args);
 

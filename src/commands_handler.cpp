@@ -24,11 +24,9 @@
 
 #include "commands_handler.hpp"
 #include "local_exception.hpp"
-#include "commands.hpp"
 #include "utils.hpp"
 #include "ftp/ftp_exception.hpp"
 #include <iostream>
-#include <boost/algorithm/string/predicate.hpp>
 #include <boost/lexical_cast/try_lexical_convert.hpp>
 
 using std::string;
@@ -44,8 +42,7 @@ commands_handler::commands_handler()
     client_.subscribe(&stdout_writer_);
 }
 
-void commands_handler::execute(const string & command,
-                               const vector<string> & args)
+void commands_handler::execute(command command, const vector<string> & args)
 {
     if (is_needed_connection(command) && !client_.is_open())
     {
@@ -54,73 +51,73 @@ void commands_handler::execute(const string & command,
 
     try
     {
-        if (boost::iequals(command, command::open))
+        if (command == command::open)
         {
             open(args);
             // Use binary mode to transfer files by default.
             binary();
         }
-        else if (boost::iequals(command, command::user))
+        else if (command == command::user)
         {
             user(args);
             // Use binary mode to transfer files by default.
             binary();
         }
-        else if (boost::iequals(command, command::close))
+        else if (command == command::close)
         {
             close();
         }
-        else if (boost::iequals(command, command::cd))
+        else if (command == command::cd)
         {
             cd(args);
         }
-        else if (boost::iequals(command, command::ls))
+        else if (command == command::ls)
         {
             ls(args);
         }
-        else if (boost::iequals(command, command::get))
+        else if (command == command::get)
         {
             get(args);
         }
-        else if (boost::iequals(command, command::pwd))
+        else if (command == command::pwd)
         {
             pwd();
         }
-        else if (boost::iequals(command, command::mkdir))
+        else if (command == command::mkdir)
         {
             mkdir(args);
         }
-        else if (boost::iequals(command, command::stat))
+        else if (command == command::stat)
         {
             stat(args);
         }
-        else if (boost::iequals(command, command::syst))
+        else if (command == command::syst)
         {
             syst();
         }
-        else if (boost::iequals(command, command::binary))
+        else if (command == command::binary)
         {
             binary();
         }
-        else if (boost::iequals(command, command::size))
+        else if (command == command::size)
         {
             size(args);
         }
-        else if (boost::iequals(command, command::noop))
+        else if (command == command::noop)
         {
             noop();
         }
-        else if (boost::iequals(command, command::help))
+        else if (command == command::help)
         {
             help();
         }
-        else if (boost::iequals(command, command::exit))
+        else if (command == command::exit)
         {
             exit();
         }
         else
         {
-            throw local_exception("Invalid command.");
+            assert(false);
         }
     }
     catch (const ftp_exception & ex)
@@ -129,19 +126,26 @@ void commands_handler::execute(const string & command,
     }
 }
 
-bool commands_handler::is_needed_connection(const string & command) const
+bool commands_handler::is_needed_connection(command command) const
 {
-    return boost::iequals(command, command::close) ||
-           boost::iequals(command, command::cd) ||
-           boost::iequals(command, command::ls) ||
-           boost::iequals(command, command::get) ||
-           boost::iequals(command, command::user) ||
-           boost::iequals(command, command::pwd) ||
-           boost::iequals(command, command::mkdir) ||
-           boost::iequals(command, command::syst) ||
-           boost::iequals(command, command::binary) ||
-           boost::iequals(command, command::size) ||
-           boost::iequals(command, command::noop);
+    switch (command)
+    {
+    case command::user:
+    case command::cd:
+    case command::ls:
+    case command::get:
+    case command::pwd:
+    case command::mkdir:
+    case command::stat:
+    case command::syst:
+    case command::binary:
+    case command::size:
+    case command::noop:
+    case command::close:
+        return true;
+    default:
+        return false;
+    }
 }
 
 void commands_handler::open(const vector<string> & args)

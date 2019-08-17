@@ -23,8 +23,10 @@
  */
 
 #include "parser.hpp"
+#include "local_exception.hpp"
 #include <sstream>
 #include <iomanip>
+#include <boost/algorithm/string/predicate.hpp>
 
 using std::vector;
 using std::string;
@@ -32,12 +34,82 @@ using std::pair;
 using std::make_pair;
 using std::istringstream;
 
-pair<string, vector<string>> parse_command(const string & line)
+static command get_command_from_string(const string & str)
+{
+    if (boost::iequals(str, "open"))
+    {
+        return command::open;
+    }
+    else if (boost::iequals(str, "user"))
+    {
+        return command::user;
+    }
+    else if (boost::iequals(str, "close"))
+    {
+        return command::close;
+    }
+    else if (boost::iequals(str, "cd"))
+    {
+        return command::cd;
+    }
+    else if (boost::iequals(str, "ls"))
+    {
+        return command::ls;
+    }
+    else if (boost::iequals(str, "get"))
+    {
+        return command::get;
+    }
+    else if (boost::iequals(str, "pwd"))
+    {
+        return command::pwd;
+    }
+    else if (boost::iequals(str, "mkdir"))
+    {
+        return command::mkdir;
+    }
+    else if (boost::iequals(str, "stat"))
+    {
+        return command::stat;
+    }
+    else if (boost::iequals(str, "syst"))
+    {
+        return command::syst;
+    }
+    else if (boost::iequals(str, "binary"))
+    {
+        return command::binary;
+    }
+    else if (boost::iequals(str, "size"))
+    {
+        return command::size;
+    }
+    else if (boost::iequals(str, "noop"))
+    {
+        return command::noop;
+    }
+    else if (boost::iequals(str, "help"))
+    {
+        return command::help;
+    }
+    else if (boost::iequals(str, "exit"))
+    {
+        return command::exit;
+    }
+    else
+    {
+        throw local_exception("Invalid command.");
+    }
+}
+
+pair<command, vector<string>> parse_command(const string & line)
 {
     istringstream iss(line);
-    string command;
+    string str_command;
 
-    iss >> command;
+    iss >> str_command;
+
+    command command = get_command_from_string(str_command);
 
     vector<string> args;
     string arg;

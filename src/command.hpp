@@ -22,27 +22,26 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_COMMANDS_HPP
-#define FTP_CLIENT_COMMANDS_HPP
+#ifndef FTP_CLIENT_COMMAND_HPP
+#define FTP_CLIENT_COMMAND_HPP
 
-#include <string>
-
-namespace command
+enum class command
 {
-    inline const char * const open = "open";
-    inline const char * const user = "user";
-    inline const char * const cd = "cd";
-    inline const char * const ls = "ls";
-    inline const char * const get = "get";
-    inline const char * const pwd = "pwd";
-    inline const char * const mkdir = "mkdir";
-    inline const char * const stat = "stat";
-    inline const char * const syst = "syst";
-    inline const char * const binary = "binary";
-    inline const char * const size = "size";
-    inline const char * const noop = "noop";
-    inline const char * const close = "close";
-    inline const char * const help = "help";
-    inline const char * const exit = "exit";
-} // namespace commands
-#endif //FTP_CLIENT_COMMANDS_HPP
+    open = 0,
+    user,
+    cd,
+    ls,
+    get,
+    pwd,
+    mkdir,
+    stat,
+    syst,
+    binary,
+    size,
+    noop,
+    close,
+    help,
+    exit
+};
+
+#endif //FTP_CLIENT_COMMAND_HPP
