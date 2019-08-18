@@ -119,7 +119,7 @@ void client::list(const optional<string> & remote_directory)
 
     notify_of_reply(data_connection->recv());
     // Don't keep the data connection.
-    data_connection.reset();
+    data_connection->close();
 
     reply = control_connection_.recv();
 
@@ -158,7 +158,7 @@ void client::stor(const string & local_file, const string & remote_file)
 
     data_connection->send_file(file);
     // Don't keep the data connection.
-    data_connection.reset();
+    data_connection->close();
 
     reply = control_connection_.recv();
 
@@ -197,7 +197,7 @@ void client::retr(const string & remote_file, const string & local_file)
 
     data_connection->recv_file(file);
     // Don't keep the data connection.
-    data_connection.reset();
+    data_connection->close();
 
     reply = control_connection_.recv();
 
