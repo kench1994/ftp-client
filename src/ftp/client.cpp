@@ -121,7 +121,9 @@ void client::list(const optional<string> & remote_directory)
     // Don't keep the data connection.
     data_connection.reset();
 
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 void client::stor(const string & local_file, const string & remote_file)
@@ -158,7 +160,9 @@ void client::stor(const string & local_file, const string & remote_file)
     // Don't keep the data connection.
     data_connection.reset();
 
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 void client::retr(const string & remote_file, const string & local_file)
@@ -195,7 +199,9 @@ void client::retr(const string & remote_file, const string & local_file)
     // Don't keep the data connection.
     data_connection.reset();
 
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 void client::pwd()
