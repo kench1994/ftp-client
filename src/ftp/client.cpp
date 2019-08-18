@@ -40,8 +40,12 @@ using std::ios_base;
 
 void client::open(const string & hostname, uint16_t port)
 {
+    reply_t reply;
+
     control_connection_.open(hostname, port);
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 bool client::is_open() const
@@ -73,8 +77,12 @@ void client::user(const string & username, const string & password)
 
 void client::cwd(const string & remote_directory)
 {
+    reply_t reply;
+
     control_connection_.send("CWD " + remote_directory);
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 void client::list(const optional<string> & remote_directory)
@@ -192,26 +200,42 @@ void client::retr(const string & remote_file, const string & local_file)
 
 void client::pwd()
 {
+    reply_t reply;
+
     control_connection_.send("PWD");
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 void client::mkd(const string & directory_name)
 {
+    reply_t reply;
+
     control_connection_.send("MKD " + directory_name);
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 void client::type_i()
 {
+    reply_t reply;
+
     control_connection_.send("TYPE I");
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 void client::size(const string & remote_file)
 {
+    reply_t reply;
+
     control_connection_.send("SIZE " + remote_file);
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 void client::stat(const optional<string> & remote_file)
@@ -227,26 +251,43 @@ void client::stat(const optional<string> & remote_file)
         command = "STAT";
     }
 
+    reply_t reply;
+
     control_connection_.send(command);
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 void client::syst()
 {
+    reply_t reply;
+
     control_connection_.send("SYST");
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 void client::noop()
 {
+    reply_t reply;
+
     control_connection_.send("NOOP");
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
 }
 
 void client::quit()
 {
+    reply_t reply;
+
     control_connection_.send("QUIT");
-    notify_of_reply(control_connection_.recv());
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
+
     control_connection_.close();
 }
 
