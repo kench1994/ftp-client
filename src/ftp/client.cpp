@@ -87,13 +87,6 @@ void client::cwd(const string & remote_directory)
 
 void client::list(const optional<string> & remote_directory)
 {
-    unique_ptr<data_connection> data_connection = create_data_connection();
-
-    if (!data_connection)
-    {
-        return;
-    }
-
     string command;
 
     if (remote_directory)
@@ -103,6 +96,13 @@ void client::list(const optional<string> & remote_directory)
     else
     {
         command = "LIST";
+    }
+
+    unique_ptr<data_connection> data_connection = create_data_connection();
+
+    if (!data_connection)
+    {
+        return;
     }
 
     reply_t reply;
