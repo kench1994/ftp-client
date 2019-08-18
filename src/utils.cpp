@@ -25,9 +25,7 @@
 #include <iostream>
 #include "utils.hpp"
 #include <boost/filesystem.hpp>
-#include <vector>
-#include "ncurses_wrappers/ncurses_initializer.hpp"
-#include "ncurses_wrappers/ncurses.hpp"
+#include <termios.h>
 
 namespace utils
 {
@@ -35,9 +33,6 @@ namespace utils
 using std::string;
 using std::cout;
 using std::cin;
-using std::endl;
-using std::vector;
-using ncurses::ncurses_initializer;
 
 string read_line(const string & greeting)
 {
@@ -49,23 +44,26 @@ string read_line(const string & greeting)
     return line;
 }
 
-string read_hidden_line(const string & greeting, int len)
+string read_password(const string & greeting)
 {
-    ncurses_initializer ncurses;
-    ncurses::cbreak();
+    struct termios old_settings = {0};
+    struct termios new_settings = {0};
 
-    ncurses::printw(greeting);
-    ncurses::refresh();
+    tcgetattr(STDIN_FILENO, &old_settings);
 
-    ncurses::noecho();
+    new_settings = old_settings;
+    new_settings.c_lflag &= ~ECHO;
+    new_settings.c_lflag |= ECHONL;
 
-    vector<char> line(len + 1);
-    ncurses::wgetnstr(stdscr, line.data(), len);
+    tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
 
-    ncurses::echo();
-    ncurses::clear();
+    string line;
+    cout << greeting;
+    getline(cin, line);
 
-    return string(line.data());
+    tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
+
+    return line;
 }
 
 string get_filename(const string & path)

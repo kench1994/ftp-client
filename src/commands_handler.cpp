@@ -188,7 +188,7 @@ void commands_handler::open(const vector<string> & args)
     client_.open(hostname, port);
 
     string username = utils::read_line("username: ");
-    string password = utils::read_hidden_line("password: ");
+    string password = utils::read_password("password: ");
 
     client_.user(username, password);
 }
@@ -201,12 +201,12 @@ void commands_handler::user(const vector<string> & args)
     if (args.empty())
     {
         username = utils::read_line("username: ");
-        password = utils::read_hidden_line("password: ");
+        password = utils::read_password("password: ");
     }
     else if (args.size() == 1)
     {
         username = args[0];
-        password = utils::read_hidden_line("password: ");
+        password = utils::read_password("password: ");
     }
     else
     {

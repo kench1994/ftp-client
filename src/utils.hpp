@@ -32,7 +32,7 @@ namespace utils
 
 std::string read_line(const std::string & greeting);
 
-std::string read_hidden_line(const std::string & greeting, int len = 64);
+std::string read_password(const std::string & greeting);
 
 std::string get_filename(const std::string & path);
 
