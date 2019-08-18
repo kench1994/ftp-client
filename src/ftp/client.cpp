@@ -348,7 +348,7 @@ uint16_t client::parse_epsv_port(const string & reply)
     begin = reply.find('|');
     if (begin == string::npos)
     {
-        throw ftp_exception("Invalid server reply: %1%", reply);
+        throw ftp_exception("Invalid server reply.");
     }
 
     // Skip '|||' characters.
@@ -357,13 +357,13 @@ uint16_t client::parse_epsv_port(const string & reply)
     end = reply.rfind('|');
     if (end == string::npos)
     {
-        throw ftp_exception("Invalid server reply: %1%", reply);
+        throw ftp_exception("Invalid server reply.");
     }
 
     string port_str = reply.substr(begin, end - begin);
     if (!boost::conversion::try_lexical_convert(port_str, port))
     {
-        throw ftp_exception("Invalid server reply: %1%", reply);
+        throw ftp_exception("Invalid server reply.");
     }
 
     return port;
