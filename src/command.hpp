@@ -35,6 +35,7 @@ enum class command
     get,
     pwd,
     mkdir,
+    rmdir,
     del,
     stat,
     syst,

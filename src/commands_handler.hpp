@@ -57,6 +57,8 @@ private:
 
     void mkdir(const std::vector<std::string> & args);
 
+    void rmdir(const std::vector<std::string> & args);
+
     void del(const std::vector<std::string> & args);
 
     void binary();

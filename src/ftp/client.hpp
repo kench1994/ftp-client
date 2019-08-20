@@ -62,6 +62,8 @@ public:
 
     void mkd(const std::string & directory_name);
 
+    void rmd(const std::string & directory_name);
+
     void dele(const std::string & remote_file);
 
     void type_i();

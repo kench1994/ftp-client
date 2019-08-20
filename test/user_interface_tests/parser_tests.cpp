@@ -39,6 +39,8 @@ TEST(ParserTest, ParseCommandTest)
 
     EXPECT_EQ(parse_command("mkdir dir"), pair(command::mkdir, vector<string>{"dir"s}));
 
+    EXPECT_EQ(parse_command("rmdir dir"), pair(command::rmdir, vector<string>{"dir"s}));
+
     EXPECT_EQ(parse_command("stat"), pair(command::stat, vector<string>{}));
 
     EXPECT_EQ(parse_command("syst"), pair(command::syst, vector<string>{}));

@@ -72,6 +72,10 @@ static command get_command_from_string(const string & str)
     {
         return command::mkdir;
     }
+    else if (boost::iequals(str, "rmdir"))
+    {
+        return command::rmdir;
+    }
     else if (boost::iequals(str, "del"))
     {
         return command::del;
