@@ -224,6 +224,16 @@ void client::mkd(const string & directory_name)
     notify_of_reply(reply);
 }
 
+void client::dele(const string & remote_file)
+{
+    reply_t reply;
+
+    control_connection_.send("DELE " + remote_file);
+    reply = control_connection_.recv();
+
+    notify_of_reply(reply);
+}
+
 void client::type_i()
 {
     reply_t reply;

@@ -91,6 +91,10 @@ void commands_handler::execute(command command, const vector<string> & args)
         {
             mkdir(args);
         }
+        else if (command == command::del)
+        {
+            del(args);
+        }
         else if (command == command::stat)
         {
             stat(args);
@@ -141,6 +145,7 @@ bool commands_handler::is_needed_connection(command command) const
     case command::get:
     case command::pwd:
     case command::mkdir:
+    case command::del:
     case command::stat:
     case command::syst:
     case command::binary:
@@ -331,6 +336,26 @@ void commands_handler::mkdir(const vector<string> & args)
     client_.mkd(directory_name);
 }
 
+void commands_handler::del(const vector<string> & args)
+{
+    string remote_file;
+
+    if (args.empty())
+    {
+        remote_file = utils::read_line("remote-file: ");
+    }
+    else if (args.size() == 1)
+    {
+        remote_file = args[0];
+    }
+    else
+    {
+        throw local_exception("usage: del remote-file");
+    }
+
+    client_.dele(remote_file);
+}
+
 void commands_handler::binary()
 {
     client_.type_i();
@@ -399,6 +424,7 @@ void commands_handler::help()
         "  get remote-file [ local-file ] - retrieve a copy of the file\n"
         "  pwd - print the current working directory name\n"
         "  mkdir directory-name - make a directory on the remote machine\n"
+        "  del remote-file - delete a file\n"
         "  binary - set binary transfer type\n"
         "  size remote-file - show size of remote file\n"
         "  stat [ remote-file ] - print server information\n"
