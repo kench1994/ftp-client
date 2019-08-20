@@ -56,7 +56,15 @@ void control_connection::open(const string & hostname, uint16_t port)
     boost::asio::ip::tcp::resolver resolver(io_context_);
     boost::system::error_code ec;
 
-    boost::asio::connect(socket_, resolver.resolve(hostname, to_string(port), ec), ec);
+    boost::asio::ip::tcp::resolver::results_type endpoints =
+            resolver.resolve(hostname, to_string(port), ec);
+
+    if (ec)
+    {
+        throw ftp_exception("Cannot open connection: %1%", ec.message());
+    }
+
+    boost::asio::connect(socket_, endpoints, ec);
 
     if (ec)
     {
