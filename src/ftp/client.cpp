@@ -362,10 +362,8 @@ unique_ptr<data_connection> client::create_data_connection()
 uint16_t client::get_server_port(const string & epsv_reply)
 {
     uint16_t port;
-    size_t begin;
-    size_t end;
 
-    begin = epsv_reply.find('|');
+    size_t begin = epsv_reply.find('|');
     if (begin == string::npos)
     {
         throw ftp_exception("Invalid server reply.");
@@ -378,7 +376,7 @@ uint16_t client::get_server_port(const string & epsv_reply)
         throw ftp_exception("Invalid server reply.");
     }
 
-    end = epsv_reply.rfind('|');
+    size_t end = epsv_reply.rfind('|');
     if (end == string::npos)
     {
         throw ftp_exception("Invalid server reply.");
