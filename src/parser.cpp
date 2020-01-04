@@ -117,11 +117,11 @@ static command get_command_from_string(const string & str)
 pair<command, vector<string>> parse_command(const string & line)
 {
     istringstream iss(line);
-    string str_command;
+    string command_str;
 
-    iss >> str_command;
+    iss >> command_str;
 
-    command command = get_command_from_string(str_command);
+    command command = get_command_from_string(command_str);
 
     vector<string> args;
     string arg;
