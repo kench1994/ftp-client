@@ -331,7 +331,7 @@ unique_ptr<data_connection> client::create_data_connection()
         return nullptr;
     }
 
-    uint16_t port = parse_epsv_port(reply.status_line);
+    uint16_t port = get_server_port(reply.status_line);
 
     unique_ptr<data_connection> connection = make_unique<data_connection>();
 
@@ -359,13 +359,13 @@ unique_ptr<data_connection> client::create_data_connection()
  *
  * RFC 2428: https://tools.ietf.org/html/rfc2428
  */
-uint16_t client::parse_epsv_port(const string & reply)
+uint16_t client::get_server_port(const string & epsv_reply)
 {
     uint16_t port;
     size_t begin;
     size_t end;
 
-    begin = reply.find('|');
+    begin = epsv_reply.find('|');
     if (begin == string::npos)
     {
         throw ftp_exception("Invalid server reply.");
@@ -374,13 +374,13 @@ uint16_t client::parse_epsv_port(const string & reply)
     // Skip '|||' characters.
     begin = begin + 3;
 
-    end = reply.rfind('|');
+    end = epsv_reply.rfind('|');
     if (end == string::npos)
     {
         throw ftp_exception("Invalid server reply.");
     }
 
-    string port_str = reply.substr(begin, end - begin);
+    string port_str = epsv_reply.substr(begin, end - begin);
     if (!boost::conversion::try_lexical_convert(port_str, port))
     {
         throw ftp_exception("Invalid server reply.");
