@@ -95,7 +95,7 @@ public:
 private:
     std::unique_ptr<data_connection> create_data_connection();
 
-    uint16_t parse_epsv_port(const std::string & reply);
+    static uint16_t parse_epsv_port(const std::string & reply);
 
     void notify_of_reply(const std::string & reply);
 
