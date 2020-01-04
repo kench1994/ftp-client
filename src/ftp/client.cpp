@@ -373,9 +373,18 @@ uint16_t client::get_server_port(const string & epsv_reply)
 
     // Skip '|||' characters.
     begin = begin + 3;
+    if (begin >= epsv_reply.size())
+    {
+        throw ftp_exception("Invalid server reply.");
+    }
 
     end = epsv_reply.rfind('|');
     if (end == string::npos)
+    {
+        throw ftp_exception("Invalid server reply.");
+    }
+
+    if (end <= begin)
     {
         throw ftp_exception("Invalid server reply.");
     }
