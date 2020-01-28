@@ -144,9 +144,7 @@ reply_t control_connection::recv()
         throw ftp_exception("Invalid server reply: %1%", status_line);
     }
 
-    reply_t reply;
-    reply.status_code = status_code;
-    reply.status_line = status_line;
+    reply_t reply(status_code, status_line);
 
     /**
      * Thus the format for multi-line replies is that the first line
