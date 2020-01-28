@@ -40,9 +40,9 @@ class client
 public:
     client() = default;
 
-    client(const detail::control_connection &) = delete;
+    client(const client &) = delete;
 
-    client & operator=(const detail::control_connection &) = delete;
+    client & operator=(const client &) = delete;
 
     void open(const std::string & hostname, uint16_t port = 21);
 
