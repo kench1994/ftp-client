@@ -27,8 +27,8 @@
 
 #include <string>
 #include <vector>
-#include "control_connection.hpp"
-#include "data_connection.hpp"
+#include "detail/control_connection.hpp"
+#include "detail/data_connection.hpp"
 #include <fstream>
 #include <list>
 
