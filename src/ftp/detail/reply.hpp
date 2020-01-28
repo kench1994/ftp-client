@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Denis Kovalchuk
+ * Copyright (c) 2020 Denis Kovalchuk
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,45 +22,30 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_CONTROL_CONNECTION_HPP
-#define FTP_CLIENT_CONTROL_CONNECTION_HPP
+#ifndef FTP_CLIENT_REPLY_HPP
+#define FTP_CLIENT_REPLY_HPP
 
-#include "reply.hpp"
-#include <boost/asio/ip/tcp.hpp>
+#include <string>
 
 namespace ftp::detail
 {
 
-class control_connection
+struct reply_t
 {
-public:
-    control_connection();
+    reply_t()
+        : status_code(0)
+    {
+    }
 
-    control_connection(const control_connection &) = delete;
+    reply_t(std::uint16_t code, const std::string & line)
+        : status_code(code),
+          status_line(line)
+    {
+    }
 
-    control_connection & operator=(const control_connection &) = delete;
-
-    void open(const std::string & hostname, uint16_t port);
-
-    bool is_open() const;
-
-    void close();
-
-    std::string ip() const;
-
-    void send(const std::string & command);
-
-    reply_t recv();
-
-private:
-    std::string read_line();
-
-    static bool is_last_line(const std::string & line, uint16_t code);
-
-    std::string buffer_;
-    boost::asio::io_context io_context_;
-    boost::asio::ip::tcp::socket socket_;
+    std::uint16_t status_code;
+    std::string status_line;
 };
 
 } // namespace ftp::detail
-#endif //FTP_CLIENT_CONTROL_CONNECTION_HPP
+#endif //FTP_CLIENT_REPLY_HPP
