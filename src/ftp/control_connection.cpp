@@ -36,14 +36,14 @@ using std::uint16_t;
 using std::string;
 using std::to_string;
 
-static bool try_parse_status_code(const string & line, uint16_t & code)
+static bool try_parse_status_code(const string & line, uint16_t & status_code)
 {
     if (line.size() < 3)
     {
         return false;
     }
 
-    return boost::conversion::try_lexical_convert(line.substr(0, 3), code);
+    return boost::conversion::try_lexical_convert(line.substr(0, 3), status_code);
 }
 
 control_connection::control_connection()
