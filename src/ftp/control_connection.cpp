@@ -187,13 +187,13 @@ bool control_connection::is_last_line(const string & line, uint16_t reply_code)
         return false;
     }
 
-    uint16_t code;
-    if (!try_parse_status_code(line, code))
+    uint16_t status_code;
+    if (!try_parse_status_code(line, status_code))
     {
         return false;
     }
 
-    return reply_code == code;
+    return reply_code == status_code;
 }
 
 void control_connection::send(const string & command)
