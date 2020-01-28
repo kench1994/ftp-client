@@ -32,6 +32,7 @@
 namespace ftp
 {
 
+using std::uint16_t;
 using std::string;
 using std::to_string;
 
@@ -122,9 +123,10 @@ string control_connection::ip() const
 
 reply_t control_connection::recv()
 {
-    reply_t reply;
+    uint16_t status_code;
+    string status_line;
 
-    reply.status_line = read_line();
+    status_line = read_line();
 
     /**
      * A reply is defined to contain the 3-digit code, followed by Space
@@ -132,15 +134,19 @@ reply_t control_connection::recv()
      *
      * RFC 959: https://tools.ietf.org/html/rfc959
      */
-    if (reply.status_line.size() < 4)
+    if (status_line.size() < 4)
     {
-        throw ftp_exception("Invalid server reply: %1%", reply.status_line);
+        throw ftp_exception("Invalid server reply: %1%", status_line);
     }
 
-    if (!try_parse_status_code(reply.status_line, reply.status_code))
+    if (!try_parse_status_code(status_line, status_code))
     {
-        throw ftp_exception("Invalid server reply: %1%", reply.status_line);
+        throw ftp_exception("Invalid server reply: %1%", status_line);
     }
+
+    reply_t reply;
+    reply.status_code = status_code;
+    reply.status_line = status_line;
 
     /**
      * Thus the format for multi-line replies is that the first line
@@ -150,15 +156,15 @@ reply_t control_connection::recv()
      *
      * RFC 959: https://tools.ietf.org/html/rfc959
      */
-    if (reply.status_line[3] == '-')
+    if (status_line[3] == '-')
     {
         for (;;)
         {
-            string line = read_line();
+            status_line = read_line();
 
-            reply.status_line += line;
+            reply.status_line += status_line;
 
-            if (is_last_line(line, reply.status_code))
+            if (is_last_line(status_line, reply.status_code))
             {
                 break;
             }
