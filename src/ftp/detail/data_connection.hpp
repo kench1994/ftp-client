@@ -25,8 +25,8 @@
 #ifndef FTP_CLIENT_DATA_CONNECTION_HPP
 #define FTP_CLIENT_DATA_CONNECTION_HPP
 
-#include <boost/asio/ip/tcp.hpp>
 #include <fstream>
+#include <boost/asio/ip/tcp.hpp>
 
 namespace ftp::detail
 {

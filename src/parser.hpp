@@ -25,9 +25,9 @@
 #ifndef FTP_CLIENT_PARSER_HPP
 #define FTP_CLIENT_PARSER_HPP
 
+#include "command.hpp"
 #include <vector>
 #include <string>
-#include "command.hpp"
 
 std::pair<command, std::vector<std::string>> parse_command(const std::string & line);
 

@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
+#include "control_connection.hpp"
+#include "ftp_exception.hpp"
 #include <boost/asio/connect.hpp>
 #include <boost/asio/read_until.hpp>
 #include <boost/asio/write.hpp>
 #include <boost/lexical_cast/try_lexical_convert.hpp>
-#include "control_connection.hpp"
-#include "ftp_exception.hpp"
 
 namespace ftp::detail
 {

@@ -25,10 +25,10 @@
 #ifndef FTP_CLIENT_CLIENT_HPP
 #define FTP_CLIENT_CLIENT_HPP
 
-#include <string>
-#include <vector>
 #include "detail/control_connection.hpp"
 #include "detail/data_connection.hpp"
+#include <string>
+#include <vector>
 #include <fstream>
 #include <list>
 

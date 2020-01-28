@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-#include <boost/lexical_cast.hpp>
 #include "client.hpp"
 #include "ftp_exception.hpp"
+#include <boost/lexical_cast.hpp>
 
 namespace ftp
 {

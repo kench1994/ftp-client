@@ -25,11 +25,11 @@
 #ifndef FTP_CLIENT_COMMANDS_HANDLER_HPP
 #define FTP_CLIENT_COMMANDS_HANDLER_HPP
 
+#include "command.hpp"
+#include "ftp/client.hpp"
 #include <string>
 #include <vector>
 #include <iostream>
-#include "ftp/client.hpp"
-#include "command.hpp"
 
 class commands_handler
 {

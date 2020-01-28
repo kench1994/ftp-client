@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#include <iostream>
 #include "user_interface.hpp"
+#include <iostream>
 
 using std::cout;
 using std::cin;

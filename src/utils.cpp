@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-#include <iostream>
 #include "utils.hpp"
-#include <boost/filesystem.hpp>
+#include <iostream>
 #include <termios.h>
+#include <boost/filesystem.hpp>
 
 namespace utils
 {
