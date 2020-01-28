@@ -28,7 +28,6 @@
 
 namespace ftp
 {
-
 using std::string;
 using std::vector;
 using std::make_unique;
@@ -37,6 +36,10 @@ using std::ifstream;
 using std::ofstream;
 using std::unique_ptr;
 using std::ios_base;
+
+using ftp::detail::control_connection;
+using ftp::detail::data_connection;
+using ftp::detail::reply_t;
 
 void client::open(const string & hostname, uint16_t port)
 {

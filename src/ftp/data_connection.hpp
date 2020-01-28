@@ -28,7 +28,7 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <fstream>
 
-namespace ftp
+namespace ftp::detail
 {
 
 class data_connection
@@ -58,5 +58,5 @@ private:
     std::array<char, 4096> buffer_;
 };
 
-} // namespace ftp
+} // namespace ftp::detail
 #endif //FTP_CLIENT_DATA_CONNECTION_HPP

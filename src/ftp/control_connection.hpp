@@ -27,7 +27,7 @@
 
 #include <boost/asio/ip/tcp.hpp>
 
-namespace ftp
+namespace ftp::detail
 {
 
 struct reply_t
@@ -78,5 +78,5 @@ private:
     boost::asio::ip::tcp::socket socket_;
 };
 
-} // namespace ftp
+} // namespace ftp::detail
 #endif //FTP_CLIENT_CONTROL_CONNECTION_HPP

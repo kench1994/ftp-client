@@ -27,7 +27,7 @@
 #include <boost/asio/read.hpp>
 #include <boost/asio/write.hpp>
 
-namespace ftp
+namespace ftp::detail
 {
 
 using std::string;
@@ -155,4 +155,4 @@ void data_connection::recv_file(ofstream & file)
     }
 }
 
-} // namespace ftp
+} // namespace ftp::detail

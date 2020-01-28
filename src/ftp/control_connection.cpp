@@ -29,7 +29,7 @@
 #include "control_connection.hpp"
 #include "ftp_exception.hpp"
 
-namespace ftp
+namespace ftp::detail
 {
 
 using std::uint16_t;
@@ -233,4 +233,4 @@ string control_connection::read_line()
     return line;
 }
 
-} // namespace ftp
+} // namespace ftp::detail

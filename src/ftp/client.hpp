@@ -40,9 +40,9 @@ class client
 public:
     client() = default;
 
-    client(const control_connection &) = delete;
+    client(const detail::control_connection &) = delete;
 
-    client & operator=(const control_connection &) = delete;
+    client & operator=(const detail::control_connection &) = delete;
 
     void open(const std::string & hostname, uint16_t port = 21);
 
@@ -93,17 +93,17 @@ public:
     void unsubscribe(event_observer *observer);
 
 private:
-    std::unique_ptr<data_connection> create_data_connection();
+    std::unique_ptr<detail::data_connection> create_data_connection();
 
     static uint16_t get_server_port(const std::string & epsv_reply);
 
     void notify_of_reply(const std::string & reply);
 
-    void notify_of_reply(const reply_t & reply);
+    void notify_of_reply(const detail::reply_t & reply);
 
     void notify_of_error(const std::string & error);
 
-    control_connection control_connection_;
+    detail::control_connection control_connection_;
     std::list<event_observer *> observers_;
 };
 
