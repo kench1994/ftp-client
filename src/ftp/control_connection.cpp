@@ -35,7 +35,7 @@ namespace ftp
 using std::string;
 using std::to_string;
 
-static bool try_parse_code(const string & line, uint16_t & code)
+static bool try_parse_status_code(const string & line, uint16_t & code)
 {
     if (line.size() < 3)
     {
@@ -137,7 +137,7 @@ reply_t control_connection::recv()
         throw ftp_exception("Invalid server reply: %1%", reply.status_line);
     }
 
-    if (!try_parse_code(reply.status_line, reply.status_code))
+    if (!try_parse_status_code(reply.status_line, reply.status_code))
     {
         throw ftp_exception("Invalid server reply: %1%", reply.status_line);
     }
@@ -188,7 +188,7 @@ bool control_connection::is_last_line(const string & line, uint16_t reply_code)
     }
 
     uint16_t code;
-    if (!try_parse_code(line, code))
+    if (!try_parse_status_code(line, code))
     {
         return false;
     }
