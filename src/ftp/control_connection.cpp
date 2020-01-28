@@ -193,7 +193,7 @@ bool control_connection::is_last_line(const string & line, uint16_t reply_code)
         return false;
     }
 
-    return reply_code == status_code;
+    return status_code == reply_code;
 }
 
 void control_connection::send(const string & command)
