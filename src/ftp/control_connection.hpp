@@ -32,7 +32,7 @@ namespace ftp
 
 struct reply_t
 {
-    std::uint16_t code;
+    std::uint16_t status_code;
     std::string status_line;
 };
 

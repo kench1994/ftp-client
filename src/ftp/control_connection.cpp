@@ -137,7 +137,7 @@ reply_t control_connection::recv()
         throw ftp_exception("Invalid server reply: %1%", reply.status_line);
     }
 
-    if (!try_parse_code(reply.status_line, reply.code))
+    if (!try_parse_code(reply.status_line, reply.status_code))
     {
         throw ftp_exception("Invalid server reply: %1%", reply.status_line);
     }
@@ -158,7 +158,7 @@ reply_t control_connection::recv()
 
             reply.status_line += line;
 
-            if (is_last_line(line, reply.code))
+            if (is_last_line(line, reply.status_code))
             {
                 break;
             }

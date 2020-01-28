@@ -62,13 +62,13 @@ void client::user(const string & username, const string & password)
 
     notify_of_reply(reply);
 
-    if (reply.code == 331)
+    if (reply.status_code == 331)
     {
         // 331 User name okay, need password.
         control_connection_.send("PASS " + password);
         notify_of_reply(control_connection_.recv());
     }
-    else if (reply.code == 332)
+    else if (reply.status_code == 332)
     {
         // 332 Need account for login.
         // Sorry, we don't support ACCT command.
@@ -112,7 +112,7 @@ void client::list(const optional<string> & remote_directory)
 
     notify_of_reply(reply);
 
-    if (reply.code >= 400)
+    if (reply.status_code >= 400)
     {
         return;
     }
@@ -151,7 +151,7 @@ void client::stor(const string & local_file, const string & remote_file)
 
     notify_of_reply(reply);
 
-    if (reply.code >= 400)
+    if (reply.status_code >= 400)
     {
         return;
     }
@@ -190,7 +190,7 @@ void client::retr(const string & remote_file, const string & local_file)
 
     notify_of_reply(reply);
 
-    if (reply.code >= 400)
+    if (reply.status_code >= 400)
     {
         return;
     }
@@ -326,7 +326,7 @@ unique_ptr<data_connection> client::create_data_connection()
 
     notify_of_reply(reply);
 
-    if (reply.code >= 400)
+    if (reply.status_code >= 400)
     {
         return nullptr;
     }
