@@ -158,6 +158,10 @@ bool commands_handler::is_needed_connection(command command) const
     case command::noop:
     case command::close:
         return true;
+    case command::open:
+    case command::help:
+    case command::exit:
+        return false;
     default:
         return false;
     }
