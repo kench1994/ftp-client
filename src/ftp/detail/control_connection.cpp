@@ -166,7 +166,7 @@ reply_t control_connection::recv()
  *
  * RFC 959: https://tools.ietf.org/html/rfc959
  */
-bool control_connection::is_last_line(const string & line, uint16_t reply_code)
+bool control_connection::is_last_line(const string & line, uint16_t status_code)
 {
     if (line.size() < 4)
     {
@@ -178,13 +178,13 @@ bool control_connection::is_last_line(const string & line, uint16_t reply_code)
         return false;
     }
 
-    uint16_t status_code;
-    if (!try_parse_status_code(line, status_code))
+    uint16_t code;
+    if (!try_parse_status_code(line,code))
     {
         return false;
     }
 
-    return status_code == reply_code;
+    return code == status_code;
 }
 
 void control_connection::send(const string & command)

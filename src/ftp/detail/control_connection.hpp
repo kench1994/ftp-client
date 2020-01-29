@@ -55,7 +55,7 @@ public:
 private:
     std::string read_line();
 
-    static bool is_last_line(const std::string & line, uint16_t code);
+    static bool is_last_line(const std::string & line, uint16_t status_code);
 
     std::string buffer_;
     boost::asio::io_context io_context_;
