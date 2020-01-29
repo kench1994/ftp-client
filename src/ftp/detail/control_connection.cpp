@@ -144,8 +144,6 @@ reply_t control_connection::recv()
         throw ftp_exception("Invalid server reply: %1%", status_line);
     }
 
-    reply_t reply(status_code, status_line);
-
     /**
      * Thus the format for multi-line replies is that the first line
      * will begin with the exact required reply code, followed
@@ -158,18 +156,18 @@ reply_t control_connection::recv()
     {
         for (;;)
         {
-            status_line = read_line();
+            string line = read_line();
 
-            reply.status_line += status_line;
+            status_line += line;
 
-            if (is_last_line(status_line, reply.status_code))
+            if (is_last_line(line, status_code))
             {
                 break;
             }
         }
     }
 
-    return reply;
+    return reply_t(status_code, status_line);
 }
 
 /**
