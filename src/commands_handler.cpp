@@ -138,7 +138,7 @@ void commands_handler::execute(command command, const vector<string> & args)
     }
 }
 
-bool commands_handler::is_needed_connection(command command) const
+bool commands_handler::is_needed_connection(command command)
 {
     switch (command)
     {

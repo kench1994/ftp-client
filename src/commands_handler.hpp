@@ -39,7 +39,7 @@ public:
     void execute(command command, const std::vector<std::string> & args);
 
 private:
-    bool is_needed_connection(command command) const;
+    static bool is_needed_connection(command command);
 
     void open(const std::vector<std::string> & args);
 
