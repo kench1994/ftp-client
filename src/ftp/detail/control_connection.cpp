@@ -128,17 +128,6 @@ reply_t control_connection::recv()
 
     status_line = read_line();
 
-    /**
-     * A reply is defined to contain the 3-digit code, followed by Space
-     * <SP>, followed by one line of text.
-     *
-     * RFC 959: https://tools.ietf.org/html/rfc959
-     */
-    if (status_line.size() < 4)
-    {
-        throw ftp_exception("Invalid server reply: %1%", status_line);
-    }
-
     if (!try_parse_status_code(status_line, status_code))
     {
         throw ftp_exception("Invalid server reply: %1%", status_line);
@@ -152,7 +141,7 @@ reply_t control_connection::recv()
      *
      * RFC 959: https://tools.ietf.org/html/rfc959
      */
-    if (status_line[3] == '-')
+    if (status_line.size() > 3 && status_line[3] == '-')
     {
         for (;;)
         {
