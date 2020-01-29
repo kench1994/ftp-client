@@ -163,6 +163,7 @@ bool commands_handler::is_needed_connection(command command) const
     case command::exit:
         return false;
     default:
+        assert(false);
         return false;
     }
 }
