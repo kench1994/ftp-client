@@ -24,7 +24,7 @@
 
 #include "commands_handler.hpp"
 #include "local_exception.hpp"
-#include "utils.hpp"
+#include "utils/utils.hpp"
 #include "ftp/ftp_exception.hpp"
 #include <iostream>
 #include <boost/lexical_cast/try_lexical_convert.hpp>

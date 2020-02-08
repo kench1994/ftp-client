@@ -25,8 +25,8 @@
 #include "user_interface.hpp"
 #include "command.hpp"
 #include "local_exception.hpp"
-#include "utils.hpp"
 #include "parser.hpp"
+#include "utils/utils.hpp"
 #include <iostream>
 
 using std::string;
