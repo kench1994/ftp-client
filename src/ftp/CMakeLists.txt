@@ -15,7 +15,5 @@ target_link_libraries(ftp
             ${Boost_LIBRARIES})
 
 target_include_directories(ftp
-        PUBLIC
-            ${CMAKE_CURRENT_SOURCE_DIR}
         PRIVATE
             ${Boost_INCLUDE_DIRS})

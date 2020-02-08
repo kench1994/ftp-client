@@ -23,7 +23,7 @@
  */
 
 #include "control_connection.hpp"
-#include "ftp_exception.hpp"
+#include "../ftp_exception.hpp"
 #include <boost/asio/connect.hpp>
 #include <boost/asio/read_until.hpp>
 #include <boost/asio/write.hpp>
