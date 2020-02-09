@@ -6,9 +6,9 @@ add_library(utils
 find_package(Boost 1.67.0 REQUIRED COMPONENTS system)
 
 target_link_libraries(utils
-        PRIVATE
+        PUBLIC
             ${Boost_LIBRARIES})
 
 target_include_directories(utils
-        PRIVATE
+        PUBLIC
             ${Boost_INCLUDE_DIRS})
