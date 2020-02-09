@@ -3,7 +3,7 @@ add_library(utils
             utils.cpp
             utils.hpp)
 
-find_package(Boost 1.67.0 REQUIRED COMPONENTS system)
+find_package(Boost 1.67.0 REQUIRED COMPONENTS filesystem)
 
 target_link_libraries(utils
         PUBLIC
