@@ -45,7 +45,7 @@ std::ostream & operator<<(std::ostream & os, const custom_type & value)
     return os << value.s << " " << value.d << " " << value.i;
 }
 
-TEST(UtilsTest, CustomTypeTest)
+TEST(UtilsTest, FormatCustomTypeTest)
 {
     custom_type value {"hello", 27.9, 42};
 
