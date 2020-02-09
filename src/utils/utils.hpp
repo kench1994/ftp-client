@@ -26,6 +26,7 @@
 #define FTP_CLIENT_UTILS_HPP
 
 #include <string>
+#include <boost/format.hpp>
 
 namespace utils
 {
@@ -35,6 +36,14 @@ std::string read_line(const std::string & greeting);
 std::string read_password(const std::string & greeting);
 
 std::string get_filename(const std::string & path);
+
+template<typename ...Args>
+std::string format(const std::string & fmt, Args && ...args)
+{
+    boost::format f(fmt);
+    f = (f % ... % std::forward<Args>(args));
+    return f.str();
+}
 
 } // namespace utils
 #endif //FTP_CLIENT_UTILS_HPP
