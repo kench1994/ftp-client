@@ -51,3 +51,15 @@ TEST(UtilsTest, FormatCustomTypeTest)
 
     EXPECT_EQ(utils::format("%1%", value), "hello 27.9 42");
 }
+
+TEST(UtilsTest, GetFileNameTest)
+{
+    EXPECT_EQ(utils::get_filename(""), "");
+    EXPECT_EQ(utils::get_filename("file.ext"), "file.ext");
+    EXPECT_EQ(utils::get_filename("/dir/"), "");
+    EXPECT_EQ(utils::get_filename("/file.ext"), "file.ext");
+    EXPECT_EQ(utils::get_filename("/dir/file.ext"), "file.ext");
+    EXPECT_EQ(utils::get_filename("C:\\"), "");
+    EXPECT_EQ(utils::get_filename("C:\\dir\\"), "");
+    EXPECT_EQ(utils::get_filename("C:\\dir\\file.ext"), "file.ext");
+}

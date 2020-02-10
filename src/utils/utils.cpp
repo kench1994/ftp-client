@@ -25,7 +25,6 @@
 #include "utils.hpp"
 #include <iostream>
 #include <termios.h>
-#include <boost/filesystem.hpp>
 
 namespace utils
 {
@@ -68,7 +67,16 @@ string read_password(const string & greeting)
 
 string get_filename(const string & path)
 {
-    return boost::filesystem::path(path).filename().string();
+    size_t last_slash = path.find_last_of("\\/");
+
+    if (last_slash == string::npos)
+    {
+        return path;
+    }
+    else
+    {
+        return path.substr(last_slash + 1);
+    }
 }
 
 } // namespace utils
