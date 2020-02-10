@@ -179,7 +179,7 @@ bool control_connection::is_last_line(const string & line, uint16_t status_code)
     }
 
     uint16_t code;
-    if (!try_parse_status_code(line,code))
+    if (!try_parse_status_code(line, code))
     {
         return false;
     }
