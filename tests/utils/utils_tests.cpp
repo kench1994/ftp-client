@@ -27,6 +27,7 @@
 
 TEST(UtilsTest, FormatTest)
 {
+    EXPECT_EQ(utils::format(""), "");
     EXPECT_EQ(utils::format("string: %1%", "hello"), "string: hello");
     EXPECT_EQ(utils::format("double: %1%", 27.9), "double: 27.9");
     EXPECT_EQ(utils::format("integer: %1%", 42), "integer: 42");
