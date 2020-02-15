@@ -53,8 +53,11 @@ public:
 
     template<typename ...Args>
     explicit ftp_exception(const std::string & message, Args && ...args)
-        : std::runtime_error(boost::str((boost::format(message) % ... % args)))
+        : std::runtime_error("")
     {
+        boost::format f(message);
+        f = (f % ... % std::forward<Args>(args));
+        message_ = f.str();
     }
 
     const char * what() const noexcept override
