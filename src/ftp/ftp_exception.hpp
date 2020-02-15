@@ -30,12 +30,11 @@
 namespace ftp
 {
 
-class ftp_exception : public std::runtime_error
+class ftp_exception : public std::exception
 {
 public:
     template<typename ...Args>
     explicit ftp_exception(boost::system::error_code & ec, const std::string & fmt = "", Args && ...args)
-        : std::runtime_error("")
     {
         if (fmt.empty())
         {
@@ -53,7 +52,6 @@ public:
 
     template<typename ...Args>
     explicit ftp_exception(const std::string & fmt, Args && ...args)
-        : std::runtime_error("")
     {
         boost::format f(fmt);
         f = (f % ... % std::forward<Args>(args));
