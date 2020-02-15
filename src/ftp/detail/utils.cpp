@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Denis Kovalchuk
+ * Copyright (c) 2020 Denis Kovalchuk
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,46 +22,7 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_FTP_EXCEPTION_HPP
-#define FTP_CLIENT_FTP_EXCEPTION_HPP
-
-#include "detail/utils.hpp"
-
-namespace ftp
+namespace ftp::detail::utils
 {
 
-class ftp_exception : public std::exception
-{
-public:
-    template<typename ...Args>
-    explicit ftp_exception(boost::system::error_code & ec, const std::string & fmt = "", Args && ...args)
-    {
-        if (fmt.empty())
-        {
-            message_ = ec.message();
-        }
-        else
-        {
-            message_ = detail::utils::format(fmt, std::forward<Args>(args)...);
-            message_.append(": ");
-            message_.append(ec.message());
-        }
-    }
-
-    template<typename ...Args>
-    explicit ftp_exception(const std::string & fmt, Args && ...args)
-    {
-        message_ = detail::utils::format(fmt, std::forward<Args>(args)...);
-    }
-
-    const char * what() const noexcept override
-    {
-        return message_.c_str();
-    }
-
-private:
-    std::string message_;
-};
-
-} // namespace ftp
-#endif //FTP_CLIENT_FTP_EXCEPTION_HPP
+} // namespace ftp::detail::utils
