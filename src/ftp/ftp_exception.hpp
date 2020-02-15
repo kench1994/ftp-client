@@ -52,10 +52,10 @@ public:
     }
 
     template<typename ...Args>
-    explicit ftp_exception(const std::string & message, Args && ...args)
+    explicit ftp_exception(const std::string & fmt, Args && ...args)
         : std::runtime_error("")
     {
-        boost::format f(message);
+        boost::format f(fmt);
         f = (f % ... % std::forward<Args>(args));
         message_ = f.str();
     }
