@@ -34,10 +34,36 @@ class ftp_exception : public std::runtime_error
 {
 public:
     template<typename ...Args>
+    explicit ftp_exception(boost::system::error_code & ec, const std::string & fmt = "", Args && ...args)
+        : std::runtime_error("")
+    {
+        if (fmt.empty())
+        {
+            message_ = ec.message();
+        }
+        else
+        {
+            boost::format f(fmt);
+            f = (f % ... % std::forward<Args>(args));
+            message_ = f.str();
+            message_.append(": ");
+            message_.append(ec.message());
+        }
+    }
+
+    template<typename ...Args>
     explicit ftp_exception(const std::string & message, Args && ...args)
         : std::runtime_error(boost::str((boost::format(message) % ... % args)))
     {
     }
+
+    const char * what() const noexcept override
+    {
+        return message_.c_str();
+    }
+
+private:
+    std::string message_;
 };
 
 } // namespace ftp

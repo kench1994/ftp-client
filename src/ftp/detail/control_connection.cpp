@@ -62,7 +62,7 @@ void control_connection::open(const string & hostname, uint16_t port)
 
     if (ec)
     {
-        throw ftp_exception("Cannot open connection: %1%", ec.message());
+        throw ftp_exception(ec, "Cannot open connection");
     }
 
     boost::asio::connect(socket_, endpoints, ec);
@@ -79,7 +79,7 @@ void control_connection::open(const string & hostname, uint16_t port)
          */
         socket_.close(ignored);
 
-        throw ftp_exception("Cannot open connection: %1%", ec.message());
+        throw ftp_exception(ec, "Cannot open connection");
     }
 }
 
@@ -96,7 +96,7 @@ void control_connection::close()
 
     if (ec)
     {
-        throw ftp_exception("Cannot close connection: %1%", ec.message());
+        throw ftp_exception(ec, "Cannot close connection");
     }
 }
 
@@ -108,14 +108,14 @@ string control_connection::ip() const
 
     if (ec)
     {
-        throw ftp_exception("Cannot get ip address: %1%", ec.message());
+        throw ftp_exception(ec, "Cannot get ip address");
     }
 
     string ip = remote_endpoint.address().to_string(ec);
 
     if (ec)
     {
-        throw ftp_exception("Cannot get ip address: %1%", ec.message());
+        throw ftp_exception(ec, "Cannot get ip address");
     }
 
     return ip;
@@ -195,7 +195,7 @@ void control_connection::send(const string & command)
 
     if (ec)
     {
-        throw ftp_exception("Cannot send command: %1%", ec.message());
+        throw ftp_exception(ec, "Cannot send command");
     }
 }
 
@@ -211,7 +211,7 @@ string control_connection::read_line()
     }
     else if (ec)
     {
-        throw ftp_exception("Cannot receive reply: %1%", ec.message());
+        throw ftp_exception(ec, "Cannot receive reply");
     }
 
     string line = buffer_.substr(0, len);
