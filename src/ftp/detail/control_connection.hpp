@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_CONTROL_CONNECTION_HPP
-#define FTP_CLIENT_CONTROL_CONNECTION_HPP
+#ifndef FTP_CONTROL_CONNECTION_HPP
+#define FTP_CONTROL_CONNECTION_HPP
 
 #include "reply.hpp"
 #include <boost/asio/ip/tcp.hpp>
@@ -63,4 +63,4 @@ private:
 };
 
 } // namespace ftp::detail
-#endif //FTP_CLIENT_CONTROL_CONNECTION_HPP
+#endif //FTP_CONTROL_CONNECTION_HPP

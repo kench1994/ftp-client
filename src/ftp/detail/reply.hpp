@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_REPLY_HPP
-#define FTP_CLIENT_REPLY_HPP
+#ifndef FTP_REPLY_HPP
+#define FTP_REPLY_HPP
 
 #include <string>
 
@@ -48,4 +48,4 @@ struct reply_t
 };
 
 } // namespace ftp::detail
-#endif //FTP_CLIENT_REPLY_HPP
+#endif //FTP_REPLY_HPP

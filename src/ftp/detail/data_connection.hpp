@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_DATA_CONNECTION_HPP
-#define FTP_CLIENT_DATA_CONNECTION_HPP
+#ifndef FTP_DATA_CONNECTION_HPP
+#define FTP_DATA_CONNECTION_HPP
 
 #include <fstream>
 #include <boost/asio/ip/tcp.hpp>
@@ -59,4 +59,4 @@ private:
 };
 
 } // namespace ftp::detail
-#endif //FTP_CLIENT_DATA_CONNECTION_HPP
+#endif //FTP_DATA_CONNECTION_HPP

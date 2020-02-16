@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_CLIENT_HPP
-#define FTP_CLIENT_CLIENT_HPP
+#ifndef FTP_CLIENT_HPP
+#define FTP_CLIENT_HPP
 
 #include "detail/control_connection.hpp"
 #include "detail/data_connection.hpp"
@@ -108,4 +108,4 @@ private:
 };
 
 } // namespace ftp
-#endif //FTP_CLIENT_CLIENT_HPP
+#endif //FTP_CLIENT_HPP

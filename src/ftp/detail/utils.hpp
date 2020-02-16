@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_UTILS_HPP
-#define FTP_CLIENT_UTILS_HPP
+#ifndef FTP_UTILS_HPP
+#define FTP_UTILS_HPP
 
 #include <string>
 #include <boost/format.hpp>
@@ -40,4 +40,4 @@ std::string format(const std::string & fmt, Args && ...args)
 }
 
 } // namespace ftp::detail::utils
-#endif //FTP_CLIENT_UTILS_HPP
+#endif //FTP_UTILS_HPP

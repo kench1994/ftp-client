@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_FTP_EXCEPTION_HPP
-#define FTP_CLIENT_FTP_EXCEPTION_HPP
+#ifndef FTP_FTP_EXCEPTION_HPP
+#define FTP_FTP_EXCEPTION_HPP
 
 #include "detail/utils.hpp"
 
@@ -64,4 +64,4 @@ private:
 };
 
 } // namespace ftp
-#endif //FTP_CLIENT_FTP_EXCEPTION_HPP
+#endif //FTP_FTP_EXCEPTION_HPP
