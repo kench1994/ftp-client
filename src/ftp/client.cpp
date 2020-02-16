@@ -37,9 +37,7 @@ using std::ofstream;
 using std::unique_ptr;
 using std::ios_base;
 
-using ftp::detail::control_connection;
-using ftp::detail::data_connection;
-using ftp::detail::reply_t;
+using namespace ftp::detail;
 
 void client::open(const string & hostname, uint16_t port)
 {
@@ -135,8 +133,8 @@ void client::stor(const string & local_file, const string & remote_file)
 
     if (!file)
     {
-        notify_of_error(
-                (boost::format("Cannot open file: '%1%'.") % local_file).str());
+        string error_message = utils::format("Cannot open file: '%1%'.", local_file);
+        notify_of_error(error_message);
         return;
     }
 
@@ -174,8 +172,8 @@ void client::retr(const string & remote_file, const string & local_file)
 
     if (!file)
     {
-        notify_of_error(
-            (boost::format("Cannot create file: '%1%'.") % local_file).str());
+        string error_message = utils::format("Cannot create file: '%1%'.", local_file);
+        notify_of_error(error_message);
         return;
     }
 
