@@ -80,6 +80,20 @@ void data_connection::close()
 {
     boost::system::error_code ec;
 
+    socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
+
+    if (ec == boost::asio::error::not_connected)
+    {
+        /* Ignore 'not_connected' error. We could get ENOTCONN if an server side
+         * has already closed the control connection. This suits us, just close
+         * the socket.
+         */
+    }
+    else if (ec)
+    {
+        throw ftp_exception(ec, "Cannot close connection");
+    }
+
     socket_.close(ec);
 
     if (ec)
