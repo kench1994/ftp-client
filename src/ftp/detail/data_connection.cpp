@@ -59,8 +59,7 @@ void data_connection::open(const string & ip, uint16_t port)
     {
         boost::system::error_code ignored;
 
-        /*
-         * If the connect fails, and the socket was automatically opened,
+        /* If the connect fails, and the socket was automatically opened,
          * the socket is not returned to the closed state.
          *
          * https://www.boost.org/doc/libs/1_70_0/doc/html/boost_asio/reference/basic_stream_socket/connect/overload2.html

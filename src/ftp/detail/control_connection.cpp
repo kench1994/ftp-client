@@ -71,8 +71,7 @@ void control_connection::open(const string & hostname, uint16_t port)
     {
         boost::system::error_code ignored;
 
-        /*
-         * If the connect fails, and the socket was automatically opened,
+        /* If the connect fails, and the socket was automatically opened,
          * the socket is not returned to the closed state.
          *
          * https://www.boost.org/doc/libs/1_70_0/doc/html/boost_asio/reference/basic_stream_socket/connect/overload2.html
@@ -147,8 +146,7 @@ reply_t control_connection::recv()
         throw ftp_exception("Invalid server reply: %1%", status_line);
     }
 
-    /**
-     * Thus the format for multi-line replies is that the first line
+    /* Thus the format for multi-line replies is that the first line
      * will begin with the exact required reply code, followed
      * immediately by a Hyphen, "-" (also known as Minus), followed by
      * text.
@@ -189,8 +187,7 @@ reply_t control_connection::recv()
     return reply_t(status_code, status_line);
 }
 
-/**
- * The last line will begin with the same code, followed
+/* The last line will begin with the same code, followed
  * immediately by Space <SP>, optionally some text, and the Telnet
  * end-of-line code.
  *

@@ -341,8 +341,7 @@ unique_ptr<data_connection> client::create_data_connection()
     return connection;
 }
 
-/**
- * The text returned in response to the EPSV command MUST be:
+/* The text returned in response to the EPSV command MUST be:
  *
  *     <text indicating server is entering extended passive mode> \
  *       (<d><d><d><tcp-port><d>)
