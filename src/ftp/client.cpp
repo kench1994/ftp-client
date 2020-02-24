@@ -71,8 +71,9 @@ void client::user(const string & username, const string & password)
     }
     else if (reply.status_code == 332)
     {
-        // 332 Need account for login.
-        // Sorry, we don't support ACCT command.
+        /* 332 Need account for login.
+         * Sorry, we don't support ACCT command.
+         */
     }
 }
 
