@@ -33,19 +33,17 @@ namespace ftp
 class ftp_exception : public std::exception
 {
 public:
-    template<typename ...Args>
-    explicit ftp_exception(boost::system::error_code & ec, const std::string & fmt = "", Args && ...args)
+    explicit ftp_exception(boost::system::error_code & ec)
     {
-        if (fmt.empty())
-        {
-            message_ = ec.message();
-        }
-        else
-        {
-            message_ = detail::utils::format(fmt, std::forward<Args>(args)...);
-            message_.append(": ");
-            message_.append(ec.message());
-        }
+        message_ = ec.message();
+    }
+
+    template<typename ...Args>
+    explicit ftp_exception(boost::system::error_code & ec, const std::string & fmt, Args && ...args)
+    {
+        message_ = detail::utils::format(fmt, std::forward<Args>(args)...);
+        message_.append(": ");
+        message_.append(ec.message());
     }
 
     template<typename ...Args>
