@@ -85,7 +85,7 @@ void data_connection::close()
     if (ec == boost::asio::error::not_connected)
     {
         /* Ignore 'not_connected' error. We could get ENOTCONN if an server side
-         * has already closed the control connection. This suits us, just close
+         * has already closed the data connection. This suits us, just close
          * the socket.
          */
     }
