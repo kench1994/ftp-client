@@ -26,6 +26,7 @@
 #define FTP_CONNECTION_EXCEPTION_HPP
 
 #include "utils.hpp"
+#include <boost/system/error_code.hpp>
 
 namespace ftp::detail
 {
