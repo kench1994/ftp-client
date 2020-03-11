@@ -23,7 +23,7 @@
  */
 
 #include "client.hpp"
-#include "ftp_exception.hpp"
+#include "detail/utils.hpp"
 #include <boost/lexical_cast.hpp>
 
 namespace ftp
@@ -333,7 +333,14 @@ unique_ptr<data_connection> client::create_data_connection()
         return nullptr;
     }
 
-    uint16_t port = get_server_port(reply.status_line);
+    uint16_t port;
+    if (!try_parse_server_port(reply.status_line, port))
+    {
+        string error_msg = utils::format("Cannot parse server port from '%1%'.",
+                                         reply.status_line);
+        notify_of_error(error_msg);
+        return nullptr;
+    }
 
     unique_ptr<data_connection> connection = make_unique<data_connection>();
 
@@ -360,41 +367,35 @@ unique_ptr<data_connection> client::create_data_connection()
  *
  * RFC 2428: https://tools.ietf.org/html/rfc2428
  */
-uint16_t client::get_server_port(const string & epsv_reply)
+bool client::try_parse_server_port(const string & epsv_reply, uint16_t & port)
 {
-    uint16_t port;
-
     size_t begin = epsv_reply.find('|');
     if (begin == string::npos)
     {
-        throw ftp_exception("Invalid server reply.");
+        return false;
     }
 
     // Skip '|||' characters.
     begin += 3;
     if (begin >= epsv_reply.size())
     {
-        throw ftp_exception("Invalid server reply.");
+        return false;
     }
 
     size_t end = epsv_reply.rfind('|');
     if (end == string::npos)
     {
-        throw ftp_exception("Invalid server reply.");
+        return false;
     }
 
     if (end <= begin)
     {
-        throw ftp_exception("Invalid server reply.");
+        return false;
     }
 
     string port_str = epsv_reply.substr(begin, end - begin);
-    if (!boost::conversion::try_lexical_convert(port_str, port))
-    {
-        throw ftp_exception("Invalid server reply.");
-    }
 
-    return port;
+    return boost::conversion::try_lexical_convert(port_str, port);
 }
 
 void client::subscribe(event_observer *observer)

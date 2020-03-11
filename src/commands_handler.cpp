@@ -25,7 +25,6 @@
 #include "commands_handler.hpp"
 #include "local_exception.hpp"
 #include "utils/utils.hpp"
-#include "ftp/ftp_exception.hpp"
 #include <iostream>
 #include <boost/lexical_cast/try_lexical_convert.hpp>
 
@@ -35,7 +34,6 @@ using std::cout;
 using std::cin;
 using std::endl;
 using std::optional;
-using ftp::ftp_exception;
 
 commands_handler::commands_handler()
 {
@@ -49,92 +47,85 @@ void commands_handler::execute(command command, const vector<string> & args)
         throw local_exception("Not connected.");
     }
 
-    try
+    if (command == command::open)
     {
-        if (command == command::open)
-        {
-            open(args);
-            // Use binary mode to transfer files by default.
-            binary();
-        }
-        else if (command == command::user)
-        {
-            user(args);
-            // Use binary mode to transfer files by default.
-            binary();
-        }
-        else if (command == command::close)
-        {
-            close();
-        }
-        else if (command == command::cd)
-        {
-            cd(args);
-        }
-        else if (command == command::ls)
-        {
-            ls(args);
-        }
-        else if (command == command::put)
-        {
-            put(args);
-        }
-        else if (command == command::get)
-        {
-            get(args);
-        }
-        else if (command == command::pwd)
-        {
-            pwd();
-        }
-        else if (command == command::mkdir)
-        {
-            mkdir(args);
-        }
-        else if (command == command::rmdir)
-        {
-            rmdir(args);
-        }
-        else if (command == command::del)
-        {
-            del(args);
-        }
-        else if (command == command::stat)
-        {
-            stat(args);
-        }
-        else if (command == command::syst)
-        {
-            syst();
-        }
-        else if (command == command::binary)
-        {
-            binary();
-        }
-        else if (command == command::size)
-        {
-            size(args);
-        }
-        else if (command == command::noop)
-        {
-            noop();
-        }
-        else if (command == command::help)
-        {
-            help();
-        }
-        else if (command == command::exit)
-        {
-            exit();
-        }
-        else
-        {
-            assert(false);
-        }
+        open(args);
+        // Use binary mode to transfer files by default.
+        binary();
     }
-    catch (const ftp_exception & ex)
+    else if (command == command::user)
     {
-        cout << ex.what() << endl;
+        user(args);
+        // Use binary mode to transfer files by default.
+        binary();
+    }
+    else if (command == command::close)
+    {
+        close();
+    }
+    else if (command == command::cd)
+    {
+        cd(args);
+    }
+    else if (command == command::ls)
+    {
+        ls(args);
+    }
+    else if (command == command::put)
+    {
+        put(args);
+    }
+    else if (command == command::get)
+    {
+        get(args);
+    }
+    else if (command == command::pwd)
+    {
+        pwd();
+    }
+    else if (command == command::mkdir)
+    {
+        mkdir(args);
+    }
+    else if (command == command::rmdir)
+    {
+        rmdir(args);
+    }
+    else if (command == command::del)
+    {
+        del(args);
+    }
+    else if (command == command::stat)
+    {
+        stat(args);
+    }
+    else if (command == command::syst)
+    {
+        syst();
+    }
+    else if (command == command::binary)
+    {
+        binary();
+    }
+    else if (command == command::size)
+    {
+        size(args);
+    }
+    else if (command == command::noop)
+    {
+        noop();
+    }
+    else if (command == command::help)
+    {
+        help();
+    }
+    else if (command == command::exit)
+    {
+        exit();
+    }
+    else
+    {
+        assert(false);
     }
 }
 

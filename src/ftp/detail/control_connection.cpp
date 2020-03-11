@@ -23,7 +23,7 @@
  */
 
 #include "control_connection.hpp"
-#include "../ftp_exception.hpp"
+#include "connection_exception.hpp"
 #include <boost/asio/connect.hpp>
 #include <boost/asio/read_until.hpp>
 #include <boost/asio/write.hpp>
@@ -62,7 +62,7 @@ void control_connection::open(const string & hostname, uint16_t port)
 
     if (ec)
     {
-        throw ftp_exception(ec, "Cannot open connection");
+        throw connection_exception(ec, "Cannot open connection");
     }
 
     boost::asio::connect(socket_, endpoints, ec);
@@ -78,7 +78,7 @@ void control_connection::open(const string & hostname, uint16_t port)
          */
         socket_.close(ignored);
 
-        throw ftp_exception(ec, "Cannot open connection");
+        throw connection_exception(ec, "Cannot open connection");
     }
 }
 
@@ -102,14 +102,14 @@ void control_connection::close()
     }
     else if (ec)
     {
-        throw ftp_exception(ec, "Cannot close connection");
+        throw connection_exception(ec, "Cannot close connection");
     }
 
     socket_.close(ec);
 
     if (ec)
     {
-        throw ftp_exception(ec, "Cannot close connection");
+        throw connection_exception(ec, "Cannot close connection");
     }
 }
 
@@ -121,14 +121,14 @@ string control_connection::ip() const
 
     if (ec)
     {
-        throw ftp_exception(ec, "Cannot get ip address");
+        throw connection_exception(ec, "Cannot get ip address");
     }
 
     string ip = remote_endpoint.address().to_string(ec);
 
     if (ec)
     {
-        throw ftp_exception(ec, "Cannot get ip address");
+        throw connection_exception(ec, "Cannot get ip address");
     }
 
     return ip;
@@ -143,7 +143,7 @@ reply_t control_connection::recv()
 
     if (!try_parse_status_code(status_line, status_code))
     {
-        throw ftp_exception("Invalid server reply: %1%", status_line);
+        throw connection_exception("Invalid server reply: %1%", status_line);
     }
 
     /* Thus the format for multi-line replies is that the first line
@@ -180,7 +180,7 @@ reply_t control_connection::recv()
 
         if (ec)
         {
-            throw ftp_exception(ec, "Cannot close connection");
+            throw connection_exception(ec, "Cannot close connection");
         }
     }
 
@@ -222,7 +222,7 @@ void control_connection::send(const string & command)
 
     if (ec)
     {
-        throw ftp_exception(ec, "Cannot send command");
+        throw connection_exception(ec, "Cannot send command");
     }
 }
 
@@ -238,7 +238,7 @@ string control_connection::read_line()
     }
     else if (ec)
     {
-        throw ftp_exception(ec, "Cannot receive reply");
+        throw connection_exception(ec, "Cannot receive reply");
     }
 
     string line = buffer_.substr(0, len);

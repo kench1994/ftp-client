@@ -23,7 +23,7 @@
  */
 
 #include "data_connection.hpp"
-#include "../ftp_exception.hpp"
+#include "connection_exception.hpp"
 #include <boost/asio/read.hpp>
 #include <boost/asio/write.hpp>
 
@@ -49,7 +49,7 @@ void data_connection::open(const string & ip, uint16_t port)
 
     if (ec)
     {
-        throw ftp_exception(ec, "Cannot get ip address");
+        throw connection_exception(ec, "Cannot get ip address");
     }
 
     boost::asio::ip::tcp::endpoint remote_endpoint(address, port);
@@ -66,7 +66,7 @@ void data_connection::open(const string & ip, uint16_t port)
          */
         socket_.close(ignored);
 
-        throw ftp_exception(ec, "Cannot open connection");
+        throw connection_exception(ec, "Cannot open connection");
     }
 }
 
@@ -90,14 +90,14 @@ void data_connection::close()
     }
     else if (ec)
     {
-        throw ftp_exception(ec, "Cannot close connection");
+        throw connection_exception(ec, "Cannot close connection");
     }
 
     socket_.close(ec);
 
     if (ec)
     {
-        throw ftp_exception(ec, "Cannot close connection");
+        throw connection_exception(ec, "Cannot close connection");
     }
 }
 
@@ -114,7 +114,7 @@ string data_connection::recv()
     }
     else if (ec)
     {
-        throw ftp_exception(ec, "Cannot receive reply");
+        throw connection_exception(ec, "Cannot receive reply");
     }
 
     return reply;
@@ -130,14 +130,14 @@ void data_connection::send_file(ifstream & file)
 
         if (file.fail() && !file.eof())
         {
-            throw ftp_exception("Cannot send file.");
+            throw connection_exception("Cannot send file.");
         }
 
         boost::asio::write(socket_, boost::asio::buffer(buffer_, file.gcount()), ec);
 
         if (ec)
         {
-            throw ftp_exception(ec, "Cannot send file");
+            throw connection_exception(ec, "Cannot send file");
         }
 
         if (file.eof())
@@ -161,7 +161,7 @@ void data_connection::recv_file(ofstream & file)
         }
         else if (ec)
         {
-            throw ftp_exception(ec, "Cannot receive file");
+            throw connection_exception(ec, "Cannot receive file");
         }
 
         file.write(buffer_.data(), len);

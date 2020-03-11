@@ -22,24 +22,24 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_FTP_EXCEPTION_HPP
-#define FTP_FTP_EXCEPTION_HPP
+#ifndef FTP_CONNECTION_EXCEPTION_HPP
+#define FTP_CONNECTION_EXCEPTION_HPP
 
-#include "detail/utils.hpp"
+#include "utils.hpp"
 
-namespace ftp
+namespace ftp::detail
 {
 
-class ftp_exception : public std::exception
+class connection_exception : public std::exception
 {
 public:
-    explicit ftp_exception(boost::system::error_code & ec)
+    explicit connection_exception(boost::system::error_code & ec)
     {
         message_ = ec.message();
     }
 
     template<typename ...Args>
-    explicit ftp_exception(boost::system::error_code & ec, const std::string & fmt, Args && ...args)
+    explicit connection_exception(boost::system::error_code & ec, const std::string & fmt, Args && ...args)
     {
         message_ = detail::utils::format(fmt, std::forward<Args>(args)...);
         message_.append(": ");
@@ -47,7 +47,7 @@ public:
     }
 
     template<typename ...Args>
-    explicit ftp_exception(const std::string & fmt, Args && ...args)
+    explicit connection_exception(const std::string & fmt, Args && ...args)
     {
         message_ = detail::utils::format(fmt, std::forward<Args>(args)...);
     }
@@ -61,5 +61,5 @@ private:
     std::string message_;
 };
 
-} // namespace ftp
-#endif //FTP_FTP_EXCEPTION_HPP
+} // namespace ftp::detail
+#endif //FTP_CONNECTION_EXCEPTION_HPP
