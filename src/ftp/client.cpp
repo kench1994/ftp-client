@@ -43,10 +43,9 @@ void client::open(const string & hostname, uint16_t port)
 {
     try
     {
-        reply_t reply;
-
         control_connection_.open(hostname, port);
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
     }
@@ -65,10 +64,9 @@ void client::user(const string & username, const string & password)
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("USER " + username);
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
 
@@ -95,10 +93,9 @@ void client::cwd(const string & remote_directory)
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("CWD " + remote_directory);
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
     }
@@ -130,10 +127,9 @@ void client::list(const optional<string> & remote_directory)
             return;
         }
 
-        reply_t reply;
-
         control_connection_.send(command);
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
 
@@ -176,10 +172,9 @@ void client::stor(const string & local_file, const string & remote_file)
             return;
         }
 
-        reply_t reply;
-
         control_connection_.send("STOR " + remote_file);
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
 
@@ -222,10 +217,9 @@ void client::retr(const string & remote_file, const string & local_file)
             return;
         }
 
-        reply_t reply;
-
         control_connection_.send("RETR " + remote_file);
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
 
@@ -252,10 +246,9 @@ void client::pwd()
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("PWD");
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
     }
@@ -269,10 +262,9 @@ void client::mkd(const string & directory_name)
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("MKD " + directory_name);
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
     }
@@ -286,10 +278,9 @@ void client::rmd(const string & directory_name)
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("RMD " + directory_name);
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
     }
@@ -303,10 +294,9 @@ void client::dele(const string & remote_file)
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("DELE " + remote_file);
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
     }
@@ -320,10 +310,9 @@ void client::type_i()
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("TYPE I");
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
     }
@@ -337,10 +326,9 @@ void client::size(const string & remote_file)
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("SIZE " + remote_file);
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
     }
@@ -365,10 +353,9 @@ void client::stat(const optional<string> & remote_file)
 
     try
     {
-        reply_t reply;
-
         control_connection_.send(command);
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
     }
@@ -382,10 +369,9 @@ void client::syst()
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("SYST");
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
     }
@@ -399,10 +385,9 @@ void client::noop()
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("NOOP");
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
     }
@@ -416,10 +401,9 @@ void client::quit()
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("QUIT");
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
 
@@ -435,10 +419,9 @@ unique_ptr<data_connection> client::create_data_connection()
 {
     try
     {
-        reply_t reply;
-
         control_connection_.send("EPSV");
-        reply = control_connection_.recv();
+
+        reply_t reply = control_connection_.recv();
 
         notify_of_reply(reply);
 
