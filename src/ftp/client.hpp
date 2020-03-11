@@ -27,6 +27,7 @@
 
 #include "detail/control_connection.hpp"
 #include "detail/data_connection.hpp"
+#include "detail/connection_exception.hpp"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -96,6 +97,8 @@ private:
     std::unique_ptr<detail::data_connection> create_data_connection();
 
     static bool try_parse_server_port(const std::string & epsv_reply, uint16_t & port);
+
+    void handle_connection_exception(const detail::connection_exception & ex);
 
     void notify_of_reply(const std::string & reply);
 

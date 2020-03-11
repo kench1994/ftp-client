@@ -113,6 +113,13 @@ void control_connection::close()
     }
 }
 
+void control_connection::reset()
+{
+    boost::system::error_code ignored;
+
+    socket_.close(ignored);
+}
+
 string control_connection::ip() const
 {
     boost::system::error_code ec;

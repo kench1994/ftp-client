@@ -41,12 +41,19 @@ using namespace ftp::detail;
 
 void client::open(const string & hostname, uint16_t port)
 {
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.open(hostname, port);
-    reply = control_connection_.recv();
+        control_connection_.open(hostname, port);
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 bool client::is_open() const
@@ -56,35 +63,49 @@ bool client::is_open() const
 
 void client::user(const string & username, const string & password)
 {
-    reply_t reply;
-
-    control_connection_.send("USER " + username);
-    reply = control_connection_.recv();
-
-    notify_of_reply(reply);
-
-    if (reply.status_code == 331)
+    try
     {
-        // 331 User name okay, need password.
-        control_connection_.send("PASS " + password);
-        notify_of_reply(control_connection_.recv());
+        reply_t reply;
+
+        control_connection_.send("USER " + username);
+        reply = control_connection_.recv();
+
+        notify_of_reply(reply);
+
+        if (reply.status_code == 331)
+        {
+            // 331 User name okay, need password.
+            control_connection_.send("PASS " + password);
+            notify_of_reply(control_connection_.recv());
+        }
+        else if (reply.status_code == 332)
+        {
+            /* 332 Need account for login.
+             * Sorry, we don't support ACCT command.
+             */
+        }
     }
-    else if (reply.status_code == 332)
+    catch (const connection_exception & ex)
     {
-        /* 332 Need account for login.
-         * Sorry, we don't support ACCT command.
-         */
+        handle_connection_exception(ex);
     }
 }
 
 void client::cwd(const string & remote_directory)
 {
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.send("CWD " + remote_directory);
-    reply = control_connection_.recv();
+        control_connection_.send("CWD " + remote_directory);
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 void client::list(const optional<string> & remote_directory)
@@ -100,32 +121,39 @@ void client::list(const optional<string> & remote_directory)
         command = "LIST";
     }
 
-    unique_ptr<data_connection> data_connection = create_data_connection();
-
-    if (!data_connection)
+    try
     {
-        return;
+        unique_ptr<data_connection> data_connection = create_data_connection();
+
+        if (!data_connection)
+        {
+            return;
+        }
+
+        reply_t reply;
+
+        control_connection_.send(command);
+        reply = control_connection_.recv();
+
+        notify_of_reply(reply);
+
+        if (reply.status_code >= 400)
+        {
+            return;
+        }
+
+        notify_of_reply(data_connection->recv());
+        // Don't keep the data connection.
+        data_connection->close();
+
+        reply = control_connection_.recv();
+
+        notify_of_reply(reply);
     }
-
-    reply_t reply;
-
-    control_connection_.send(command);
-    reply = control_connection_.recv();
-
-    notify_of_reply(reply);
-
-    if (reply.status_code >= 400)
+    catch (const connection_exception & ex)
     {
-        return;
+        handle_connection_exception(ex);
     }
-
-    notify_of_reply(data_connection->recv());
-    // Don't keep the data connection.
-    data_connection->close();
-
-    reply = control_connection_.recv();
-
-    notify_of_reply(reply);
 }
 
 void client::stor(const string & local_file, const string & remote_file)
@@ -139,32 +167,39 @@ void client::stor(const string & local_file, const string & remote_file)
         return;
     }
 
-    unique_ptr<data_connection> data_connection = create_data_connection();
-
-    if (!data_connection)
+    try
     {
-        return;
+        unique_ptr<data_connection> data_connection = create_data_connection();
+
+        if (!data_connection)
+        {
+            return;
+        }
+
+        reply_t reply;
+
+        control_connection_.send("STOR " + remote_file);
+        reply = control_connection_.recv();
+
+        notify_of_reply(reply);
+
+        if (reply.status_code >= 400)
+        {
+            return;
+        }
+
+        data_connection->send_file(file);
+        // Don't keep the data connection.
+        data_connection->close();
+
+        reply = control_connection_.recv();
+
+        notify_of_reply(reply);
     }
-
-    reply_t reply;
-
-    control_connection_.send("STOR " + remote_file);
-    reply = control_connection_.recv();
-
-    notify_of_reply(reply);
-
-    if (reply.status_code >= 400)
+    catch (const connection_exception & ex)
     {
-        return;
+        handle_connection_exception(ex);
     }
-
-    data_connection->send_file(file);
-    // Don't keep the data connection.
-    data_connection->close();
-
-    reply = control_connection_.recv();
-
-    notify_of_reply(reply);
 }
 
 void client::retr(const string & remote_file, const string & local_file)
@@ -178,92 +213,141 @@ void client::retr(const string & remote_file, const string & local_file)
         return;
     }
 
-    unique_ptr<data_connection> data_connection = create_data_connection();
-
-    if (!data_connection)
+    try
     {
-        return;
+        unique_ptr<data_connection> data_connection = create_data_connection();
+
+        if (!data_connection)
+        {
+            return;
+        }
+
+        reply_t reply;
+
+        control_connection_.send("RETR " + remote_file);
+        reply = control_connection_.recv();
+
+        notify_of_reply(reply);
+
+        if (reply.status_code >= 400)
+        {
+            return;
+        }
+
+        data_connection->recv_file(file);
+        // Don't keep the data connection.
+        data_connection->close();
+
+        reply = control_connection_.recv();
+
+        notify_of_reply(reply);
     }
-
-    reply_t reply;
-
-    control_connection_.send("RETR " + remote_file);
-    reply = control_connection_.recv();
-
-    notify_of_reply(reply);
-
-    if (reply.status_code >= 400)
+    catch (const connection_exception & ex)
     {
-        return;
+        handle_connection_exception(ex);
     }
-
-    data_connection->recv_file(file);
-    // Don't keep the data connection.
-    data_connection->close();
-
-    reply = control_connection_.recv();
-
-    notify_of_reply(reply);
 }
 
 void client::pwd()
 {
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.send("PWD");
-    reply = control_connection_.recv();
+        control_connection_.send("PWD");
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 void client::mkd(const string & directory_name)
 {
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.send("MKD " + directory_name);
-    reply = control_connection_.recv();
+        control_connection_.send("MKD " + directory_name);
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 void client::rmd(const string & directory_name)
 {
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.send("RMD " + directory_name);
-    reply = control_connection_.recv();
+        control_connection_.send("RMD " + directory_name);
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 void client::dele(const string & remote_file)
 {
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.send("DELE " + remote_file);
-    reply = control_connection_.recv();
+        control_connection_.send("DELE " + remote_file);
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 void client::type_i()
 {
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.send("TYPE I");
-    reply = control_connection_.recv();
+        control_connection_.send("TYPE I");
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 void client::size(const string & remote_file)
 {
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.send("SIZE " + remote_file);
-    reply = control_connection_.recv();
+        control_connection_.send("SIZE " + remote_file);
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 void client::stat(const optional<string> & remote_file)
@@ -279,74 +363,110 @@ void client::stat(const optional<string> & remote_file)
         command = "STAT";
     }
 
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.send(command);
-    reply = control_connection_.recv();
+        control_connection_.send(command);
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 void client::syst()
 {
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.send("SYST");
-    reply = control_connection_.recv();
+        control_connection_.send("SYST");
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 void client::noop()
 {
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.send("NOOP");
-    reply = control_connection_.recv();
+        control_connection_.send("NOOP");
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 void client::quit()
 {
-    reply_t reply;
+    try
+    {
+        reply_t reply;
 
-    control_connection_.send("QUIT");
-    reply = control_connection_.recv();
+        control_connection_.send("QUIT");
+        reply = control_connection_.recv();
 
-    notify_of_reply(reply);
+        notify_of_reply(reply);
 
-    control_connection_.close();
+        control_connection_.close();
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
+    }
 }
 
 unique_ptr<data_connection> client::create_data_connection()
 {
-    reply_t reply;
-
-    control_connection_.send("EPSV");
-    reply = control_connection_.recv();
-
-    notify_of_reply(reply);
-
-    if (reply.status_code >= 400)
+    try
     {
+        reply_t reply;
+
+        control_connection_.send("EPSV");
+        reply = control_connection_.recv();
+
+        notify_of_reply(reply);
+
+        if (reply.status_code >= 400)
+        {
+            return nullptr;
+        }
+
+        uint16_t port;
+        if (!try_parse_server_port(reply.status_line, port))
+        {
+            string error_msg = utils::format("Cannot parse server port from '%1%'.",
+                                             reply.status_line);
+            notify_of_error(error_msg);
+            return nullptr;
+        }
+
+        unique_ptr<data_connection> connection = make_unique<data_connection>();
+
+        connection->open(control_connection_.ip(), port);
+
+        return connection;
+    }
+    catch (const connection_exception & ex)
+    {
+        handle_connection_exception(ex);
         return nullptr;
     }
-
-    uint16_t port;
-    if (!try_parse_server_port(reply.status_line, port))
-    {
-        string error_msg = utils::format("Cannot parse server port from '%1%'.",
-                                         reply.status_line);
-        notify_of_error(error_msg);
-        return nullptr;
-    }
-
-    unique_ptr<data_connection> connection = make_unique<data_connection>();
-
-    connection->open(control_connection_.ip(), port);
-
-    return connection;
 }
 
 /* The text returned in response to the EPSV command MUST be:
@@ -396,6 +516,15 @@ bool client::try_parse_server_port(const string & epsv_reply, uint16_t & port)
     string port_str = epsv_reply.substr(begin, end - begin);
 
     return boost::conversion::try_lexical_convert(port_str, port);
+}
+
+void client::handle_connection_exception(const connection_exception & ex)
+{
+    string error_msg = ex.what();
+
+    notify_of_error(error_msg);
+
+    control_connection_.reset();
 }
 
 void client::subscribe(event_observer *observer)

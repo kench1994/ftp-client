@@ -46,6 +46,8 @@ public:
 
     void close();
 
+    void reset();
+
     std::string ip() const;
 
     void send(const std::string & command);
