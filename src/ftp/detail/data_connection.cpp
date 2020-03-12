@@ -33,7 +33,6 @@ namespace ftp::detail
 using std::string;
 using std::ifstream;
 using std::ofstream;
-using std::array;
 
 data_connection::data_connection()
     : io_context_(),

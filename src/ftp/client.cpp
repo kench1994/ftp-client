@@ -29,7 +29,6 @@
 namespace ftp
 {
 using std::string;
-using std::vector;
 using std::make_unique;
 using std::optional;
 using std::ifstream;
