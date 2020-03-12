@@ -159,8 +159,8 @@ void client::stor(const string & local_file, const string & remote_file)
 
     if (!file)
     {
-        string error_message = utils::format("Cannot open file: '%1%'.", local_file);
-        notify_of_error(error_message);
+        string error_msg = utils::format("Cannot open file: '%1%'.", local_file);
+        notify_of_error(error_msg);
         return;
     }
 
@@ -205,8 +205,8 @@ void client::retr(const string & remote_file, const string & local_file)
 
     if (!file)
     {
-        string error_message = utils::format("Cannot create file: '%1%'.", local_file);
-        notify_of_error(error_message);
+        string error_msg = utils::format("Cannot create file: '%1%'.", local_file);
+        notify_of_error(error_msg);
         return;
     }
 
