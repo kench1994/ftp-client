@@ -241,7 +241,7 @@ string control_connection::read_line()
 
     if (ec == boost::asio::error::eof)
     {
-        // Ignore eof.
+        /* Ignore eof. */
     }
     else if (ec)
     {

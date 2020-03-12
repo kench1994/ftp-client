@@ -110,7 +110,7 @@ string data_connection::recv()
 
     if (ec == boost::asio::error::eof)
     {
-        // Ignore eof.
+        /* Ignore eof. */
     }
     else if (ec)
     {

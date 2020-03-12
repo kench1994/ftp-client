@@ -72,7 +72,7 @@ void client::user(const string & username, const string & password)
 
         if (reply.status_code == 331)
         {
-            // 331 User name okay, need password.
+            /* 331 User name okay, need password. */
             control_connection_.send("PASS " + password);
             notify_of_reply(control_connection_.recv());
         }
@@ -139,7 +139,7 @@ void client::list(const optional<string> & remote_directory)
         }
 
         notify_of_reply(data_connection->recv());
-        // Don't keep the data connection.
+        /* Don't keep the data connection. */
         data_connection->close();
 
         reply = control_connection_.recv();
@@ -184,7 +184,7 @@ void client::stor(const string & local_file, const string & remote_file)
         }
 
         data_connection->send_file(file);
-        // Don't keep the data connection.
+        /* Don't keep the data connection. */
         data_connection->close();
 
         reply = control_connection_.recv();
@@ -229,7 +229,7 @@ void client::retr(const string & remote_file, const string & local_file)
         }
 
         data_connection->recv_file(file);
-        // Don't keep the data connection.
+        /* Don't keep the data connection. */
         data_connection->close();
 
         reply = control_connection_.recv();
@@ -478,7 +478,7 @@ bool client::try_parse_server_port(const string & epsv_reply, uint16_t & port)
         return false;
     }
 
-    // Skip '|||' characters.
+    /* Skip '|||' characters. */
     begin += 3;
     if (begin >= epsv_reply.size())
     {
