@@ -525,19 +525,28 @@ void client::unsubscribe(event_observer *observer)
 void client::report_reply(const string & reply)
 {
     for (const auto & observer : observers_)
-        observer->on_reply(reply);
+    {
+        if (observer)
+            observer->on_reply(reply);
+    }
 }
 
 void client::report_reply(const reply_t & reply)
 {
     for (const auto & observer : observers_)
-        observer->on_reply(reply.status_line);
+    {
+        if (observer)
+            observer->on_reply(reply.status_line);
+    }
 }
 
 void client::report_error(const string & error)
 {
     for (const auto & observer : observers_)
-        observer->on_error(error);
+    {
+        if (observer)
+            observer->on_error(error);
+    }
 }
 
 } // namespace ftp
