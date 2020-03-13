@@ -100,11 +100,11 @@ private:
 
     void handle_connection_exception(const detail::connection_exception & ex);
 
-    void notify_of_reply(const std::string & reply);
+    void report_reply(const std::string & reply);
 
-    void notify_of_reply(const detail::reply_t & reply);
+    void report_reply(const detail::reply_t & reply);
 
-    void notify_of_error(const std::string & error);
+    void report_error(const std::string & error);
 
     detail::control_connection control_connection_;
     std::list<event_observer *> observers_;
