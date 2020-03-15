@@ -49,33 +49,33 @@ public:
 
     void user(const std::string & username, const std::string & password);
 
-    void cwd(const std::string & remote_directory);
+    void cd(const std::string & remote_directory);
 
-    void list(const std::optional<std::string> & remote_directory = std::nullopt);
+    void ls(const std::optional<std::string> & remote_directory = std::nullopt);
 
-    void stor(const std::string & local_file, const std::string & remote_file);
+    void upload(const std::string & local_file, const std::string & remote_file);
 
-    void retr(const std::string & remote_file, const std::string & local_file);
+    void download(const std::string & remote_file, const std::string & local_file);
 
     void pwd();
 
-    void mkd(const std::string & directory_name);
+    void mkdir(const std::string & directory_name);
 
-    void rmd(const std::string & directory_name);
+    void rmdir(const std::string & directory_name);
 
-    void dele(const std::string & remote_file);
+    void rm(const std::string & remote_file);
 
-    void type_i();
+    void binary();
 
     void size(const std::string & remote_file);
 
     void stat(const std::optional<std::string> & remote_file = std::nullopt);
 
-    void syst();
+    void system();
 
     void noop();
 
-    void quit();
+    void close();
 
     class event_observer
     {

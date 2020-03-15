@@ -89,7 +89,7 @@ void client::user(const string & username, const string & password)
     }
 }
 
-void client::cwd(const string & remote_directory)
+void client::cd(const string & remote_directory)
 {
     try
     {
@@ -105,7 +105,7 @@ void client::cwd(const string & remote_directory)
     }
 }
 
-void client::list(const optional<string> & remote_directory)
+void client::ls(const optional<string> & remote_directory)
 {
     string command;
 
@@ -153,7 +153,7 @@ void client::list(const optional<string> & remote_directory)
     }
 }
 
-void client::stor(const string & local_file, const string & remote_file)
+void client::upload(const string & local_file, const string & remote_file)
 {
     ifstream file(local_file, ios_base::binary);
 
@@ -214,7 +214,7 @@ void client::stor(const string & local_file, const string & remote_file)
     }
 }
 
-void client::retr(const string & remote_file, const string & local_file)
+void client::download(const string & remote_file, const string & local_file)
 {
     ofstream file(local_file, ios_base::binary);
 
@@ -291,7 +291,7 @@ void client::pwd()
     }
 }
 
-void client::mkd(const string & directory_name)
+void client::mkdir(const string & directory_name)
 {
     try
     {
@@ -307,7 +307,7 @@ void client::mkd(const string & directory_name)
     }
 }
 
-void client::rmd(const string & directory_name)
+void client::rmdir(const string & directory_name)
 {
     try
     {
@@ -323,7 +323,7 @@ void client::rmd(const string & directory_name)
     }
 }
 
-void client::dele(const string & remote_file)
+void client::rm(const string & remote_file)
 {
     try
     {
@@ -339,7 +339,7 @@ void client::dele(const string & remote_file)
     }
 }
 
-void client::type_i()
+void client::binary()
 {
     try
     {
@@ -398,7 +398,7 @@ void client::stat(const optional<string> & remote_file)
     }
 }
 
-void client::syst()
+void client::system()
 {
     try
     {
@@ -430,7 +430,7 @@ void client::noop()
     }
 }
 
-void client::quit()
+void client::close()
 {
     try
     {

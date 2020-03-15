@@ -239,18 +239,18 @@ void commands_handler::cd(const vector<string> & args)
         throw local_exception("usage: cd remote-directory");
     }
 
-    client_.cwd(remote_directory);
+    client_.cd(remote_directory);
 }
 
 void commands_handler::ls(const vector<string> & args)
 {
     if (args.empty())
     {
-        client_.list();
+        client_.ls();
     }
     else if (args.size() == 1)
     {
-        client_.list(args[0]);
+        client_.ls(args[0]);
     }
     else
     {
@@ -282,7 +282,7 @@ void commands_handler::put(const vector<string> & args)
         throw local_exception("usage: put local-file [ remote-file ]");
     }
 
-    client_.stor(local_file, remote_file);
+    client_.upload(local_file, remote_file);
 }
 
 void commands_handler::get(const vector<string> & args)
@@ -309,7 +309,7 @@ void commands_handler::get(const vector<string> & args)
         throw local_exception("usage: get remote-file [ local-file ]");
     }
 
-    client_.retr(remote_file, local_file);
+    client_.download(remote_file, local_file);
 }
 
 void commands_handler::pwd()
@@ -334,7 +334,7 @@ void commands_handler::mkdir(const vector<string> & args)
         throw local_exception("usage: mkdir directory-name");
     }
 
-    client_.mkd(directory_name);
+    client_.mkdir(directory_name);
 }
 
 void commands_handler::rmdir(const vector<string> & args)
@@ -354,7 +354,7 @@ void commands_handler::rmdir(const vector<string> & args)
         throw local_exception("usage: rmdir directory-name");
     }
 
-    client_.rmd(directory_name);
+    client_.rmdir(directory_name);
 }
 
 void commands_handler::del(const vector<string> & args)
@@ -374,12 +374,12 @@ void commands_handler::del(const vector<string> & args)
         throw local_exception("usage: del remote-file");
     }
 
-    client_.dele(remote_file);
+    client_.rm(remote_file);
 }
 
 void commands_handler::binary()
 {
-    client_.type_i();
+    client_.binary();
 }
 
 void commands_handler::size(const vector<string> & args)
@@ -420,7 +420,7 @@ void commands_handler::stat(const vector<string> & args)
 
 void commands_handler::syst()
 {
-    client_.syst();
+    client_.system();
 }
 
 void commands_handler::noop()
@@ -430,7 +430,7 @@ void commands_handler::noop()
 
 void commands_handler::close()
 {
-    client_.quit();
+    client_.close();
 }
 
 void commands_handler::help()
@@ -461,6 +461,6 @@ void commands_handler::exit()
 {
     if (client_.is_open())
     {
-        client_.quit();
+        client_.close();
     }
 }
