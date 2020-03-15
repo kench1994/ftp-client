@@ -29,8 +29,6 @@
 #include "detail/data_connection.hpp"
 #include "detail/connection_exception.hpp"
 #include <string>
-#include <vector>
-#include <fstream>
 #include <list>
 
 namespace ftp
