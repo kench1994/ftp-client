@@ -45,11 +45,11 @@ public:
 
     void close();
 
-    std::string recv();
-
     void send(const void *buff, std::size_t size);
 
     std::size_t recv(void *buff, std::size_t max_size);
+
+    std::string recv();
 
 private:
     boost::asio::io_context io_context_;
