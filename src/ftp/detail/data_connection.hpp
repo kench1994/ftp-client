@@ -25,7 +25,6 @@
 #ifndef FTP_DATA_CONNECTION_HPP
 #define FTP_DATA_CONNECTION_HPP
 
-#include <fstream>
 #include <boost/asio/ip/tcp.hpp>
 
 namespace ftp::detail
@@ -48,14 +47,13 @@ public:
 
     std::string recv();
 
-    void send_file(std::ifstream & file);
+    void send(const void *buff, std::size_t size);
 
-    void recv_file(std::ofstream & file);
+    std::size_t recv(void *buff, std::size_t max_size);
 
 private:
     boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;
-    std::array<char, 4096> buffer_;
 };
 
 } // namespace ftp::detail

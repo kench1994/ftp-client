@@ -183,7 +183,22 @@ void client::stor(const string & local_file, const string & remote_file)
             return;
         }
 
-        data_connection->send_file(file);
+        /* Start file transfer. */
+        for (;;)
+        {
+            file.read(buffer_.data(), buffer_.size());
+
+            if (file.fail() && !file.eof())
+            {
+                report_error("Cannot read data from file.");
+                return;
+            }
+
+            data_connection->send(buffer_.data(), file.gcount());
+
+            if (file.eof())
+                break;
+        }
 
         /* Don't keep the data connection. */
         data_connection->close();
@@ -229,7 +244,22 @@ void client::retr(const string & remote_file, const string & local_file)
             return;
         }
 
-        data_connection->recv_file(file);
+        /* Start file transfer. */
+        for (;;)
+        {
+            size_t size = data_connection->recv(buffer_.data(), buffer_.size());
+
+            if (size == 0)
+                break;
+
+            file.write(buffer_.data(), size);
+
+            if (file.fail())
+            {
+                report_error("Cannot write data to file.");
+                return;
+            }
+        }
 
         /* Don't keep the data connection. */
         data_connection->close();
