@@ -98,25 +98,6 @@ void data_connection::close()
     }
 }
 
-string data_connection::recv()
-{
-    boost::system::error_code ec;
-    string reply;
-
-    boost::asio::read(socket_, boost::asio::dynamic_buffer(reply), ec);
-
-    if (ec == boost::asio::error::eof)
-    {
-        /* Ignore eof. */
-    }
-    else if (ec)
-    {
-        throw connection_exception(ec, "Cannot receive data through data connection");
-    }
-
-    return reply;
-}
-
 void data_connection::send(const void *buff, size_t size)
 {
     boost::system::error_code ec;
@@ -145,6 +126,25 @@ size_t data_connection::recv(void *buff, size_t max_size)
     }
 
     return size;
+}
+
+string data_connection::recv()
+{
+    boost::system::error_code ec;
+    string reply;
+
+    boost::asio::read(socket_, boost::asio::dynamic_buffer(reply), ec);
+
+    if (ec == boost::asio::error::eof)
+    {
+        /* Ignore eof. */
+    }
+    else if (ec)
+    {
+        throw connection_exception(ec, "Cannot receive data through data connection");
+    }
+
+    return reply;
 }
 
 } // namespace ftp::detail
