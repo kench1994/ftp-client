@@ -111,7 +111,7 @@ string data_connection::recv()
     }
     else if (ec)
     {
-        throw connection_exception(ec, "Cannot receive reply");
+        throw connection_exception(ec, "Cannot receive data through data connection");
     }
 
     return reply;
