@@ -43,6 +43,11 @@ struct reply_t
     {
     }
 
+    bool is_negative() const
+    {
+        return status_code >= 400;
+    }
+
     std::uint16_t status_code;
     std::string status_line;
 };

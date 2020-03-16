@@ -34,6 +34,13 @@
 namespace ftp
 {
 
+enum class command_result
+{
+    ok = 0,
+    not_ok,
+    error
+};
+
 class client
 {
 public:
@@ -43,39 +50,39 @@ public:
 
     client & operator=(const client &) = delete;
 
-    void open(const std::string & hostname, uint16_t port = 21);
+    command_result open(const std::string & hostname, uint16_t port = 21);
 
     bool is_open() const;
 
-    void user(const std::string & username, const std::string & password);
+    command_result user(const std::string & username, const std::string & password);
 
-    void cd(const std::string & remote_directory);
+    command_result cd(const std::string & remote_directory);
 
-    void ls(const std::optional<std::string> & remote_directory = std::nullopt);
+    command_result ls(const std::optional<std::string> & remote_directory = std::nullopt);
 
-    void upload(const std::string & local_file, const std::string & remote_file);
+    command_result upload(const std::string & local_file, const std::string & remote_file);
 
-    void download(const std::string & remote_file, const std::string & local_file);
+    command_result download(const std::string & remote_file, const std::string & local_file);
 
-    void pwd();
+    command_result pwd();
 
-    void mkdir(const std::string & directory_name);
+    command_result mkdir(const std::string & directory_name);
 
-    void rmdir(const std::string & directory_name);
+    command_result rmdir(const std::string & directory_name);
 
-    void rm(const std::string & remote_file);
+    command_result rm(const std::string & remote_file);
 
-    void binary();
+    command_result binary();
 
-    void size(const std::string & remote_file);
+    command_result size(const std::string & remote_file);
 
-    void stat(const std::optional<std::string> & remote_file = std::nullopt);
+    command_result stat(const std::optional<std::string> & remote_file = std::nullopt);
 
-    void system();
+    command_result system();
 
-    void noop();
+    command_result noop();
 
-    void close();
+    command_result close();
 
     class event_observer
     {
@@ -92,7 +99,7 @@ public:
     void unsubscribe(event_observer *observer);
 
 private:
-    std::unique_ptr<detail::data_connection> create_data_connection();
+    std::pair<command_result, std::unique_ptr<detail::data_connection>> create_data_connection();
 
     static bool try_parse_server_port(const std::string & epsv_reply, uint16_t & port);
 

@@ -36,10 +36,12 @@ using std::ifstream;
 using std::ofstream;
 using std::unique_ptr;
 using std::ios_base;
+using std::pair;
+using std::make_pair;
 
 using namespace ftp::detail;
 
-void client::open(const string & hostname, uint16_t port)
+command_result client::open(const string & hostname, uint16_t port)
 {
     try
     {
@@ -48,10 +50,20 @@ void client::open(const string & hostname, uint16_t port)
         reply_t reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
@@ -60,7 +72,7 @@ bool client::is_open() const
     return control_connection_.is_open();
 }
 
-void client::user(const string & username, const string & password)
+command_result client::user(const string & username, const string & password)
 {
     try
     {
@@ -74,7 +86,10 @@ void client::user(const string & username, const string & password)
         {
             /* 331 User name okay, need password. */
             control_connection_.send("PASS " + password);
-            report_reply(control_connection_.recv());
+
+            reply = control_connection_.recv();
+
+            report_reply(reply);
         }
         else if (reply.status_code == 332)
         {
@@ -82,14 +97,24 @@ void client::user(const string & username, const string & password)
              * Sorry, we don't support ACCT command.
              */
         }
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::cd(const string & remote_directory)
+command_result client::cd(const string & remote_directory)
 {
     try
     {
@@ -98,14 +123,24 @@ void client::cd(const string & remote_directory)
         reply_t reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::ls(const optional<string> & remote_directory)
+command_result client::ls(const optional<string> & remote_directory)
 {
     string command;
 
@@ -120,11 +155,11 @@ void client::ls(const optional<string> & remote_directory)
 
     try
     {
-        unique_ptr<data_connection> data_connection = create_data_connection();
+        auto [result, data_connection] = create_data_connection();
 
-        if (!data_connection)
+        if (result != command_result::ok)
         {
-            return;
+            return result;
         }
 
         control_connection_.send(command);
@@ -133,9 +168,9 @@ void client::ls(const optional<string> & remote_directory)
 
         report_reply(reply);
 
-        if (reply.status_code >= 400)
+        if (reply.is_negative())
         {
-            return;
+            return command_result::not_ok;
         }
 
         report_reply(data_connection->recv());
@@ -146,14 +181,24 @@ void client::ls(const optional<string> & remote_directory)
         reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::upload(const string & local_file, const string & remote_file)
+command_result client::upload(const string & local_file, const string & remote_file)
 {
     ifstream file(local_file, ios_base::binary);
 
@@ -161,16 +206,16 @@ void client::upload(const string & local_file, const string & remote_file)
     {
         string error_msg = utils::format("Cannot open file %1%.", local_file);
         report_error(error_msg);
-        return;
+        return command_result::error;
     }
 
     try
     {
-        unique_ptr<data_connection> data_connection = create_data_connection();
+        auto [result, data_connection] = create_data_connection();
 
-        if (!data_connection)
+        if (result != command_result::ok)
         {
-            return;
+            return result;
         }
 
         control_connection_.send("STOR " + remote_file);
@@ -179,9 +224,9 @@ void client::upload(const string & local_file, const string & remote_file)
 
         report_reply(reply);
 
-        if (reply.status_code >= 400)
+        if (reply.is_negative())
         {
-            return;
+            return command_result::not_ok;
         }
 
         /* Start file transfer. */
@@ -192,7 +237,7 @@ void client::upload(const string & local_file, const string & remote_file)
             if (file.fail() && !file.eof())
             {
                 report_error("Cannot read data from file.");
-                return;
+                return command_result::error;
             }
 
             data_connection->send(buffer_.data(), file.gcount());
@@ -207,14 +252,24 @@ void client::upload(const string & local_file, const string & remote_file)
         reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::download(const string & remote_file, const string & local_file)
+command_result client::download(const string & remote_file, const string & local_file)
 {
     ofstream file(local_file, ios_base::binary);
 
@@ -222,16 +277,16 @@ void client::download(const string & remote_file, const string & local_file)
     {
         string error_msg = utils::format("Cannot create file %1%.", local_file);
         report_error(error_msg);
-        return;
+        return command_result::error;
     }
 
     try
     {
-        unique_ptr<data_connection> data_connection = create_data_connection();
+        auto [result, data_connection] = create_data_connection();
 
-        if (!data_connection)
+        if (result != command_result::ok)
         {
-            return;
+            return result;
         }
 
         control_connection_.send("RETR " + remote_file);
@@ -240,9 +295,9 @@ void client::download(const string & remote_file, const string & local_file)
 
         report_reply(reply);
 
-        if (reply.status_code >= 400)
+        if (reply.is_negative())
         {
-            return;
+            return command_result::not_ok;
         }
 
         /* Start file transfer. */
@@ -258,7 +313,7 @@ void client::download(const string & remote_file, const string & local_file)
             if (file.fail())
             {
                 report_error("Cannot write data to file.");
-                return;
+                return command_result::error;
             }
         }
 
@@ -268,14 +323,24 @@ void client::download(const string & remote_file, const string & local_file)
         reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::pwd()
+command_result client::pwd()
 {
     try
     {
@@ -284,14 +349,24 @@ void client::pwd()
         reply_t reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::mkdir(const string & directory_name)
+command_result client::mkdir(const string & directory_name)
 {
     try
     {
@@ -300,14 +375,24 @@ void client::mkdir(const string & directory_name)
         reply_t reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::rmdir(const string & directory_name)
+command_result client::rmdir(const string & directory_name)
 {
     try
     {
@@ -316,14 +401,24 @@ void client::rmdir(const string & directory_name)
         reply_t reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::rm(const string & remote_file)
+command_result client::rm(const string & remote_file)
 {
     try
     {
@@ -332,14 +427,24 @@ void client::rm(const string & remote_file)
         reply_t reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::binary()
+command_result client::binary()
 {
     try
     {
@@ -348,14 +453,24 @@ void client::binary()
         reply_t reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::size(const string & remote_file)
+command_result client::size(const string & remote_file)
 {
     try
     {
@@ -364,14 +479,24 @@ void client::size(const string & remote_file)
         reply_t reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::stat(const optional<string> & remote_file)
+command_result client::stat(const optional<string> & remote_file)
 {
     string command;
 
@@ -391,14 +516,24 @@ void client::stat(const optional<string> & remote_file)
         reply_t reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::system()
+command_result client::system()
 {
     try
     {
@@ -407,14 +542,24 @@ void client::system()
         reply_t reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::noop()
+command_result client::noop()
 {
     try
     {
@@ -423,14 +568,24 @@ void client::noop()
         reply_t reply = control_connection_.recv();
 
         report_reply(reply);
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-void client::close()
+command_result client::close()
 {
     try
     {
@@ -441,14 +596,24 @@ void client::close()
         report_reply(reply);
 
         control_connection_.close();
+
+        if (reply.is_negative())
+        {
+            return command_result::not_ok;
+        }
+        else
+        {
+            return command_result::ok;
+        }
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
+        return command_result::error;
     }
 }
 
-unique_ptr<data_connection> client::create_data_connection()
+pair<command_result, unique_ptr<data_connection>> client::create_data_connection()
 {
     try
     {
@@ -458,9 +623,9 @@ unique_ptr<data_connection> client::create_data_connection()
 
         report_reply(reply);
 
-        if (reply.status_code >= 400)
+        if (reply.is_negative())
         {
-            return nullptr;
+            return make_pair(command_result::not_ok, nullptr);
         }
 
         uint16_t port;
@@ -469,19 +634,19 @@ unique_ptr<data_connection> client::create_data_connection()
             string error_msg = utils::format("Cannot parse server port from '%1%'.",
                                              reply.status_line);
             report_error(error_msg);
-            return nullptr;
+            return make_pair(command_result::error, nullptr);
         }
 
         unique_ptr<data_connection> connection = make_unique<data_connection>();
 
         connection->open(control_connection_.ip(), port);
 
-        return connection;
+        return make_pair(command_result::ok, std::move(connection));
     }
     catch (const connection_exception & ex)
     {
         handle_connection_exception(ex);
-        return nullptr;
+        return make_pair(command_result::error, nullptr);
     }
 }
 
