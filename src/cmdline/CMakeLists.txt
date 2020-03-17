@@ -2,8 +2,8 @@ add_executable(ftp_cmdline
         cmdline_interface.cpp
         cmdline_interface.hpp
         command.hpp
-        command_handler.cpp
-        command_handler.hpp
+        command_executor.cpp
+        command_executor.hpp
         command_parser.cpp
         command_parser.hpp
         local_exception.hpp
