@@ -25,7 +25,7 @@
 #ifndef FTP_CLIENT_CMDLINE_INTERFACE_HPP
 #define FTP_CLIENT_CMDLINE_INTERFACE_HPP
 
-#include "commands_handler.hpp"
+#include "command_handler.hpp"
 
 class cmdline_interface
 {
@@ -33,7 +33,7 @@ public:
     void run();
 
 private:
-    commands_handler commands_handler_;
+    command_handler command_handler_;
 };
 
 #endif //FTP_CLIENT_CMDLINE_INTERFACE_HPP

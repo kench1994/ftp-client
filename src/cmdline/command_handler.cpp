@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "commands_handler.hpp"
+#include "command_handler.hpp"
 #include "local_exception.hpp"
 #include "utils/utils.hpp"
 #include <iostream>
@@ -35,12 +35,12 @@ using std::cin;
 using std::endl;
 using std::optional;
 
-commands_handler::commands_handler()
+command_handler::command_handler()
 {
     client_.subscribe(&stdout_writer_);
 }
 
-void commands_handler::execute(command command, const vector<string> & args)
+void command_handler::execute(command command, const vector<string> & args)
 {
     if (is_needed_connection(command) && !client_.is_open())
     {
@@ -129,7 +129,7 @@ void commands_handler::execute(command command, const vector<string> & args)
     }
 }
 
-bool commands_handler::is_needed_connection(command command)
+bool command_handler::is_needed_connection(command command)
 {
     switch (command)
     {
@@ -159,7 +159,7 @@ bool commands_handler::is_needed_connection(command command)
     }
 }
 
-void commands_handler::open(const vector<string> & args)
+void command_handler::open(const vector<string> & args)
 {
     if (client_.is_open())
     {
@@ -199,7 +199,7 @@ void commands_handler::open(const vector<string> & args)
     client_.user(username, password);
 }
 
-void commands_handler::user(const vector<string> & args)
+void command_handler::user(const vector<string> & args)
 {
     string username;
     string password;
@@ -222,7 +222,7 @@ void commands_handler::user(const vector<string> & args)
     client_.user(username, password);
 }
 
-void commands_handler::cd(const vector<string> & args)
+void command_handler::cd(const vector<string> & args)
 {
     string remote_directory;
 
@@ -242,7 +242,7 @@ void commands_handler::cd(const vector<string> & args)
     client_.cd(remote_directory);
 }
 
-void commands_handler::ls(const vector<string> & args)
+void command_handler::ls(const vector<string> & args)
 {
     if (args.empty())
     {
@@ -258,7 +258,7 @@ void commands_handler::ls(const vector<string> & args)
     }
 }
 
-void commands_handler::put(const vector<string> & args)
+void command_handler::put(const vector<string> & args)
 {
     string local_file, remote_file;
 
@@ -285,7 +285,7 @@ void commands_handler::put(const vector<string> & args)
     client_.upload(local_file, remote_file);
 }
 
-void commands_handler::get(const vector<string> & args)
+void command_handler::get(const vector<string> & args)
 {
     string remote_file, local_file;
 
@@ -312,12 +312,12 @@ void commands_handler::get(const vector<string> & args)
     client_.download(remote_file, local_file);
 }
 
-void commands_handler::pwd()
+void command_handler::pwd()
 {
     client_.pwd();
 }
 
-void commands_handler::mkdir(const vector<string> & args)
+void command_handler::mkdir(const vector<string> & args)
 {
     string directory_name;
 
@@ -337,7 +337,7 @@ void commands_handler::mkdir(const vector<string> & args)
     client_.mkdir(directory_name);
 }
 
-void commands_handler::rmdir(const vector<string> & args)
+void command_handler::rmdir(const vector<string> & args)
 {
     string directory_name;
 
@@ -357,7 +357,7 @@ void commands_handler::rmdir(const vector<string> & args)
     client_.rmdir(directory_name);
 }
 
-void commands_handler::del(const vector<string> & args)
+void command_handler::del(const vector<string> & args)
 {
     string remote_file;
 
@@ -377,12 +377,12 @@ void commands_handler::del(const vector<string> & args)
     client_.rm(remote_file);
 }
 
-void commands_handler::binary()
+void command_handler::binary()
 {
     client_.binary();
 }
 
-void commands_handler::size(const vector<string> & args)
+void command_handler::size(const vector<string> & args)
 {
     string remote_file;
 
@@ -402,7 +402,7 @@ void commands_handler::size(const vector<string> & args)
     client_.size(remote_file);
 }
 
-void commands_handler::stat(const vector<string> & args)
+void command_handler::stat(const vector<string> & args)
 {
     if (args.empty())
     {
@@ -418,22 +418,22 @@ void commands_handler::stat(const vector<string> & args)
     }
 }
 
-void commands_handler::syst()
+void command_handler::syst()
 {
     client_.system();
 }
 
-void commands_handler::noop()
+void command_handler::noop()
 {
     client_.noop();
 }
 
-void commands_handler::close()
+void command_handler::close()
 {
     client_.close();
 }
 
-void commands_handler::help()
+void command_handler::help()
 {
     cout <<
         "List of ftp commands:\n"
@@ -457,7 +457,7 @@ void commands_handler::help()
         "  exit - exit program\n";
 }
 
-void commands_handler::exit()
+void command_handler::exit()
 {
     if (client_.is_open())
     {
