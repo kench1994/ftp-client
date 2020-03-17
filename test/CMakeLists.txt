@@ -8,5 +8,5 @@ include(GNUInstallDirs)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
 add_subdirectory(lib)
-add_subdirectory(user_interface)
+add_subdirectory(cmdline)
 add_subdirectory(utils)
