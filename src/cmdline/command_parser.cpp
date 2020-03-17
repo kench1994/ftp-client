@@ -23,7 +23,7 @@
  */
 
 #include "command_parser.hpp"
-#include "local_exception.hpp"
+#include "cmdline_exception.hpp"
 #include <sstream>
 #include <iomanip>
 #include <boost/algorithm/string/predicate.hpp>
@@ -110,7 +110,7 @@ static command get_command_from_string(const string & str)
     }
     else
     {
-        throw local_exception("Invalid command.");
+        throw cmdline_exception("Invalid command.");
     }
 }
 

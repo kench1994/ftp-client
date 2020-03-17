@@ -23,7 +23,7 @@
  */
 
 #include "command_executor.hpp"
-#include "local_exception.hpp"
+#include "cmdline_exception.hpp"
 #include "utils/utils.hpp"
 #include <iostream>
 #include <boost/lexical_cast/try_lexical_convert.hpp>
@@ -44,7 +44,7 @@ void command_executor::execute(command command, const vector<string> & args)
 {
     if (is_needed_connection(command) && !client_.is_open())
     {
-        throw local_exception("Not connected.");
+        throw cmdline_exception("Not connected.");
     }
 
     if (command == command::open)
@@ -163,7 +163,7 @@ void command_executor::open(const vector<string> & args)
 {
     if (client_.is_open())
     {
-        throw local_exception("Already connected, use close first.");
+        throw cmdline_exception("Already connected, use close first.");
     }
 
     string hostname;
@@ -183,12 +183,12 @@ void command_executor::open(const vector<string> & args)
 
         if (!boost::conversion::try_lexical_convert(args[1], port))
         {
-            throw local_exception("Invalid port number.");
+            throw cmdline_exception("Invalid port number.");
         }
     }
     else
     {
-        throw local_exception("usage: open hostname [ port ]");
+        throw cmdline_exception("usage: open hostname [ port ]");
     }
 
     client_.open(hostname, port);
@@ -216,7 +216,7 @@ void command_executor::user(const vector<string> & args)
     }
     else
     {
-        throw local_exception("usage: user username");
+        throw cmdline_exception("usage: user username");
     }
 
     client_.user(username, password);
@@ -236,7 +236,7 @@ void command_executor::cd(const vector<string> & args)
     }
     else
     {
-        throw local_exception("usage: cd remote-directory");
+        throw cmdline_exception("usage: cd remote-directory");
     }
 
     client_.cd(remote_directory);
@@ -254,7 +254,7 @@ void command_executor::ls(const vector<string> & args)
     }
     else
     {
-        throw local_exception("usage: ls [ remote-directory ]");
+        throw cmdline_exception("usage: ls [ remote-directory ]");
     }
 }
 
@@ -279,7 +279,7 @@ void command_executor::put(const vector<string> & args)
     }
     else
     {
-        throw local_exception("usage: put local-file [ remote-file ]");
+        throw cmdline_exception("usage: put local-file [ remote-file ]");
     }
 
     client_.upload(local_file, remote_file);
@@ -306,7 +306,7 @@ void command_executor::get(const vector<string> & args)
     }
     else
     {
-        throw local_exception("usage: get remote-file [ local-file ]");
+        throw cmdline_exception("usage: get remote-file [ local-file ]");
     }
 
     client_.download(remote_file, local_file);
@@ -331,7 +331,7 @@ void command_executor::mkdir(const vector<string> & args)
     }
     else
     {
-        throw local_exception("usage: mkdir directory-name");
+        throw cmdline_exception("usage: mkdir directory-name");
     }
 
     client_.mkdir(directory_name);
@@ -351,7 +351,7 @@ void command_executor::rmdir(const vector<string> & args)
     }
     else
     {
-        throw local_exception("usage: rmdir directory-name");
+        throw cmdline_exception("usage: rmdir directory-name");
     }
 
     client_.rmdir(directory_name);
@@ -371,7 +371,7 @@ void command_executor::del(const vector<string> & args)
     }
     else
     {
-        throw local_exception("usage: del remote-file");
+        throw cmdline_exception("usage: del remote-file");
     }
 
     client_.rm(remote_file);
@@ -396,7 +396,7 @@ void command_executor::size(const vector<string> & args)
     }
     else
     {
-        throw local_exception("usage: size remote-file");
+        throw cmdline_exception("usage: size remote-file");
     }
 
     client_.size(remote_file);
@@ -414,7 +414,7 @@ void command_executor::stat(const vector<string> & args)
     }
     else
     {
-        throw local_exception("usage: stat [ remote-file ]");
+        throw cmdline_exception("usage: stat [ remote-file ]");
     }
 }
 

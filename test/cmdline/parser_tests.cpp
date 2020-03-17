@@ -26,7 +26,7 @@
 #include <string>
 #include "command_parser.hpp"
 #include "command.hpp"
-#include "local_exception.hpp"
+#include "cmdline_exception.hpp"
 
 using namespace std::literals::string_literals;
 using std::pair;
@@ -92,7 +92,7 @@ TEST(ParserTest, ParseInvalidCommandTest)
     {
         parse_command("some invalid command");
     }
-    catch (const local_exception & ex)
+    catch (const cmdline_exception & ex)
     {
         gotException = true;
         ASSERT_STREQ(ex.what(), "Invalid command.");

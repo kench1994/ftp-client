@@ -1,4 +1,5 @@
 add_executable(ftp_cmdline
+        cmdline_exception.hpp
         cmdline_interface.cpp
         cmdline_interface.hpp
         command.hpp
@@ -6,7 +7,6 @@ add_executable(ftp_cmdline
         command_executor.hpp
         command_parser.cpp
         command_parser.hpp
-        local_exception.hpp
         main.cpp)
 
 find_package(Boost 1.67.0 REQUIRED COMPONENTS filesystem)

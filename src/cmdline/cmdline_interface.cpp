@@ -24,7 +24,7 @@
 
 #include "cmdline_interface.hpp"
 #include "command.hpp"
-#include "local_exception.hpp"
+#include "cmdline_exception.hpp"
 #include "command_parser.hpp"
 #include "utils/utils.hpp"
 #include <iostream>
@@ -55,7 +55,7 @@ void cmdline_interface::run()
                 break;
             }
         }
-        catch (const local_exception & ex)
+        catch (const cmdline_exception & ex)
         {
             cout << ex.what() << endl;
         }
