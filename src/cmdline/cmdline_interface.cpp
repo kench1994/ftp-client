@@ -22,18 +22,42 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_USER_INTERFACE_HPP
-#define FTP_CLIENT_USER_INTERFACE_HPP
+#include "cmdline_interface.hpp"
+#include "command.hpp"
+#include "local_exception.hpp"
+#include "parser.hpp"
+#include "utils/utils.hpp"
+#include <iostream>
 
-#include "commands_handler.hpp"
+using std::string;
+using std::cout;
+using std::endl;
 
-class user_interface
+void cmdline_interface::run()
 {
-public:
-    void run();
+    for (;;)
+    {
+        try
+        {
+            string line = utils::read_line("ftp> ");
 
-private:
-    commands_handler commands_handler_;
-};
+            if (line.empty())
+            {
+                continue;
+            }
 
-#endif //FTP_CLIENT_USER_INTERFACE_HPP
+            auto [command, args] = parse_command(line);
+
+            commands_handler_.execute(command, args);
+
+            if (command == command::exit)
+            {
+                break;
+            }
+        }
+        catch (const local_exception & ex)
+        {
+            cout << ex.what() << endl;
+        }
+    }
+}

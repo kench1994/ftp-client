@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "user_interface.hpp"
+#include "cmdline_interface.hpp"
 #include <iostream>
 
 using std::cout;
@@ -37,8 +37,8 @@ int main(int argc, char *argv[])
 
     try
     {
-        user_interface ui;
-        ui.run();
+        cmdline_interface cmdline;
+        cmdline.run();
     }
     catch (const istream::failure & ex)
     {
