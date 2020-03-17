@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_PARSER_HPP
-#define FTP_CLIENT_PARSER_HPP
+#ifndef FTP_CLIENT_COMMAND_PARSER_HPP
+#define FTP_CLIENT_COMMAND_PARSER_HPP
 
 #include "command.hpp"
 #include <vector>
@@ -31,4 +31,4 @@
 
 std::pair<command, std::vector<std::string>> parse_command(const std::string & line);
 
-#endif //FTP_CLIENT_PARSER_HPP
+#endif //FTP_CLIENT_COMMAND_PARSER_HPP

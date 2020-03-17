@@ -25,7 +25,7 @@
 #include "cmdline_interface.hpp"
 #include "command.hpp"
 #include "local_exception.hpp"
-#include "parser.hpp"
+#include "command_parser.hpp"
 #include "utils/utils.hpp"
 #include <iostream>
 

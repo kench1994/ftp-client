@@ -24,7 +24,7 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include "parser.hpp"
+#include "command_parser.hpp"
 #include "command.hpp"
 #include "local_exception.hpp"
 
