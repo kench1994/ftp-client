@@ -125,7 +125,7 @@ void command_executor::execute(command command, const vector<string> & args)
     }
     else
     {
-        assert(false);
+        throw cmdline_exception("Invalid command.");
     }
 }
 
