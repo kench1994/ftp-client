@@ -191,7 +191,12 @@ void command_executor::open(const vector<string> & args)
         throw cmdline_exception("usage: open hostname [ port ]");
     }
 
-    client_.open(hostname, port);
+    ftp::command_result result = client_.open(hostname, port);
+
+    if (result != ftp::command_result::ok)
+    {
+        return;
+    }
 
     string username = utils::read_line("username: ");
     string password = utils::read_password("password: ");
