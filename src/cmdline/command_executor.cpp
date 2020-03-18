@@ -204,7 +204,7 @@ void command_executor::open(const vector<string> & args)
         return;
     }
 
-    // Use binary mode to transfer files by default.
+    /* Use binary mode to transfer files by default. */
     client_.binary();
 }
 
@@ -235,7 +235,7 @@ void command_executor::user(const vector<string> & args)
         return;
     }
 
-    // Use binary mode to transfer files by default.
+    /* Use binary mode to transfer files by default. */
     client_.binary();
 }
 
