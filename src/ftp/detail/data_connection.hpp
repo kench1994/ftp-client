@@ -45,9 +45,9 @@ public:
 
     void close();
 
-    void send(const void *buff, std::size_t size);
+    void send(const void *buf, std::size_t size);
 
-    std::size_t recv(void *buff, std::size_t max_size);
+    std::size_t recv(void *buf, std::size_t max_size);
 
     std::string recv();
 

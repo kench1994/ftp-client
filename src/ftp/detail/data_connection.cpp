@@ -98,11 +98,11 @@ void data_connection::close()
     }
 }
 
-void data_connection::send(const void *buff, size_t size)
+void data_connection::send(const void *buf, size_t size)
 {
     boost::system::error_code ec;
 
-    boost::asio::write(socket_, boost::asio::buffer(buff, size), ec);
+    boost::asio::write(socket_, boost::asio::buffer(buf, size), ec);
 
     if (ec)
     {
@@ -110,11 +110,11 @@ void data_connection::send(const void *buff, size_t size)
     }
 }
 
-size_t data_connection::recv(void *buff, size_t max_size)
+size_t data_connection::recv(void *buf, size_t max_size)
 {
     boost::system::error_code ec;
 
-    size_t size = socket_.read_some(boost::asio::buffer(buff, max_size), ec);
+    size_t size = socket_.read_some(boost::asio::buffer(buf, max_size), ec);
 
     if (ec == boost::asio::error::eof)
     {
