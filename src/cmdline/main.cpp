@@ -25,7 +25,7 @@
 #include "cmdline_interface.hpp"
 #include <iostream>
 
-using std::cout;
+using std::cerr;
 using std::cin;
 using std::endl;
 using std::istream;
@@ -48,18 +48,18 @@ int main(int argc, char *argv[])
         }
         else
         {
-            cout << ex.what() << endl;
+            cerr << ex.what() << endl;
             return EXIT_FAILURE;
         }
     }
     catch (const exception & ex)
     {
-        cout << ex.what() << endl;
+        cerr << ex.what() << endl;
         return EXIT_FAILURE;
     }
     catch (...)
     {
-        cout << "Unknown error." << endl;
+        cerr << "Unknown error." << endl;
         return EXIT_FAILURE;
     }
 
