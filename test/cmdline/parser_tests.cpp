@@ -86,7 +86,7 @@ TEST(ParserTest, ParseCommandTest)
 
 TEST(ParserTest, ParseInvalidCommandTest)
 {
-    bool gotException = false;
+    bool catched = false;
 
     try
     {
@@ -94,7 +94,7 @@ TEST(ParserTest, ParseInvalidCommandTest)
     }
     catch (const cmdline_exception & ex)
     {
-        gotException = true;
+        catched = true;
         ASSERT_STREQ(ex.what(), "Invalid command.");
     }
     catch (...)
@@ -102,7 +102,7 @@ TEST(ParserTest, ParseInvalidCommandTest)
         FAIL() << "Got unexpected exception.";
     }
 
-    ASSERT_EQ(gotException, true);
+    ASSERT_EQ(catched, true);
 }
 
 TEST(ParserTest, ParseCaseInsensitiveCommandTest)
