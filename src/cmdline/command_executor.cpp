@@ -50,14 +50,10 @@ void command_executor::execute(command command, const vector<string> & args)
     if (command == command::open)
     {
         open(args);
-        // Use binary mode to transfer files by default.
-        binary();
     }
     else if (command == command::user)
     {
         user(args);
-        // Use binary mode to transfer files by default.
-        binary();
     }
     else if (command == command::close)
     {
@@ -201,7 +197,15 @@ void command_executor::open(const vector<string> & args)
     string username = utils::read_line("username: ");
     string password = utils::read_password("password: ");
 
-    client_.user(username, password);
+    result = client_.user(username, password);
+
+    if (result != ftp::command_result::ok)
+    {
+        return;
+    }
+
+    // Use binary mode to transfer files by default.
+    client_.binary();
 }
 
 void command_executor::user(const vector<string> & args)
@@ -224,7 +228,15 @@ void command_executor::user(const vector<string> & args)
         throw cmdline_exception("usage: user username");
     }
 
-    client_.user(username, password);
+    ftp::command_result result = client_.user(username, password);
+
+    if (result != ftp::command_result::ok)
+    {
+        return;
+    }
+
+    // Use binary mode to transfer files by default.
+    client_.binary();
 }
 
 void command_executor::cd(const vector<string> & args)
