@@ -23,7 +23,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "utils.hpp"
+#include "utils/utils.hpp"
 
 TEST(UtilsTest, FormatTest)
 {

@@ -24,9 +24,9 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include "command_parser.hpp"
-#include "command.hpp"
-#include "cmdline_exception.hpp"
+#include "cmdline/command_parser.hpp"
+#include "cmdline/command.hpp"
+#include "cmdline/cmdline_exception.hpp"
 
 using namespace std::literals::string_literals;
 using std::pair;

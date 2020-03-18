@@ -11,6 +11,4 @@ target_link_libraries(cmdline_tests
 
 target_include_directories(cmdline_tests
         PRIVATE
-            ${Boost_INCLUDE_DIRS}
-            ../../src/cmdline
-            ../../src)
+            ${Boost_INCLUDE_DIRS})
