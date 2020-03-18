@@ -72,7 +72,7 @@ bool client::is_open() const
     return control_connection_.is_open();
 }
 
-command_result client::user(const string & username, const string & password)
+command_result client::login(const string & username, const string & password)
 {
     try
     {

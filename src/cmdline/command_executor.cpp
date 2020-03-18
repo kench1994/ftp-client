@@ -197,7 +197,7 @@ void command_executor::open(const vector<string> & args)
     string username = utils::read_line("username: ");
     string password = utils::read_password("password: ");
 
-    result = client_.user(username, password);
+    result = client_.login(username, password);
 
     if (result != ftp::command_result::ok)
     {
@@ -228,7 +228,7 @@ void command_executor::user(const vector<string> & args)
         throw cmdline_exception("usage: user username");
     }
 
-    ftp::command_result result = client_.user(username, password);
+    ftp::command_result result = client_.login(username, password);
 
     if (result != ftp::command_result::ok)
     {

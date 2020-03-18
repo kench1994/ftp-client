@@ -54,7 +54,7 @@ public:
 
     bool is_open() const;
 
-    command_result user(const std::string & username, const std::string & password);
+    command_result login(const std::string & username, const std::string & password);
 
     command_result cd(const std::string & remote_directory);
 
