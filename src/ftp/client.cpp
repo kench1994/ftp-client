@@ -45,11 +45,9 @@ command_result client::open(const string & hostname, uint16_t port)
 {
     try
     {
-        control_connection_.open(hostname, port);
+        open_connection(hostname, port);
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -76,20 +74,16 @@ command_result client::login(const string & username, const string & password)
 {
     try
     {
-        control_connection_.send("USER " + username);
+        send("USER " + username);
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.status_code == 331)
         {
             /* 331 User name okay, need password. */
-            control_connection_.send("PASS " + password);
+            send("PASS " + password);
 
-            reply = control_connection_.recv();
-
-            report_reply(reply);
+            reply = recv();
         }
         else if (reply.status_code == 332)
         {
@@ -118,11 +112,9 @@ command_result client::cd(const string & remote_directory)
 {
     try
     {
-        control_connection_.send("CWD " + remote_directory);
+        send("CWD " + remote_directory);
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -162,11 +154,9 @@ command_result client::ls(const optional<string> & remote_directory)
             return result;
         }
 
-        control_connection_.send(command);
+        send(command);
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -178,9 +168,7 @@ command_result client::ls(const optional<string> & remote_directory)
         /* Don't keep the data connection. */
         data_connection->close();
 
-        reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply = recv();
 
         if (reply.is_negative())
         {
@@ -218,11 +206,9 @@ command_result client::upload(const string & local_file, const string & remote_f
             return result;
         }
 
-        control_connection_.send("STOR " + remote_file);
+        send("STOR " + remote_file);
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -249,9 +235,7 @@ command_result client::upload(const string & local_file, const string & remote_f
         /* Don't keep the data connection. */
         data_connection->close();
 
-        reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply = recv();
 
         if (reply.is_negative())
         {
@@ -289,11 +273,9 @@ command_result client::download(const string & remote_file, const string & local
             return result;
         }
 
-        control_connection_.send("RETR " + remote_file);
+        send("RETR " + remote_file);
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -320,9 +302,7 @@ command_result client::download(const string & remote_file, const string & local
         /* Don't keep the data connection. */
         data_connection->close();
 
-        reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply = recv();
 
         if (reply.is_negative())
         {
@@ -344,11 +324,9 @@ command_result client::pwd()
 {
     try
     {
-        control_connection_.send("PWD");
+        send("PWD");
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -370,11 +348,9 @@ command_result client::mkdir(const string & directory_name)
 {
     try
     {
-        control_connection_.send("MKD " + directory_name);
+        send("MKD " + directory_name);
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -396,11 +372,9 @@ command_result client::rmdir(const string & directory_name)
 {
     try
     {
-        control_connection_.send("RMD " + directory_name);
+        send("RMD " + directory_name);
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -422,11 +396,9 @@ command_result client::rm(const string & remote_file)
 {
     try
     {
-        control_connection_.send("DELE " + remote_file);
+        send("DELE " + remote_file);
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -448,11 +420,9 @@ command_result client::binary()
 {
     try
     {
-        control_connection_.send("TYPE I");
+        send("TYPE I");
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -474,11 +444,9 @@ command_result client::size(const string & remote_file)
 {
     try
     {
-        control_connection_.send("SIZE " + remote_file);
+        send("SIZE " + remote_file);
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -511,11 +479,9 @@ command_result client::stat(const optional<string> & remote_file)
 
     try
     {
-        control_connection_.send(command);
+        send(command);
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -537,11 +503,9 @@ command_result client::system()
 {
     try
     {
-        control_connection_.send("SYST");
+        send("SYST");
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -563,11 +527,9 @@ command_result client::noop()
 {
     try
     {
-        control_connection_.send("NOOP");
+        send("NOOP");
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
@@ -589,13 +551,11 @@ command_result client::close()
 {
     try
     {
-        control_connection_.send("QUIT");
+        send("QUIT");
 
-        reply_t reply = control_connection_.recv();
+        reply_t reply = recv();
 
-        report_reply(reply);
-
-        control_connection_.close();
+        close_connection();
 
         if (reply.is_negative())
         {
@@ -611,6 +571,30 @@ command_result client::close()
         handle_connection_exception(ex);
         return command_result::error;
     }
+}
+
+void client::open_connection(const string & hostname, uint16_t port)
+{
+    control_connection_.open(hostname, port);
+}
+
+void client::close_connection()
+{
+    control_connection_.close();
+}
+
+void client::send(const string & command)
+{
+    control_connection_.send(command);
+}
+
+reply_t client::recv()
+{
+    reply_t reply = control_connection_.recv();
+
+    report_reply(reply);
+
+    return reply;
 }
 
 pair<command_result, unique_ptr<data_connection>> client::create_data_connection()

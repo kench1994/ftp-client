@@ -99,6 +99,14 @@ public:
     void unsubscribe(event_observer *observer);
 
 private:
+    void open_connection(const std::string & hostname, uint16_t port);
+
+    void close_connection();
+
+    void send(const std::string & command);
+
+    detail::reply_t recv();
+
     std::pair<command_result, std::unique_ptr<detail::data_connection>> create_data_connection();
 
     static bool try_parse_server_port(const std::string & epsv_reply, uint16_t & port);
