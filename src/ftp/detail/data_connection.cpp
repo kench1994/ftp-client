@@ -32,24 +32,26 @@ namespace ftp::detail
 
 using std::string;
 
-data_connection::data_connection()
+data_connection::data_connection(const string & ip, uint16_t port)
     : io_context_(),
-      socket_(io_context_)
+      socket_(io_context_),
+      ip_(ip),
+      port_(port)
 {
 }
 
-void data_connection::open(const string & ip, uint16_t port)
+void data_connection::open()
 {
     boost::system::error_code ec;
 
-    boost::asio::ip::address address = boost::asio::ip::address::from_string(ip, ec);
+    boost::asio::ip::address address = boost::asio::ip::address::from_string(ip_, ec);
 
     if (ec)
     {
         throw connection_exception(ec, "Cannot get ip address");
     }
 
-    boost::asio::ip::tcp::endpoint remote_endpoint(address, port);
+    boost::asio::ip::tcp::endpoint remote_endpoint(address, port_);
     socket_.connect(remote_endpoint, ec);
 
     if (ec)

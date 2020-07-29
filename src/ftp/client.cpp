@@ -38,6 +38,8 @@ using std::unique_ptr;
 using std::ios_base;
 using std::pair;
 using std::make_pair;
+using std::nullopt;
+using std::make_optional;
 
 using namespace ftp::detail;
 
@@ -147,12 +149,14 @@ command_result client::ls(const optional<string> & remote_directory)
 
     try
     {
-        auto [result, data_connection] = create_data_connection();
+        optional<data_connection> data_connection = initiate_data_connection();
 
-        if (result != command_result::ok)
+        if (!data_connection)
         {
-            return result;
+            return command_result::not_ok;
         }
+
+        data_connection->open();
 
         send(command);
 
@@ -199,12 +203,14 @@ command_result client::upload(const string & local_file, const string & remote_f
 
     try
     {
-        auto [result, data_connection] = create_data_connection();
+        optional<data_connection> data_connection = initiate_data_connection();
 
-        if (result != command_result::ok)
+        if (!data_connection)
         {
-            return result;
+            return command_result::not_ok;
         }
+
+        data_connection->open();
 
         send("STOR " + remote_file);
 
@@ -266,12 +272,14 @@ command_result client::download(const string & remote_file, const string & local
 
     try
     {
-        auto [result, data_connection] = create_data_connection();
+        optional<data_connection> data_connection = initiate_data_connection();
 
-        if (result != command_result::ok)
+        if (!data_connection)
         {
-            return result;
+            return command_result::not_ok;
         }
+
+        data_connection->open();
 
         send("RETR " + remote_file);
 
@@ -597,39 +605,24 @@ reply_t client::recv()
     return reply;
 }
 
-pair<command_result, unique_ptr<data_connection>> client::create_data_connection()
+optional<data_connection> client::initiate_data_connection()
 {
-    try
+    send("EPSV");
+
+    reply_t reply = recv();
+
+    if (reply.is_negative())
     {
-        send("EPSV");
-
-        reply_t reply = recv();
-
-        if (reply.is_negative())
-        {
-            return make_pair(command_result::not_ok, nullptr);
-        }
-
-        uint16_t port;
-        if (!try_parse_server_port(reply.status_line, port))
-        {
-            string error_msg = utils::format("Cannot parse server port from '%1%'.",
-                                             reply.status_line);
-            report_error(error_msg);
-            return make_pair(command_result::error, nullptr);
-        }
-
-        unique_ptr<data_connection> connection = make_unique<data_connection>();
-
-        connection->open(control_connection_.ip(), port);
-
-        return make_pair(command_result::ok, std::move(connection));
+        return nullopt;
     }
-    catch (const connection_exception & ex)
+
+    uint16_t port;
+    if (!try_parse_server_port(reply.status_line, port))
     {
-        handle_connection_exception(ex);
-        return make_pair(command_result::error, nullptr);
+        throw connection_exception("Cannot parse server port from '%1%'.", reply.status_line);
     }
+
+    return make_optional<data_connection>(control_connection_.ip(), port);
 }
 
 /* The text returned in response to the EPSV command MUST be:

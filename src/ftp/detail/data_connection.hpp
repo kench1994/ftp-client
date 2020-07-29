@@ -33,13 +33,13 @@ namespace ftp::detail
 class data_connection
 {
 public:
-    data_connection();
+    data_connection(const std::string & ip, uint16_t port);
 
     data_connection(const data_connection &) = delete;
 
     data_connection & operator=(const data_connection &) = delete;
 
-    void open(const std::string & ip, uint16_t port);
+    void open();
 
     bool is_open() const;
 
@@ -54,6 +54,8 @@ public:
 private:
     boost::asio::io_context io_context_;
     boost::asio::ip::tcp::socket socket_;
+    std::string ip_;
+    uint16_t port_;
 };
 
 } // namespace ftp::detail

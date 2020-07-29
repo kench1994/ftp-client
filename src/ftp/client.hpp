@@ -107,7 +107,7 @@ private:
 
     detail::reply_t recv();
 
-    std::pair<command_result, std::unique_ptr<detail::data_connection>> create_data_connection();
+    std::optional<detail::data_connection> initiate_data_connection();
 
     static bool try_parse_server_port(const std::string & epsv_reply, uint16_t & port);
 
