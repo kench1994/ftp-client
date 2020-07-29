@@ -198,7 +198,7 @@ command_result client::upload(const string & local_file, const string & remote_f
     {
         string error_msg = utils::format("Cannot open file %1%.", local_file);
         report_error(error_msg);
-        return command_result::error;
+        return command_result::not_ok;
     }
 
     try
@@ -267,7 +267,7 @@ command_result client::download(const string & remote_file, const string & local
     {
         string error_msg = utils::format("Cannot create file %1%.", local_file);
         report_error(error_msg);
-        return command_result::error;
+        return command_result::not_ok;
     }
 
     try
