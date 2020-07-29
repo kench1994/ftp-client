@@ -31,6 +31,8 @@ namespace ftp::detail
 {
 
 using std::string;
+using std::ifstream;
+using std::ofstream;
 
 data_connection::data_connection(const string & ip, uint16_t port)
     : io_context_(),
@@ -100,34 +102,57 @@ void data_connection::close()
     }
 }
 
-void data_connection::send(const void *buf, size_t size)
+void data_connection::send(ifstream & file)
 {
     boost::system::error_code ec;
 
-    boost::asio::write(socket_, boost::asio::buffer(buf, size), ec);
-
-    if (ec)
+    for (;;)
     {
-        throw connection_exception(ec, "Cannot send data through data connection");
+        file.read(buffer_.data(), buffer_.size());
+
+        if (file.fail() && !file.eof())
+        {
+            throw connection_exception("Cannot read data from file");
+        }
+
+        boost::asio::write(socket_, boost::asio::buffer(buffer_, file.gcount()), ec);
+
+        if (ec)
+        {
+            throw connection_exception(ec, "Cannot send data over data connection");
+        }
+
+        if (file.eof())
+        {
+            break;
+        }
     }
 }
 
-size_t data_connection::recv(void *buf, size_t max_size)
+void data_connection::recv(ofstream & file)
 {
     boost::system::error_code ec;
 
-    size_t size = socket_.read_some(boost::asio::buffer(buf, max_size), ec);
-
-    if (ec == boost::asio::error::eof)
+    for (;;)
     {
-        /* Ignore eof. */
-    }
-    else if (ec)
-    {
-        throw connection_exception(ec, "Cannot receive data through data connection");
-    }
+        size_t len = socket_.read_some(boost::asio::buffer(buffer_), ec);
 
-    return size;
+        if (ec == boost::asio::error::eof)
+        {
+            break;
+        }
+        else if (ec)
+        {
+            throw connection_exception(ec, "Cannot receive data over data connection");
+        }
+
+        file.write(buffer_.data(), len);
+
+        if (file.fail())
+        {
+            throw connection_exception("Cannot write data to file");
+        }
+    }
 }
 
 string data_connection::recv()

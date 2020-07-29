@@ -121,7 +121,6 @@ private:
 
     detail::control_connection control_connection_;
     std::list<event_observer *> observers_;
-    std::array<char, 8192> buffer_;
 };
 
 } // namespace ftp

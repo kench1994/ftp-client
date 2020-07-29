@@ -221,22 +221,7 @@ command_result client::upload(const string & local_file, const string & remote_f
             return command_result::not_ok;
         }
 
-        /* Start file transfer. */
-        for (;;)
-        {
-            file.read(buffer_.data(), buffer_.size());
-
-            if (file.fail() && !file.eof())
-            {
-                report_error("Cannot read data from file.");
-                return command_result::error;
-            }
-
-            data_connection->send(buffer_.data(), file.gcount());
-
-            if (file.eof())
-                break;
-        }
+        data_connection->send(file);
 
         /* Don't keep the data connection. */
         data_connection->close();
@@ -290,22 +275,7 @@ command_result client::download(const string & remote_file, const string & local
             return command_result::not_ok;
         }
 
-        /* Start file transfer. */
-        for (;;)
-        {
-            size_t size = data_connection->recv(buffer_.data(), buffer_.size());
-
-            if (size == 0)
-                break;
-
-            file.write(buffer_.data(), size);
-
-            if (file.fail())
-            {
-                report_error("Cannot write data to file.");
-                return command_result::error;
-            }
-        }
+        data_connection->recv(file);
 
         /* Don't keep the data connection. */
         data_connection->close();
