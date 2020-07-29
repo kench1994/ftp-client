@@ -247,6 +247,13 @@ command_result client::upload(const string & local_file, const string & remote_f
 
 command_result client::download(const string & remote_file, const string & local_file)
 {
+    if (std::filesystem::exists(local_file))
+    {
+        string error_msg = utils::format("The file '%1%' already exists.", local_file);
+        report_error(error_msg);
+        return command_result::not_ok;
+    }
+
     ofstream file(local_file, ios_base::binary);
 
     if (!file)
