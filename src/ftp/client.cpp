@@ -601,11 +601,9 @@ pair<command_result, unique_ptr<data_connection>> client::create_data_connection
 {
     try
     {
-        control_connection_.send("EPSV");
+        send("EPSV");
 
-        reply_t reply = control_connection_.recv();
-
-        report_reply(reply);
+        reply_t reply = recv();
 
         if (reply.is_negative())
         {
