@@ -167,7 +167,8 @@ command_result client::ls(const optional<string> & remote_directory)
             return command_result::not_ok;
         }
 
-        report_reply(data_connection->recv());
+        string file_list = data_connection->recv();
+        report_reply(file_list);
 
         /* Don't keep the data connection. */
         data_connection->close();
