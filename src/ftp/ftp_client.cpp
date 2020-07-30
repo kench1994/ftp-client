@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "client.hpp"
+#include "ftp_client.hpp"
 #include "detail/utils.hpp"
 #include <fstream>
 #include <boost/lexical_cast.hpp>
@@ -43,7 +43,7 @@ using std::make_optional;
 
 using namespace ftp::detail;
 
-command_result client::open(const string & hostname, uint16_t port)
+command_result ftp_client::open(const string & hostname, uint16_t port)
 {
     try
     {
@@ -67,12 +67,12 @@ command_result client::open(const string & hostname, uint16_t port)
     }
 }
 
-bool client::is_open() const
+bool ftp_client::is_open() const
 {
     return control_connection_.is_open();
 }
 
-command_result client::login(const string & username, const string & password)
+command_result ftp_client::login(const string & username, const string & password)
 {
     try
     {
@@ -110,7 +110,7 @@ command_result client::login(const string & username, const string & password)
     }
 }
 
-command_result client::cd(const string & remote_directory)
+command_result ftp_client::cd(const string & remote_directory)
 {
     try
     {
@@ -134,7 +134,7 @@ command_result client::cd(const string & remote_directory)
     }
 }
 
-command_result client::ls(const optional<string> & remote_directory)
+command_result ftp_client::ls(const optional<string> & remote_directory)
 {
     string command;
 
@@ -191,7 +191,7 @@ command_result client::ls(const optional<string> & remote_directory)
     }
 }
 
-command_result client::upload(const string & local_file, const string & remote_file)
+command_result ftp_client::upload(const string & local_file, const string & remote_file)
 {
     ifstream file(local_file, ios_base::binary);
 
@@ -245,7 +245,7 @@ command_result client::upload(const string & local_file, const string & remote_f
     }
 }
 
-command_result client::download(const string & remote_file, const string & local_file)
+command_result ftp_client::download(const string & remote_file, const string & local_file)
 {
     if (std::filesystem::exists(local_file))
     {
@@ -306,7 +306,7 @@ command_result client::download(const string & remote_file, const string & local
     }
 }
 
-command_result client::pwd()
+command_result ftp_client::pwd()
 {
     try
     {
@@ -330,7 +330,7 @@ command_result client::pwd()
     }
 }
 
-command_result client::mkdir(const string & directory_name)
+command_result ftp_client::mkdir(const string & directory_name)
 {
     try
     {
@@ -354,7 +354,7 @@ command_result client::mkdir(const string & directory_name)
     }
 }
 
-command_result client::rmdir(const string & directory_name)
+command_result ftp_client::rmdir(const string & directory_name)
 {
     try
     {
@@ -378,7 +378,7 @@ command_result client::rmdir(const string & directory_name)
     }
 }
 
-command_result client::rm(const string & remote_file)
+command_result ftp_client::rm(const string & remote_file)
 {
     try
     {
@@ -402,7 +402,7 @@ command_result client::rm(const string & remote_file)
     }
 }
 
-command_result client::binary()
+command_result ftp_client::binary()
 {
     try
     {
@@ -426,7 +426,7 @@ command_result client::binary()
     }
 }
 
-command_result client::size(const string & remote_file)
+command_result ftp_client::size(const string & remote_file)
 {
     try
     {
@@ -450,7 +450,7 @@ command_result client::size(const string & remote_file)
     }
 }
 
-command_result client::stat(const optional<string> & remote_file)
+command_result ftp_client::stat(const optional<string> & remote_file)
 {
     string command;
 
@@ -485,7 +485,7 @@ command_result client::stat(const optional<string> & remote_file)
     }
 }
 
-command_result client::system()
+command_result ftp_client::system()
 {
     try
     {
@@ -509,7 +509,7 @@ command_result client::system()
     }
 }
 
-command_result client::noop()
+command_result ftp_client::noop()
 {
     try
     {
@@ -533,7 +533,7 @@ command_result client::noop()
     }
 }
 
-command_result client::close()
+command_result ftp_client::close()
 {
     try
     {
@@ -559,22 +559,22 @@ command_result client::close()
     }
 }
 
-void client::open_connection(const string & hostname, uint16_t port)
+void ftp_client::open_connection(const string & hostname, uint16_t port)
 {
     control_connection_.open(hostname, port);
 }
 
-void client::close_connection()
+void ftp_client::close_connection()
 {
     control_connection_.close();
 }
 
-void client::send(const string & command)
+void ftp_client::send(const string & command)
 {
     control_connection_.send(command);
 }
 
-reply_t client::recv()
+reply_t ftp_client::recv()
 {
     reply_t reply = control_connection_.recv();
 
@@ -583,7 +583,7 @@ reply_t client::recv()
     return reply;
 }
 
-optional<data_connection> client::initiate_data_connection()
+optional<data_connection> ftp_client::initiate_data_connection()
 {
     send("EPSV");
 
@@ -621,7 +621,7 @@ optional<data_connection> client::initiate_data_connection()
  *
  * RFC 2428: https://tools.ietf.org/html/rfc2428
  */
-bool client::try_parse_server_port(const string & epsv_reply, uint16_t & port)
+bool ftp_client::try_parse_server_port(const string & epsv_reply, uint16_t & port)
 {
     size_t begin = epsv_reply.find('|');
     if (begin == string::npos)
@@ -652,7 +652,7 @@ bool client::try_parse_server_port(const string & epsv_reply, uint16_t & port)
     return boost::conversion::try_lexical_convert(port_str, port);
 }
 
-void client::handle_connection_exception(const connection_exception & ex)
+void ftp_client::handle_connection_exception(const connection_exception & ex)
 {
     string error_msg = ex.what();
 
@@ -661,17 +661,17 @@ void client::handle_connection_exception(const connection_exception & ex)
     control_connection_.reset();
 }
 
-void client::subscribe(event_observer *observer)
+void ftp_client::subscribe(event_observer *observer)
 {
     observers_.push_back(observer);
 }
 
-void client::unsubscribe(event_observer *observer)
+void ftp_client::unsubscribe(event_observer *observer)
 {
     observers_.remove(observer);
 }
 
-void client::report_reply(const string & reply)
+void ftp_client::report_reply(const string & reply)
 {
     for (const auto & observer : observers_)
     {
@@ -680,7 +680,7 @@ void client::report_reply(const string & reply)
     }
 }
 
-void client::report_reply(const reply_t & reply)
+void ftp_client::report_reply(const reply_t & reply)
 {
     for (const auto & observer : observers_)
     {
@@ -689,7 +689,7 @@ void client::report_reply(const reply_t & reply)
     }
 }
 
-void client::report_error(const string & error)
+void ftp_client::report_error(const string & error)
 {
     for (const auto & observer : observers_)
     {
