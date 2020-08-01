@@ -37,12 +37,12 @@ using std::optional;
 
 command_executor::command_executor()
 {
-    client_.subscribe(&stdout_writer_);
+    ftp_client_.subscribe(&stdout_writer_);
 }
 
 void command_executor::execute(command command, const vector<string> & args)
 {
-    if (is_needed_connection(command) && !client_.is_open())
+    if (is_needed_connection(command) && !ftp_client_.is_open())
     {
         throw cmdline_exception("Not connected.");
     }
@@ -157,7 +157,7 @@ bool command_executor::is_needed_connection(command command)
 
 void command_executor::open(const vector<string> & args)
 {
-    if (client_.is_open())
+    if (ftp_client_.is_open())
     {
         throw cmdline_exception("Already connected, use close first.");
     }
@@ -187,7 +187,7 @@ void command_executor::open(const vector<string> & args)
         throw cmdline_exception("usage: open hostname [ port ]");
     }
 
-    ftp::command_result result = client_.open(hostname, port);
+    ftp::command_result result = ftp_client_.open(hostname, port);
 
     if (result != ftp::command_result::ok)
     {
@@ -197,7 +197,7 @@ void command_executor::open(const vector<string> & args)
     string username = utils::read_line("username: ");
     string password = utils::read_password("password: ");
 
-    result = client_.login(username, password);
+    result = ftp_client_.login(username, password);
 
     if (result != ftp::command_result::ok)
     {
@@ -205,7 +205,7 @@ void command_executor::open(const vector<string> & args)
     }
 
     /* Use binary mode to transfer files by default. */
-    client_.binary();
+    ftp_client_.binary();
 }
 
 void command_executor::user(const vector<string> & args)
@@ -228,7 +228,7 @@ void command_executor::user(const vector<string> & args)
         throw cmdline_exception("usage: user username");
     }
 
-    ftp::command_result result = client_.login(username, password);
+    ftp::command_result result = ftp_client_.login(username, password);
 
     if (result != ftp::command_result::ok)
     {
@@ -236,7 +236,7 @@ void command_executor::user(const vector<string> & args)
     }
 
     /* Use binary mode to transfer files by default. */
-    client_.binary();
+    ftp_client_.binary();
 }
 
 void command_executor::cd(const vector<string> & args)
@@ -256,18 +256,18 @@ void command_executor::cd(const vector<string> & args)
         throw cmdline_exception("usage: cd remote-directory");
     }
 
-    client_.cd(remote_directory);
+    ftp_client_.cd(remote_directory);
 }
 
 void command_executor::ls(const vector<string> & args)
 {
     if (args.empty())
     {
-        client_.ls();
+        ftp_client_.ls();
     }
     else if (args.size() == 1)
     {
-        client_.ls(args[0]);
+        ftp_client_.ls(args[0]);
     }
     else
     {
@@ -299,7 +299,7 @@ void command_executor::put(const vector<string> & args)
         throw cmdline_exception("usage: put local-file [ remote-file ]");
     }
 
-    client_.upload(local_file, remote_file);
+    ftp_client_.upload(local_file, remote_file);
 }
 
 void command_executor::get(const vector<string> & args)
@@ -326,12 +326,12 @@ void command_executor::get(const vector<string> & args)
         throw cmdline_exception("usage: get remote-file [ local-file ]");
     }
 
-    client_.download(remote_file, local_file);
+    ftp_client_.download(remote_file, local_file);
 }
 
 void command_executor::pwd()
 {
-    client_.pwd();
+    ftp_client_.pwd();
 }
 
 void command_executor::mkdir(const vector<string> & args)
@@ -351,7 +351,7 @@ void command_executor::mkdir(const vector<string> & args)
         throw cmdline_exception("usage: mkdir directory-name");
     }
 
-    client_.mkdir(directory_name);
+    ftp_client_.mkdir(directory_name);
 }
 
 void command_executor::rmdir(const vector<string> & args)
@@ -371,7 +371,7 @@ void command_executor::rmdir(const vector<string> & args)
         throw cmdline_exception("usage: rmdir directory-name");
     }
 
-    client_.rmdir(directory_name);
+    ftp_client_.rmdir(directory_name);
 }
 
 void command_executor::del(const vector<string> & args)
@@ -391,12 +391,12 @@ void command_executor::del(const vector<string> & args)
         throw cmdline_exception("usage: del remote-file");
     }
 
-    client_.rm(remote_file);
+    ftp_client_.rm(remote_file);
 }
 
 void command_executor::binary()
 {
-    client_.binary();
+    ftp_client_.binary();
 }
 
 void command_executor::size(const vector<string> & args)
@@ -416,18 +416,18 @@ void command_executor::size(const vector<string> & args)
         throw cmdline_exception("usage: size remote-file");
     }
 
-    client_.size(remote_file);
+    ftp_client_.size(remote_file);
 }
 
 void command_executor::stat(const vector<string> & args)
 {
     if (args.empty())
     {
-        client_.stat();
+        ftp_client_.stat();
     }
     else if (args.size() == 1)
     {
-        client_.stat(args[0]);
+        ftp_client_.stat(args[0]);
     }
     else
     {
@@ -437,17 +437,17 @@ void command_executor::stat(const vector<string> & args)
 
 void command_executor::syst()
 {
-    client_.system();
+    ftp_client_.system();
 }
 
 void command_executor::noop()
 {
-    client_.noop();
+    ftp_client_.noop();
 }
 
 void command_executor::close()
 {
-    client_.close();
+    ftp_client_.close();
 }
 
 void command_executor::help()
@@ -476,8 +476,8 @@ void command_executor::help()
 
 void command_executor::exit()
 {
-    if (client_.is_open())
+    if (ftp_client_.is_open())
     {
-        client_.close();
+        ftp_client_.close();
     }
 }

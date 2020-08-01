@@ -24,11 +24,9 @@
 
 #include <gtest/gtest.h>
 #include <boost/process.hpp>
-#include "ftp/ftp_client.hpp"
+#include "ftp/client.hpp"
 
 using std::string;
-
-using namespace ftp;
 
 class FtpClientTest : public ::testing::Test
 {
@@ -60,7 +58,7 @@ private:
     boost::process::child m_ftpServerProcess;
 };
 
-class test_ftp_observer : public ftp_client::event_observer
+class test_ftp_observer : public ftp::client::event_observer
 {
 public:
     void on_reply(const string & reply) override
@@ -91,17 +89,17 @@ private:
 TEST_F(FtpClientTest, OpenConnectionTest)
 {
     test_ftp_observer ftp_observer;
-    ftp_client client;
+    ftp::client client;
     client.subscribe(&ftp_observer);
 
     EXPECT_FALSE(client.is_open());
 
-    command_result result = client.open("localhost", 2121);
-    EXPECT_EQ(result, command_result::ok);
+    ftp::command_result result = client.open("localhost", 2121);
+    EXPECT_EQ(result, ftp::command_result::ok);
     EXPECT_TRUE(client.is_open());
 
     result = client.close();
-    EXPECT_EQ(result, command_result::ok);
+    EXPECT_EQ(result, ftp::command_result::ok);
     EXPECT_FALSE(client.is_open());
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
@@ -112,17 +110,17 @@ TEST_F(FtpClientTest, OpenConnectionTest)
 TEST_F(FtpClientTest, LoginTest)
 {
     test_ftp_observer ftp_observer;
-    ftp_client client;
+    ftp::client client;
     client.subscribe(&ftp_observer);
 
-    command_result result = client.open("localhost", 2121);
-    EXPECT_EQ(result, command_result::ok);
+    ftp::command_result result = client.open("localhost", 2121);
+    EXPECT_EQ(result, ftp::command_result::ok);
 
     result = client.login("user", "password");
-    EXPECT_EQ(result, command_result::ok);
+    EXPECT_EQ(result, ftp::command_result::ok);
 
     result = client.close();
-    EXPECT_EQ(result, command_result::ok);
+    EXPECT_EQ(result, ftp::command_result::ok);
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"

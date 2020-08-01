@@ -1,7 +1,7 @@
 add_library(ftp
         STATIC
-            ftp_client.cpp
-            ftp_client.hpp
+            client.cpp
+            client.hpp
             detail/connection_exception.hpp
             detail/control_connection.cpp
             detail/control_connection.hpp
