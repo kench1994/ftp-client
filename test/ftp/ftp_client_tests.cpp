@@ -108,3 +108,25 @@ TEST_F(FtpClientTest, OpenConnectionTest)
                                           "221 Goodbye.\r\n");
     EXPECT_EQ(ftp_observer.get_errors(), "");
 }
+
+TEST_F(FtpClientTest, LoginTest)
+{
+    test_ftp_observer ftp_observer;
+    ftp_client client;
+    client.subscribe(&ftp_observer);
+
+    command_result result = client.open("localhost", 2121);
+    EXPECT_EQ(result, command_result::ok);
+
+    result = client.login("user", "password");
+    EXPECT_EQ(result, command_result::ok);
+
+    result = client.close();
+    EXPECT_EQ(result, command_result::ok);
+
+    EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
+                                          "331 Username ok, send password.\r\n"
+                                          "230 Login successful.\r\n"
+                                          "221 Goodbye.\r\n");
+    EXPECT_EQ(ftp_observer.get_errors(), "");
+}
