@@ -93,7 +93,7 @@ private:
     };
 
     stdout_writer stdout_writer_;
-    ftp::client client_;
+    ftp::client ftp_client_;
 };
 
 #endif //FTP_CLIENT_COMMAND_EXECUTOR_HPP
