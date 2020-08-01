@@ -41,14 +41,14 @@ enum class command_result
     error
 };
 
-class ftp_client
+class client
 {
 public:
-    ftp_client() = default;
+    client() = default;
 
-    ftp_client(const ftp_client &) = delete;
+    client(const client &) = delete;
 
-    ftp_client & operator=(const ftp_client &) = delete;
+    client & operator=(const client &) = delete;
 
     command_result open(const std::string & hostname, uint16_t port = 21);
 

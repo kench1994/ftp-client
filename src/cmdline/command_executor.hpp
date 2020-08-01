@@ -26,7 +26,7 @@
 #define FTP_CLIENT_COMMAND_EXECUTOR_HPP
 
 #include "command.hpp"
-#include "ftp/ftp_client.hpp"
+#include "ftp/client.hpp"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -77,7 +77,7 @@ private:
 
     void exit();
 
-    class stdout_writer : public ftp::ftp_client::event_observer
+    class stdout_writer : public ftp::client::event_observer
     {
     public:
         void on_reply(const std::string & reply) override
@@ -93,7 +93,7 @@ private:
     };
 
     stdout_writer stdout_writer_;
-    ftp::ftp_client client_;
+    ftp::client client_;
 };
 
 #endif //FTP_CLIENT_COMMAND_EXECUTOR_HPP
