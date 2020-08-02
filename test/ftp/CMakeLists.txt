@@ -1,5 +1,5 @@
 add_executable(ftp_tests
-        ftp_client_tests.cpp)
+        client_tests.cpp)
 
 find_package(Boost 1.67.0 REQUIRED COMPONENTS system filesystem)
 

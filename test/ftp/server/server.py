@@ -28,7 +28,7 @@ from pyftpdlib.servers import FTPServer
 
 def main():
     if len(sys.argv) != 5:
-        print("Usage: ftp_server.py port user password home_directory")
+        print("Usage: server.py port user password home_directory")
         return
 
     port = sys.argv[1]

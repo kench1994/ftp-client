@@ -39,9 +39,8 @@ public:
 protected:
     void SetUp() override
     {
-        /* Usage: python ftp_server.py port user password home_directory */
-        m_ftpServerProcess = boost::process::child(m_pythonPath,
-                                                   "../ftp/ftp_server/ftp_server.py",
+        /* Usage: python server.py port user password home_directory */
+        m_ftpServerProcess = boost::process::child(m_pythonPath, "../ftp/server/server.py",
                                                    "2121", "user", "password", ".");
 
         /* Wait for 250ms to allow the server to start. */
