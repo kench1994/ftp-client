@@ -24,6 +24,7 @@
 
 #include "client.hpp"
 #include "detail/utils.hpp"
+#include <filesystem>
 #include <fstream>
 #include <boost/lexical_cast.hpp>
 
