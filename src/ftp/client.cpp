@@ -41,6 +41,7 @@ using std::pair;
 using std::make_pair;
 using std::nullopt;
 using std::make_optional;
+using std::exception;
 
 using namespace ftp::detail;
 
@@ -61,9 +62,15 @@ command_result client::open(const string & hostname, uint16_t port)
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -104,9 +111,15 @@ command_result client::login(const string & username, const string & password)
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -128,28 +141,34 @@ command_result client::cd(const string & remote_directory)
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
 
 command_result client::ls(const optional<string> & remote_directory)
 {
-    string command;
-
-    if (remote_directory)
-    {
-        command = "LIST " + remote_directory.value();
-    }
-    else
-    {
-        command = "LIST";
-    }
-
     try
     {
+        string command;
+
+        if (remote_directory)
+        {
+            command = "LIST " + remote_directory.value();
+        }
+        else
+        {
+            command = "LIST";
+        }
+
         optional<data_connection> data_connection = initiate_data_connection();
 
         if (!data_connection)
@@ -185,26 +204,32 @@ command_result client::ls(const optional<string> & remote_directory)
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
 
 command_result client::upload(const string & local_file, const string & remote_file)
 {
-    ifstream file(local_file, ios_base::binary);
-
-    if (!file)
-    {
-        string error_msg = utils::format("Cannot open file %1%.", local_file);
-        report_error(error_msg);
-        return command_result::not_ok;
-    }
-
     try
     {
+        ifstream file(local_file, ios_base::binary);
+
+        if (!file)
+        {
+            string error_msg = utils::format("Cannot open file %1%.", local_file);
+            report_error(error_msg);
+            return command_result::not_ok;
+        }
+
         optional<data_connection> data_connection = initiate_data_connection();
 
         if (!data_connection)
@@ -239,33 +264,39 @@ command_result client::upload(const string & local_file, const string & remote_f
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
 
 command_result client::download(const string & remote_file, const string & local_file)
 {
-    if (std::filesystem::exists(local_file))
-    {
-        string error_msg = utils::format("The file '%1%' already exists.", local_file);
-        report_error(error_msg);
-        return command_result::not_ok;
-    }
-
-    ofstream file(local_file, ios_base::binary);
-
-    if (!file)
-    {
-        string error_msg = utils::format("Cannot create file %1%.", local_file);
-        report_error(error_msg);
-        return command_result::not_ok;
-    }
-
     try
     {
+        if (std::filesystem::exists(local_file))
+        {
+            string error_msg = utils::format("The file '%1%' already exists.", local_file);
+            report_error(error_msg);
+            return command_result::not_ok;
+        }
+
+        ofstream file(local_file, ios_base::binary);
+
+        if (!file)
+        {
+            string error_msg = utils::format("Cannot create file %1%.", local_file);
+            report_error(error_msg);
+            return command_result::not_ok;
+        }
+
         optional<data_connection> data_connection = initiate_data_connection();
 
         if (!data_connection)
@@ -300,9 +331,15 @@ command_result client::download(const string & remote_file, const string & local
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -324,9 +361,15 @@ command_result client::pwd()
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -348,9 +391,15 @@ command_result client::mkdir(const string & directory_name)
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -372,9 +421,15 @@ command_result client::rmdir(const string & directory_name)
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -396,9 +451,15 @@ command_result client::rm(const string & remote_file)
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -420,9 +481,15 @@ command_result client::binary()
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -444,28 +511,34 @@ command_result client::size(const string & remote_file)
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
 
 command_result client::stat(const optional<string> & remote_file)
 {
-    string command;
-
-    if (remote_file)
-    {
-        command = "STAT " + remote_file.value();
-    }
-    else
-    {
-        command = "STAT";
-    }
-
     try
     {
+        string command;
+
+        if (remote_file)
+        {
+            command = "STAT " + remote_file.value();
+        }
+        else
+        {
+            command = "STAT";
+        }
+
         send(command);
 
         reply_t reply = recv();
@@ -479,9 +552,15 @@ command_result client::stat(const optional<string> & remote_file)
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -503,9 +582,15 @@ command_result client::system()
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -527,9 +612,15 @@ command_result client::noop()
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -553,9 +644,15 @@ command_result client::close()
             return command_result::ok;
         }
     }
-    catch (const connection_exception & ex)
+    catch (const exception & ex)
     {
-        handle_connection_exception(ex);
+        reset_connection();
+        report_exception(ex);
+        return command_result::error;
+    }
+    catch (...)
+    {
+        reset_connection();
         return command_result::error;
     }
 }
@@ -582,6 +679,11 @@ reply_t client::recv()
     report_reply(reply);
 
     return reply;
+}
+
+void client::reset_connection()
+{
+    control_connection_.reset();
 }
 
 optional<data_connection> client::initiate_data_connection()
@@ -653,13 +755,11 @@ bool client::try_parse_server_port(const string & epsv_reply, uint16_t & port)
     return boost::conversion::try_lexical_convert(port_str, port);
 }
 
-void client::handle_connection_exception(const connection_exception & ex)
+void client::report_exception(const std::exception & ex)
 {
     string error_msg = ex.what();
 
     report_error(error_msg);
-
-    control_connection_.reset();
 }
 
 void client::subscribe(event_observer *observer)
