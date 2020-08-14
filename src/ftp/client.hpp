@@ -107,11 +107,13 @@ private:
 
     detail::reply_t recv();
 
+    void reset_connection();
+
     std::optional<detail::data_connection> initiate_data_connection();
 
     static bool try_parse_server_port(const std::string & epsv_reply, uint16_t & port);
 
-    void handle_connection_exception(const detail::connection_exception & ex);
+    void report_exception(const std::exception & ex);
 
     void report_reply(const std::string & reply);
 
