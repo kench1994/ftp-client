@@ -754,13 +754,6 @@ bool client::try_parse_server_port(const string & epsv_reply, uint16_t & port)
     return boost::conversion::try_lexical_convert(port_str, port);
 }
 
-void client::report_exception(const std::exception & ex)
-{
-    string error_msg = ex.what();
-
-    report_error(error_msg);
-}
-
 void client::subscribe(event_observer *observer)
 {
     observers_.push_back(observer);
@@ -769,6 +762,13 @@ void client::subscribe(event_observer *observer)
 void client::unsubscribe(event_observer *observer)
 {
     observers_.remove(observer);
+}
+
+void client::report_exception(const std::exception & ex)
+{
+    string error_msg = ex.what();
+
+    report_error(error_msg);
 }
 
 void client::report_reply(const string & reply)
