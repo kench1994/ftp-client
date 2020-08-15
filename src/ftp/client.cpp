@@ -764,7 +764,7 @@ void client::unsubscribe(event_observer *observer)
     observers_.remove(observer);
 }
 
-void client::report_exception(const std::exception & ex)
+void client::report_exception(const exception & ex)
 {
     string error_msg = ex.what();
 
