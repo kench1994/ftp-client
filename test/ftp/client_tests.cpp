@@ -24,6 +24,7 @@
 
 #include <gtest/gtest.h>
 #include <boost/process.hpp>
+#include <filesystem>
 #include "ftp/client.hpp"
 
 using std::string;
@@ -33,11 +34,12 @@ class FtpClientTest : public ::testing::Test
 protected:
     static void SetUpTestSuite()
     {
+        std::filesystem::create_directory(m_ftpServerDir);
         boost::filesystem::path pythonPath = boost::process::search_path("python3");
 
         /* Usage: python server.py port user password home_directory */
         m_ftpServerProcess = boost::process::child(pythonPath, "../ftp/server/server.py",
-                                                   "2121", "user", "password", ".");
+                                                   "2121", "user", "password", m_ftpServerDir);
 
         /* Wait for 2s to allow the server to start. */
         m_ftpServerProcess.wait_for(std::chrono::seconds(2));
@@ -46,12 +48,15 @@ protected:
     static void TearDownTestSuite()
     {
         m_ftpServerProcess.terminate();
+        std::filesystem::remove_all(m_ftpServerDir);
     }
 
 private:
+    static const string m_ftpServerDir;
     static boost::process::child m_ftpServerProcess;
 };
 
+const string FtpClientTest::m_ftpServerDir = "test_server";
 boost::process::child FtpClientTest::m_ftpServerProcess;
 
 class test_ftp_observer : public ftp::client::event_observer
