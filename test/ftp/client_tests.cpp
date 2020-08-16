@@ -39,8 +39,8 @@ protected:
         m_ftpServerProcess = boost::process::child(pythonPath, "../ftp/server/server.py",
                                                    "2121", "user", "password", ".");
 
-        /* Wait for 250ms to allow the server to start. */
-        m_ftpServerProcess.wait_for(std::chrono::milliseconds(250));
+        /* Wait for 2s to allow the server to start. */
+        m_ftpServerProcess.wait_for(std::chrono::seconds(2));
     }
 
     static void TearDownTestSuite()
