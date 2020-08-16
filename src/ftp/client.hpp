@@ -44,7 +44,17 @@ enum class command_result
 class client
 {
 public:
-    client() = default;
+    class event_observer
+    {
+    public:
+        virtual void on_reply(const std::string & reply) = 0;
+
+        virtual void on_error(const std::string & error) = 0;
+
+        virtual ~event_observer() = default;
+    };
+
+    explicit client(client::event_observer *observer = nullptr);
 
     client(const client &) = delete;
 
@@ -83,16 +93,6 @@ public:
     command_result noop();
 
     command_result close();
-
-    class event_observer
-    {
-    public:
-        virtual void on_reply(const std::string & reply) = 0;
-
-        virtual void on_error(const std::string & error) = 0;
-
-        virtual ~event_observer() = default;
-    };
 
     void subscribe(event_observer *observer);
 
