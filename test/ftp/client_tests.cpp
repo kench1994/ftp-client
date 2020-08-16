@@ -90,8 +90,7 @@ private:
 TEST_F(FtpClientTest, OpenConnectionTest)
 {
     test_ftp_observer ftp_observer;
-    ftp::client client;
-    client.subscribe(&ftp_observer);
+    ftp::client client(&ftp_observer);
 
     EXPECT_FALSE(client.is_open());
 
@@ -111,8 +110,7 @@ TEST_F(FtpClientTest, OpenConnectionTest)
 TEST_F(FtpClientTest, LoginTest)
 {
     test_ftp_observer ftp_observer;
-    ftp::client client;
-    client.subscribe(&ftp_observer);
+    ftp::client client(&ftp_observer);
 
     ftp::command_result result = client.open("localhost", 2121);
     EXPECT_EQ(result, ftp::command_result::ok);
@@ -133,8 +131,7 @@ TEST_F(FtpClientTest, LoginTest)
 TEST_F(FtpClientTest, NoopCommandTest)
 {
     test_ftp_observer ftp_observer;
-    ftp::client client;
-    client.subscribe(&ftp_observer);
+    ftp::client client(&ftp_observer);
 
     ftp::command_result result = client.open("localhost", 2121);
     EXPECT_EQ(result, ftp::command_result::ok);
@@ -159,8 +156,7 @@ TEST_F(FtpClientTest, NoopCommandTest)
 TEST_F(FtpClientTest, PwdCommandTest)
 {
     test_ftp_observer ftp_observer;
-    ftp::client client;
-    client.subscribe(&ftp_observer);
+    ftp::client client(&ftp_observer);
 
     ftp::command_result result = client.open("localhost", 2121);
     EXPECT_EQ(result, ftp::command_result::ok);
@@ -185,8 +181,7 @@ TEST_F(FtpClientTest, PwdCommandTest)
 TEST_F(FtpClientTest, MkdirCommandTest)
 {
     test_ftp_observer ftp_observer;
-    ftp::client client;
-    client.subscribe(&ftp_observer);
+    ftp::client client(&ftp_observer);
 
     ftp::command_result result = client.open("localhost", 2121);
     EXPECT_EQ(result, ftp::command_result::ok);
