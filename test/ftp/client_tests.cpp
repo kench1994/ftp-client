@@ -30,32 +30,29 @@ using std::string;
 
 class FtpClientTest : public ::testing::Test
 {
-public:
-    FtpClientTest()
-    {
-        m_pythonPath = boost::process::search_path("python3");
-    }
-
 protected:
-    void SetUp() override
+    static void SetUpTestSuite()
     {
+        boost::filesystem::path pythonPath = boost::process::search_path("python3");
+
         /* Usage: python server.py port user password home_directory */
-        m_ftpServerProcess = boost::process::child(m_pythonPath, "../ftp/server/server.py",
+        m_ftpServerProcess = boost::process::child(pythonPath, "../ftp/server/server.py",
                                                    "2121", "user", "password", ".");
 
         /* Wait for 250ms to allow the server to start. */
         m_ftpServerProcess.wait_for(std::chrono::milliseconds(250));
     }
 
-    void TearDown() override
+    static void TearDownTestSuite()
     {
         m_ftpServerProcess.terminate();
     }
 
 private:
-    boost::filesystem::path m_pythonPath;
-    boost::process::child m_ftpServerProcess;
+    static boost::process::child m_ftpServerProcess;
 };
+
+boost::process::child FtpClientTest::m_ftpServerProcess;
 
 class test_ftp_observer : public ftp::client::event_observer
 {
