@@ -45,6 +45,14 @@ using std::exception;
 
 using namespace ftp::detail;
 
+client::client(client::event_observer *observer)
+{
+    if (observer)
+    {
+        observers_.push_back(observer);
+    }
+}
+
 command_result client::open(const string & hostname, uint16_t port)
 {
     try
