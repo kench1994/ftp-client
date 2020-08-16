@@ -150,3 +150,29 @@ TEST_F(FtpClientTest, NoopCommandTest)
                                           "221 Goodbye.\r\n");
     EXPECT_EQ(ftp_observer.get_errors(), "");
 }
+
+TEST_F(FtpClientTest, PwdCommandTest)
+{
+    test_ftp_observer ftp_observer;
+    ftp::client client;
+    client.subscribe(&ftp_observer);
+
+    ftp::command_result result = client.open("localhost", 2121);
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    result = client.login("user", "password");
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    result = client.pwd();
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    result = client.close();
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
+                                          "331 Username ok, send password.\r\n"
+                                          "230 Login successful.\r\n"
+                                          "257 \"/\" is the current directory.\r\n"
+                                          "221 Goodbye.\r\n");
+    EXPECT_EQ(ftp_observer.get_errors(), "");
+}
