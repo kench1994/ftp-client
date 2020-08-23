@@ -25,8 +25,10 @@
 #include <gtest/gtest.h>
 #include <boost/process.hpp>
 #include <filesystem>
+#include <regex>
 #include "ftp/client.hpp"
 
+using std::regex;
 using std::string;
 
 class FtpClientTest : public ::testing::Test
@@ -204,5 +206,54 @@ TEST_F(FtpClientTest, MkdirCommandTest)
                                           "257 \"/directory\" directory created.\r\n"
                                           "250 \"/directory\" is the current directory.\r\n"
                                           "221 Goodbye.\r\n");
+    EXPECT_EQ(ftp_observer.get_errors(), "");
+}
+
+TEST_F(FtpClientTest, LsCommandTest)
+{
+    test_ftp_observer ftp_observer;
+    ftp::client client(&ftp_observer);
+
+    ftp::command_result result = client.open("localhost", 2121);
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    result = client.login("user", "password");
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    result = client.mkdir("directory");
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    result = client.ls();
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    result = client.ls("directory");
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    result = client.close();
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    /* Replace unpredictable data. */
+    string replies = ftp_observer.get_replies();
+
+    replies = regex_replace(replies,
+                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
+                                    "229 Entering extended passive mode (|||1234|).");
+
+    replies = regex_replace(replies,
+                            regex(R"(drwxr.*directory)"),
+                                    "drwxr-xr-x 2 user staff 64 Aug 23 11:45 directory");
+
+    EXPECT_EQ(replies, "220 FTP server is ready.\r\n"
+                       "331 Username ok, send password.\r\n"
+                       "230 Login successful.\r\n"
+                       "257 \"/directory\" directory created.\r\n"
+                       "229 Entering extended passive mode (|||1234|).\r\n"
+                       "125 Data connection already open. Transfer starting.\r\n"
+                       "drwxr-xr-x 2 user staff 64 Aug 23 11:45 directory\r\n"
+                       "226 Transfer complete.\r\n"
+                       "229 Entering extended passive mode (|||1234|).\r\n"
+                       "125 Data connection already open. Transfer starting.\r\n"
+                       "226 Transfer complete.\r\n"
+                       "221 Goodbye.\r\n");
     EXPECT_EQ(ftp_observer.get_errors(), "");
 }
