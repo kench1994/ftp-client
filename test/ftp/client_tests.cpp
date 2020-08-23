@@ -53,6 +53,15 @@ protected:
         std::filesystem::remove_all(m_ftpServerDir);
     }
 
+    void TearDown() override
+    {
+        /* Clear ftp server directory after each test. */
+        for (const auto & path : std::filesystem::directory_iterator(m_ftpServerDir))
+        {
+            std::filesystem::remove_all(path);
+        }
+    }
+
 private:
     static const string m_ftpServerDir;
     static boost::process::child m_ftpServerProcess;
