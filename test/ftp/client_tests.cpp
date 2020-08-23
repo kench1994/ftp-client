@@ -319,3 +319,28 @@ TEST_F(FtpClientTest, LsCommandTest)
                        "221 Goodbye.\r\n");
     EXPECT_EQ(ftp_observer.get_errors(), "");
 }
+
+TEST_F(FtpClientTest, BinaryCommandTest)
+{
+    test_ftp_observer ftp_observer;
+    ftp::client client(&ftp_observer);
+
+    ftp::command_result result = client.open("localhost", 2121);
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    result = client.login("user", "password");
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    result = client.binary();
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    result = client.close();
+    EXPECT_EQ(result, ftp::command_result::ok);
+
+    EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
+                                          "331 Username ok, send password.\r\n"
+                                          "230 Login successful.\r\n"
+                                          "200 Type set to: Binary.\r\n"
+                                          "221 Goodbye.\r\n");
+    EXPECT_EQ(ftp_observer.get_errors(), "");
+}
