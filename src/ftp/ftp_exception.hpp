@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2019 Denis Kovalchuk
+ * Copyright (c) 2020 Denis Kovalchuk
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,49 +22,37 @@
  * SOFTWARE.
  */
 
-#include "cmdline_interface.hpp"
-#include "command.hpp"
-#include "cmdline_exception.hpp"
-#include "command_parser.hpp"
-#include "ftp/ftp_exception.hpp"
-#include "utils/utils.hpp"
-#include <iostream>
+#ifndef FTP_EXCEPTION_HPP
+#define FTP_EXCEPTION_HPP
 
-using std::string;
-using std::cout;
-using std::endl;
+#include "detail/utils.hpp"
+#include "detail/connection_exception.hpp"
 
-using ftp::ftp_exception;
-
-void cmdline_interface::run()
+namespace ftp
 {
-    for (;;)
+
+class ftp_exception : public std::exception
+{
+public:
+    explicit ftp_exception(const detail::connection_exception & ex)
     {
-        try
-        {
-            string line = utils::read_line("ftp> ");
-
-            if (line.empty())
-            {
-                continue;
-            }
-
-            auto [command, args] = parse_command(line);
-
-            command_executor_.execute(command, args);
-
-            if (command == command::exit)
-            {
-                break;
-            }
-        }
-        catch (const cmdline_exception & ex)
-        {
-            cout << ex.what() << endl;
-        }
-        catch (const ftp_exception & ex)
-        {
-            cout << ex.what() << endl;
-        }
+        message_ = ex.what();
     }
-}
+
+    template<typename ...Args>
+    explicit ftp_exception(const std::string & fmt, Args && ...args)
+    {
+        message_ = detail::utils::format(fmt, std::forward<Args>(args)...);
+    }
+
+    const char * what() const noexcept override
+    {
+        return message_.c_str();
+    }
+
+private:
+    std::string message_;
+};
+
+} // namespace ftp
+#endif //FTP_EXCEPTION_HPP

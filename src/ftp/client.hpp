@@ -27,19 +27,11 @@
 
 #include "detail/control_connection.hpp"
 #include "detail/data_connection.hpp"
-#include "detail/connection_exception.hpp"
 #include <string>
 #include <list>
 
 namespace ftp
 {
-
-enum class command_result
-{
-    ok = 0,
-    not_ok,
-    error
-};
 
 class client
 {
@@ -48,8 +40,6 @@ public:
     {
     public:
         virtual void on_reply(const std::string & reply) = 0;
-
-        virtual void on_error(const std::string & error) = 0;
 
         virtual ~event_observer() = default;
     };
@@ -60,39 +50,39 @@ public:
 
     client & operator=(const client &) = delete;
 
-    command_result open(const std::string & hostname, uint16_t port = 21);
+    bool open(const std::string & hostname, uint16_t port = 21);
 
-    bool is_open() const;
+    bool is_open();
 
-    command_result login(const std::string & username, const std::string & password);
+    bool login(const std::string & username, const std::string & password);
 
-    command_result cd(const std::string & remote_directory);
+    bool cd(const std::string & remote_directory);
 
-    command_result ls(const std::optional<std::string> & remote_directory = std::nullopt);
+    bool ls(const std::optional<std::string> & remote_directory = std::nullopt);
 
-    command_result upload(const std::string & local_file, const std::string & remote_file);
+    bool upload(const std::string & local_file, const std::string & remote_file);
 
-    command_result download(const std::string & remote_file, const std::string & local_file);
+    bool download(const std::string & remote_file, const std::string & local_file);
 
-    command_result pwd();
+    bool pwd();
 
-    command_result mkdir(const std::string & directory_name);
+    bool mkdir(const std::string & directory_name);
 
-    command_result rmdir(const std::string & directory_name);
+    bool rmdir(const std::string & directory_name);
 
-    command_result rm(const std::string & remote_file);
+    bool rm(const std::string & remote_file);
 
-    command_result binary();
+    bool binary();
 
-    command_result size(const std::string & remote_file);
+    bool size(const std::string & remote_file);
 
-    command_result stat(const std::optional<std::string> & remote_file = std::nullopt);
+    bool stat(const std::optional<std::string> & remote_file = std::nullopt);
 
-    command_result system();
+    bool system();
 
-    command_result noop();
+    bool noop();
 
-    command_result close();
+    bool close();
 
     void subscribe(event_observer *observer);
 
@@ -113,13 +103,9 @@ private:
 
     static bool try_parse_server_port(const std::string & epsv_reply, uint16_t & port);
 
-    void report_exception(const std::exception & ex);
-
     void report_reply(const std::string & reply);
 
     void report_reply(const detail::reply_t & reply);
-
-    void report_error(const std::string & error);
 
     detail::control_connection control_connection_;
     std::list<event_observer *> observers_;
