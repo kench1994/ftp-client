@@ -134,6 +134,21 @@ TEST_F(FtpClientTest, LoginNonexistentUserTest)
                                           "221 Goodbye.\r\n");
 }
 
+TEST_F(FtpClientTest, LoginWrongPasswordTest)
+{
+    test_ftp_observer ftp_observer;
+    ftp::client client(&ftp_observer);
+
+    ASSERT_TRUE(client.open("localhost", 2121));
+    ASSERT_FALSE(client.login("user", "wrong password"));
+    ASSERT_TRUE(client.close());
+
+    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
+                                          "331 Username ok, send password.\r\n"
+                                          "530 Authentication failed.\r\n"
+                                          "221 Goodbye.\r\n");
+}
+
 TEST_F(FtpClientTest, NoopCommandTest)
 {
     test_ftp_observer ftp_observer;
