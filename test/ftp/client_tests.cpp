@@ -402,6 +402,7 @@ TEST_F(FtpClientTest, UploadTest)
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.ls());
     EXPECT_TRUE(client.binary());
     EXPECT_TRUE(client.upload("../ftp/test_data/war_and_peace.txt", "war_and_peace.txt"));
     EXPECT_TRUE(client.ls());
@@ -421,6 +422,9 @@ TEST_F(FtpClientTest, UploadTest)
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
                        "230 Login successful.\r\n"
+                       "229 Entering extended passive mode (|||1234|).\r\n"
+                       "125 Data connection already open. Transfer starting.\r\n"
+                       "226 Transfer complete.\r\n"
                        "200 Type set to: Binary.\r\n"
                        "229 Entering extended passive mode (|||1234|).\r\n"
                        "125 Data connection already open. Transfer starting.\r\n"
