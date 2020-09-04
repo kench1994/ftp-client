@@ -594,3 +594,49 @@ TEST_F(FtpClientTest, DownloadNonexistentFileTest)
                        "550 No such file or directory.\r\n"
                        "221 Goodbye.\r\n");
 }
+
+TEST_F(FtpClientTest, DownloadFileAlreadyExistsTest)
+{
+    test_ftp_observer ftp_observer;
+    ftp::client client(&ftp_observer);
+
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.binary());
+    EXPECT_TRUE(client.upload("../ftp/test_data/war_and_peace.txt", "war_and_peace.txt"));
+    EXPECT_TRUE(client.download("war_and_peace.txt", "downloads/war_and_peace.txt"));
+
+    bool catched = false;
+
+    try
+    {
+        client.download("war_and_peace.txt", "downloads/war_and_peace.txt");
+    }
+    catch (const ftp_exception & ex)
+    {
+        catched = true;
+        EXPECT_STREQ(ex.what(), "The file 'downloads/war_and_peace.txt' already exists.");
+    }
+
+    EXPECT_TRUE(catched);
+    EXPECT_TRUE(client.close());
+
+    /* Replace unpredictable data. */
+    string replies = ftp_observer.get_replies();
+
+    replies = regex_replace(replies,
+                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
+                            "229 Entering extended passive mode (|||1234|).");
+
+    ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
+                       "331 Username ok, send password.\r\n"
+                       "230 Login successful.\r\n"
+                       "200 Type set to: Binary.\r\n"
+                       "229 Entering extended passive mode (|||1234|).\r\n"
+                       "125 Data connection already open. Transfer starting.\r\n"
+                       "226 Transfer complete.\r\n"
+                       "229 Entering extended passive mode (|||1234|).\r\n"
+                       "125 Data connection already open. Transfer starting.\r\n"
+                       "226 Transfer complete.\r\n"
+                       "221 Goodbye.\r\n");
+}
