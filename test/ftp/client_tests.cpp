@@ -284,6 +284,7 @@ TEST_F(FtpClientTest, CdTest)
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_TRUE(client.mkdir("directory"));
     EXPECT_TRUE(client.cd("directory"));
+    EXPECT_TRUE(client.cd(".."));
     EXPECT_TRUE(client.close());
 
     ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
@@ -291,6 +292,7 @@ TEST_F(FtpClientTest, CdTest)
                                           "230 Login successful.\r\n"
                                           "257 \"/directory\" directory created.\r\n"
                                           "250 \"/directory\" is the current directory.\r\n"
+                                          "250 \"/\" is the current directory.\r\n"
                                           "221 Goodbye.\r\n");
 }
 
