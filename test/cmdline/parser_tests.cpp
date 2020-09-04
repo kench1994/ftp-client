@@ -102,7 +102,7 @@ TEST(ParserTest, ParseInvalidCommandTest)
         FAIL() << "Got unexpected exception.";
     }
 
-    ASSERT_EQ(catched, true);
+    ASSERT_TRUE(catched);
 }
 
 TEST(ParserTest, ParseCaseInsensitiveCommandTest)
