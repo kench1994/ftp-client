@@ -161,14 +161,12 @@ TEST_F(FtpClientTest, MkdirCommandTest)
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_TRUE(client.mkdir("directory"));
-    EXPECT_TRUE(client.cd("directory"));
     EXPECT_TRUE(client.close());
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"
                                           "230 Login successful.\r\n"
                                           "257 \"/directory\" directory created.\r\n"
-                                          "250 \"/directory\" is the current directory.\r\n"
                                           "221 Goodbye.\r\n");
 }
 
@@ -209,6 +207,25 @@ TEST_F(FtpClientTest, RmdirCommandTest)
                        "125 Data connection already open. Transfer starting.\r\n"
                        "226 Transfer complete.\r\n"
                        "221 Goodbye.\r\n");
+}
+
+TEST_F(FtpClientTest, CdCommandTest)
+{
+    test_ftp_observer ftp_observer;
+    ftp::client client(&ftp_observer);
+
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.mkdir("directory"));
+    EXPECT_TRUE(client.cd("directory"));
+    EXPECT_TRUE(client.close());
+
+    EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
+                                          "331 Username ok, send password.\r\n"
+                                          "230 Login successful.\r\n"
+                                          "257 \"/directory\" directory created.\r\n"
+                                          "250 \"/directory\" is the current directory.\r\n"
+                                          "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, LsCommandTest)
