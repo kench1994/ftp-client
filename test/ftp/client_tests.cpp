@@ -78,24 +78,13 @@ public:
         replies_.append(reply);
     }
 
-    void on_error(const string & error) override
-    {
-        errors_.append(error);
-    }
-
     const string & get_replies() const
     {
         return replies_;
     }
 
-    const string & get_errors() const
-    {
-        return errors_;
-    }
-
 private:
     string replies_;
-    string errors_;
 };
 
 TEST_F(FtpClientTest, OpenConnectionTest)
@@ -105,17 +94,16 @@ TEST_F(FtpClientTest, OpenConnectionTest)
 
     EXPECT_FALSE(client.is_open());
 
-    ftp::command_result result = client.open("localhost", 2121);
-    EXPECT_EQ(result, ftp::command_result::ok);
+    bool result = client.open("localhost", 2121);
+    EXPECT_TRUE(result);
     EXPECT_TRUE(client.is_open());
 
     result = client.close();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
     EXPECT_FALSE(client.is_open());
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "221 Goodbye.\r\n");
-    EXPECT_EQ(ftp_observer.get_errors(), "");
 }
 
 TEST_F(FtpClientTest, LoginTest)
@@ -123,20 +111,19 @@ TEST_F(FtpClientTest, LoginTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    ftp::command_result result = client.open("localhost", 2121);
-    EXPECT_EQ(result, ftp::command_result::ok);
+    bool result = client.open("localhost", 2121);
+    EXPECT_TRUE(result);
 
     result = client.login("user", "password");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.close();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"
                                           "230 Login successful.\r\n"
                                           "221 Goodbye.\r\n");
-    EXPECT_EQ(ftp_observer.get_errors(), "");
 }
 
 TEST_F(FtpClientTest, NoopCommandTest)
@@ -144,24 +131,23 @@ TEST_F(FtpClientTest, NoopCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    ftp::command_result result = client.open("localhost", 2121);
-    EXPECT_EQ(result, ftp::command_result::ok);
+    bool result = client.open("localhost", 2121);
+    EXPECT_TRUE(result);
 
     result = client.login("user", "password");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.noop();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.close();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"
                                           "230 Login successful.\r\n"
                                           "200 I successfully done nothin'.\r\n"
                                           "221 Goodbye.\r\n");
-    EXPECT_EQ(ftp_observer.get_errors(), "");
 }
 
 TEST_F(FtpClientTest, PwdCommandTest)
@@ -169,24 +155,23 @@ TEST_F(FtpClientTest, PwdCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    ftp::command_result result = client.open("localhost", 2121);
-    EXPECT_EQ(result, ftp::command_result::ok);
+    bool result = client.open("localhost", 2121);
+    EXPECT_TRUE(result);
 
     result = client.login("user", "password");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.pwd();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.close();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"
                                           "230 Login successful.\r\n"
                                           "257 \"/\" is the current directory.\r\n"
                                           "221 Goodbye.\r\n");
-    EXPECT_EQ(ftp_observer.get_errors(), "");
 }
 
 TEST_F(FtpClientTest, MkdirCommandTest)
@@ -194,20 +179,20 @@ TEST_F(FtpClientTest, MkdirCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    ftp::command_result result = client.open("localhost", 2121);
-    EXPECT_EQ(result, ftp::command_result::ok);
+    bool result = client.open("localhost", 2121);
+    EXPECT_TRUE(result);
 
     result = client.login("user", "password");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.mkdir("directory");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.cd("directory");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.close();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"
@@ -215,7 +200,6 @@ TEST_F(FtpClientTest, MkdirCommandTest)
                                           "257 \"/directory\" directory created.\r\n"
                                           "250 \"/directory\" is the current directory.\r\n"
                                           "221 Goodbye.\r\n");
-    EXPECT_EQ(ftp_observer.get_errors(), "");
 }
 
 TEST_F(FtpClientTest, RmdirCommandTest)
@@ -223,26 +207,26 @@ TEST_F(FtpClientTest, RmdirCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    ftp::command_result result = client.open("localhost", 2121);
-    EXPECT_EQ(result, ftp::command_result::ok);
+    bool result = client.open("localhost", 2121);
+    EXPECT_TRUE(result);
 
     result = client.login("user", "password");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.mkdir("directory");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.ls();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.rmdir("directory");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.ls();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.close();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     /* Replace unpredictable data. */
     string replies = ftp_observer.get_replies();
@@ -268,7 +252,6 @@ TEST_F(FtpClientTest, RmdirCommandTest)
                        "125 Data connection already open. Transfer starting.\r\n"
                        "226 Transfer complete.\r\n"
                        "221 Goodbye.\r\n");
-    EXPECT_EQ(ftp_observer.get_errors(), "");
 }
 
 TEST_F(FtpClientTest, LsCommandTest)
@@ -276,23 +259,23 @@ TEST_F(FtpClientTest, LsCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    ftp::command_result result = client.open("localhost", 2121);
-    EXPECT_EQ(result, ftp::command_result::ok);
+    bool result = client.open("localhost", 2121);
+    EXPECT_TRUE(result);
 
     result = client.login("user", "password");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.mkdir("directory");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.ls();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.ls("directory");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.close();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     /* Replace unpredictable data. */
     string replies = ftp_observer.get_replies();
@@ -317,7 +300,6 @@ TEST_F(FtpClientTest, LsCommandTest)
                        "125 Data connection already open. Transfer starting.\r\n"
                        "226 Transfer complete.\r\n"
                        "221 Goodbye.\r\n");
-    EXPECT_EQ(ftp_observer.get_errors(), "");
 }
 
 TEST_F(FtpClientTest, BinaryCommandTest)
@@ -325,22 +307,21 @@ TEST_F(FtpClientTest, BinaryCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    ftp::command_result result = client.open("localhost", 2121);
-    EXPECT_EQ(result, ftp::command_result::ok);
+    bool result = client.open("localhost", 2121);
+    EXPECT_TRUE(result);
 
     result = client.login("user", "password");
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.binary();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     result = client.close();
-    EXPECT_EQ(result, ftp::command_result::ok);
+    EXPECT_TRUE(result);
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"
                                           "230 Login successful.\r\n"
                                           "200 Type set to: Binary.\r\n"
                                           "221 Goodbye.\r\n");
-    EXPECT_EQ(ftp_observer.get_errors(), "");
 }
