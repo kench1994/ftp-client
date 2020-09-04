@@ -265,7 +265,7 @@ TEST_F(FtpClientTest, RmdirNonexistentDirectoryTest)
 
     ASSERT_TRUE(client.open("localhost", 2121));
     ASSERT_TRUE(client.login("user", "password"));
-    ASSERT_FALSE(client.rmdir("directory"));
+    ASSERT_FALSE(client.rmdir("nonexistent"));
     ASSERT_TRUE(client.close());
 
     ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
