@@ -25,6 +25,7 @@
 #include "client.hpp"
 #include "ftp_exception.hpp"
 #include "detail/connection_exception.hpp"
+#include <filesystem>
 #include <fstream>
 #include <boost/lexical_cast.hpp>
 
