@@ -94,12 +94,10 @@ TEST_F(FtpClientTest, OpenConnectionTest)
 
     EXPECT_FALSE(client.is_open());
 
-    bool result = client.open("localhost", 2121);
-    EXPECT_TRUE(result);
+    EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.is_open());
 
-    result = client.close();
-    EXPECT_TRUE(result);
+    EXPECT_TRUE(client.close());
     EXPECT_FALSE(client.is_open());
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
@@ -111,14 +109,9 @@ TEST_F(FtpClientTest, LoginTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    bool result = client.open("localhost", 2121);
-    EXPECT_TRUE(result);
-
-    result = client.login("user", "password");
-    EXPECT_TRUE(result);
-
-    result = client.close();
-    EXPECT_TRUE(result);
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.close());
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"
@@ -131,17 +124,10 @@ TEST_F(FtpClientTest, NoopCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    bool result = client.open("localhost", 2121);
-    EXPECT_TRUE(result);
-
-    result = client.login("user", "password");
-    EXPECT_TRUE(result);
-
-    result = client.noop();
-    EXPECT_TRUE(result);
-
-    result = client.close();
-    EXPECT_TRUE(result);
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.noop());
+    EXPECT_TRUE(client.close());
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"
@@ -155,17 +141,10 @@ TEST_F(FtpClientTest, PwdCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    bool result = client.open("localhost", 2121);
-    EXPECT_TRUE(result);
-
-    result = client.login("user", "password");
-    EXPECT_TRUE(result);
-
-    result = client.pwd();
-    EXPECT_TRUE(result);
-
-    result = client.close();
-    EXPECT_TRUE(result);
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.pwd());
+    EXPECT_TRUE(client.close());
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"
@@ -179,20 +158,11 @@ TEST_F(FtpClientTest, MkdirCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    bool result = client.open("localhost", 2121);
-    EXPECT_TRUE(result);
-
-    result = client.login("user", "password");
-    EXPECT_TRUE(result);
-
-    result = client.mkdir("directory");
-    EXPECT_TRUE(result);
-
-    result = client.cd("directory");
-    EXPECT_TRUE(result);
-
-    result = client.close();
-    EXPECT_TRUE(result);
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.mkdir("directory"));
+    EXPECT_TRUE(client.cd("directory"));
+    EXPECT_TRUE(client.close());
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"
@@ -207,26 +177,13 @@ TEST_F(FtpClientTest, RmdirCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    bool result = client.open("localhost", 2121);
-    EXPECT_TRUE(result);
-
-    result = client.login("user", "password");
-    EXPECT_TRUE(result);
-
-    result = client.mkdir("directory");
-    EXPECT_TRUE(result);
-
-    result = client.ls();
-    EXPECT_TRUE(result);
-
-    result = client.rmdir("directory");
-    EXPECT_TRUE(result);
-
-    result = client.ls();
-    EXPECT_TRUE(result);
-
-    result = client.close();
-    EXPECT_TRUE(result);
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.mkdir("directory"));
+    EXPECT_TRUE(client.ls());
+    EXPECT_TRUE(client.rmdir("directory"));
+    EXPECT_TRUE(client.ls());
+    EXPECT_TRUE(client.close());
 
     /* Replace unpredictable data. */
     string replies = ftp_observer.get_replies();
@@ -259,23 +216,12 @@ TEST_F(FtpClientTest, LsCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    bool result = client.open("localhost", 2121);
-    EXPECT_TRUE(result);
-
-    result = client.login("user", "password");
-    EXPECT_TRUE(result);
-
-    result = client.mkdir("directory");
-    EXPECT_TRUE(result);
-
-    result = client.ls();
-    EXPECT_TRUE(result);
-
-    result = client.ls("directory");
-    EXPECT_TRUE(result);
-
-    result = client.close();
-    EXPECT_TRUE(result);
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.mkdir("directory"));
+    EXPECT_TRUE(client.ls());
+    EXPECT_TRUE(client.ls("directory"));
+    EXPECT_TRUE(client.close());
 
     /* Replace unpredictable data. */
     string replies = ftp_observer.get_replies();
@@ -307,17 +253,10 @@ TEST_F(FtpClientTest, BinaryCommandTest)
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
 
-    bool result = client.open("localhost", 2121);
-    EXPECT_TRUE(result);
-
-    result = client.login("user", "password");
-    EXPECT_TRUE(result);
-
-    result = client.binary();
-    EXPECT_TRUE(result);
-
-    result = client.close();
-    EXPECT_TRUE(result);
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.binary());
+    EXPECT_TRUE(client.close());
 
     EXPECT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
                                           "331 Username ok, send password.\r\n"
