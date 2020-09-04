@@ -378,7 +378,7 @@ TEST_F(FtpClientTest, LsNonexistentDirectoryTest)
 
     replies = regex_replace(replies,
                             regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                            "229 Entering extended passive mode (|||1234|).");
+                                    "229 Entering extended passive mode (|||1234|).");
 
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
@@ -426,11 +426,11 @@ TEST_F(FtpClientTest, UploadTest)
 
     replies = regex_replace(replies,
                             regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                            "229 Entering extended passive mode (|||1234|).");
+                                    "229 Entering extended passive mode (|||1234|).");
 
     replies = regex_replace(replies,
                             regex(R"(-rw-r--r--.* 3359584 .*war_and_peace.txt)"),
-                            "-rw-r--r-- 1 user staff 3359584 Aug 23 11:45 war_and_peace.txt");
+                                    "-rw-r--r-- 1 user staff 3359584 Aug 23 11:45 war_and_peace.txt");
 
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
@@ -475,7 +475,7 @@ TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
 
     replies = regex_replace(replies,
                             regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                            "229 Entering extended passive mode (|||1234|).");
+                                    "229 Entering extended passive mode (|||1234|).");
 
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
@@ -522,7 +522,7 @@ TEST_F(FtpClientTest, UploadNonexistentFileTest)
 
     replies = regex_replace(replies,
                             regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                            "229 Entering extended passive mode (|||1234|).");
+                                    "229 Entering extended passive mode (|||1234|).");
 
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
@@ -553,7 +553,7 @@ TEST_F(FtpClientTest, DownloadTest)
 
     replies = regex_replace(replies,
                             regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                            "229 Entering extended passive mode (|||1234|).");
+                                    "229 Entering extended passive mode (|||1234|).");
 
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
@@ -584,7 +584,7 @@ TEST_F(FtpClientTest, DownloadNonexistentFileTest)
 
     replies = regex_replace(replies,
                             regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                            "229 Entering extended passive mode (|||1234|).");
+                                    "229 Entering extended passive mode (|||1234|).");
 
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
@@ -626,7 +626,7 @@ TEST_F(FtpClientTest, DownloadFileAlreadyExistsTest)
 
     replies = regex_replace(replies,
                             regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                            "229 Entering extended passive mode (|||1234|).");
+                                    "229 Entering extended passive mode (|||1234|).");
 
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
