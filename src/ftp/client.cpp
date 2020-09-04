@@ -23,8 +23,8 @@
  */
 
 #include "client.hpp"
-#include "detail/utils.hpp"
-#include <filesystem>
+#include "ftp_exception.hpp"
+#include "detail/connection_exception.hpp"
 #include <fstream>
 #include <boost/lexical_cast.hpp>
 
@@ -41,7 +41,6 @@ using std::pair;
 using std::make_pair;
 using std::nullopt;
 using std::make_optional;
-using std::exception;
 
 using namespace ftp::detail;
 
@@ -53,7 +52,7 @@ client::client(client::event_observer *observer)
     }
 }
 
-command_result client::open(const string & hostname, uint16_t port)
+bool client::open(const string & hostname, uint16_t port)
 {
     try
     {
@@ -61,34 +60,29 @@ command_result client::open(const string & hostname, uint16_t port)
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-bool client::is_open() const
+bool client::is_open()
 {
-    return control_connection_.is_open();
+    try
+    {
+        return control_connection_.is_open();
+    }
+    catch (const connection_exception & ex)
+    {
+        reset_connection();
+        throw ftp_exception(ex);
+    }
 }
 
-command_result client::login(const string & username, const string & password)
+bool client::login(const string & username, const string & password)
 {
     try
     {
@@ -110,29 +104,16 @@ command_result client::login(const string & username, const string & password)
              */
         }
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::cd(const string & remote_directory)
+bool client::cd(const string & remote_directory)
 {
     try
     {
@@ -140,29 +121,16 @@ command_result client::cd(const string & remote_directory)
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::ls(const optional<string> & remote_directory)
+bool client::ls(const optional<string> & remote_directory)
 {
     try
     {
@@ -181,7 +149,7 @@ command_result client::ls(const optional<string> & remote_directory)
 
         if (!data_connection)
         {
-            return command_result::not_ok;
+            return false;
         }
 
         data_connection->open();
@@ -190,9 +158,9 @@ command_result client::ls(const optional<string> & remote_directory)
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
+        if (!reply.is_positive())
         {
-            return command_result::not_ok;
+            return false;
         }
 
         string file_list = data_connection->recv();
@@ -203,29 +171,16 @@ command_result client::ls(const optional<string> & remote_directory)
 
         reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::upload(const string & local_file, const string & remote_file)
+bool client::upload(const string & local_file, const string & remote_file)
 {
     try
     {
@@ -233,16 +188,14 @@ command_result client::upload(const string & local_file, const string & remote_f
 
         if (!file)
         {
-            string error_msg = utils::format("Cannot open file %1%.", local_file);
-            report_error(error_msg);
-            return command_result::not_ok;
+            throw ftp_exception("Cannot open file %1%.", local_file);
         }
 
         optional<data_connection> data_connection = initiate_data_connection();
 
         if (!data_connection)
         {
-            return command_result::not_ok;
+            return false;
         }
 
         data_connection->open();
@@ -251,9 +204,9 @@ command_result client::upload(const string & local_file, const string & remote_f
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
+        if (!reply.is_positive())
         {
-            return command_result::not_ok;
+            return false;
         }
 
         data_connection->send(file);
@@ -263,53 +216,36 @@ command_result client::upload(const string & local_file, const string & remote_f
 
         reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::download(const string & remote_file, const string & local_file)
+bool client::download(const string & remote_file, const string & local_file)
 {
     try
     {
         if (std::filesystem::exists(local_file))
         {
-            string error_msg = utils::format("The file '%1%' already exists.", local_file);
-            report_error(error_msg);
-            return command_result::not_ok;
+            throw ftp_exception("The file '%1%' already exists.", local_file);
         }
 
         ofstream file(local_file, ios_base::binary);
 
         if (!file)
         {
-            string error_msg = utils::format("Cannot create file %1%.", local_file);
-            report_error(error_msg);
-            return command_result::not_ok;
+            throw ftp_exception("Cannot create file %1%.", local_file);
         }
 
         optional<data_connection> data_connection = initiate_data_connection();
 
         if (!data_connection)
         {
-            return command_result::not_ok;
+            return false;
         }
 
         data_connection->open();
@@ -318,9 +254,9 @@ command_result client::download(const string & remote_file, const string & local
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
+        if (!reply.is_positive())
         {
-            return command_result::not_ok;
+            return false;
         }
 
         data_connection->recv(file);
@@ -330,29 +266,16 @@ command_result client::download(const string & remote_file, const string & local
 
         reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::pwd()
+bool client::pwd()
 {
     try
     {
@@ -360,29 +283,16 @@ command_result client::pwd()
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::mkdir(const string & directory_name)
+bool client::mkdir(const string & directory_name)
 {
     try
     {
@@ -390,29 +300,16 @@ command_result client::mkdir(const string & directory_name)
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::rmdir(const string & directory_name)
+bool client::rmdir(const string & directory_name)
 {
     try
     {
@@ -420,29 +317,16 @@ command_result client::rmdir(const string & directory_name)
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::rm(const string & remote_file)
+bool client::rm(const string & remote_file)
 {
     try
     {
@@ -450,29 +334,16 @@ command_result client::rm(const string & remote_file)
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::binary()
+bool client::binary()
 {
     try
     {
@@ -480,29 +351,16 @@ command_result client::binary()
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::size(const string & remote_file)
+bool client::size(const string & remote_file)
 {
     try
     {
@@ -510,29 +368,16 @@ command_result client::size(const string & remote_file)
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::stat(const optional<string> & remote_file)
+bool client::stat(const optional<string> & remote_file)
 {
     try
     {
@@ -551,29 +396,16 @@ command_result client::stat(const optional<string> & remote_file)
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::system()
+bool client::system()
 {
     try
     {
@@ -581,29 +413,16 @@ command_result client::system()
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::noop()
+bool client::noop()
 {
     try
     {
@@ -611,29 +430,16 @@ command_result client::noop()
 
         reply_t reply = recv();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
-command_result client::close()
+bool client::close()
 {
     try
     {
@@ -643,25 +449,12 @@ command_result client::close()
 
         close_connection();
 
-        if (reply.is_negative())
-        {
-            return command_result::not_ok;
-        }
-        else
-        {
-            return command_result::ok;
-        }
+        return reply.is_positive();
     }
-    catch (const exception & ex)
+    catch (const connection_exception & ex)
     {
         reset_connection();
-        report_exception(ex);
-        return command_result::error;
-    }
-    catch (...)
-    {
-        reset_connection();
-        return command_result::error;
+        throw ftp_exception(ex);
     }
 }
 
@@ -691,7 +484,13 @@ reply_t client::recv()
 
 void client::reset_connection()
 {
-    control_connection_.reset();
+    try
+    {
+        control_connection_.reset();
+    }
+    catch (...)
+    {
+    }
 }
 
 optional<data_connection> client::initiate_data_connection()
@@ -700,7 +499,7 @@ optional<data_connection> client::initiate_data_connection()
 
     reply_t reply = recv();
 
-    if (reply.is_negative())
+    if (!reply.is_positive())
     {
         return nullopt;
     }
@@ -708,7 +507,7 @@ optional<data_connection> client::initiate_data_connection()
     uint16_t port;
     if (!try_parse_server_port(reply.status_line, port))
     {
-        throw connection_exception("Cannot parse server port from '%1%'.", reply.status_line);
+        throw ftp_exception("Cannot parse server port from '%1%'.", reply.status_line);
     }
 
     return make_optional<data_connection>(control_connection_.ip(), port);
@@ -773,13 +572,6 @@ void client::unsubscribe(event_observer *observer)
     observers_.remove(observer);
 }
 
-void client::report_exception(const exception & ex)
-{
-    string error_msg = ex.what();
-
-    report_error(error_msg);
-}
-
 void client::report_reply(const string & reply)
 {
     for (const auto & observer : observers_)
@@ -795,15 +587,6 @@ void client::report_reply(const reply_t & reply)
     {
         if (observer)
             observer->on_reply(reply.status_line);
-    }
-}
-
-void client::report_error(const string & error)
-{
-    for (const auto & observer : observers_)
-    {
-        if (observer)
-            observer->on_error(error);
     }
 }
 

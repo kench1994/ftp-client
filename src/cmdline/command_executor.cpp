@@ -187,9 +187,9 @@ void command_executor::open(const vector<string> & args)
         throw cmdline_exception("usage: open hostname [ port ]");
     }
 
-    ftp::command_result result = ftp_client_.open(hostname, port);
+    bool ftp_result = ftp_client_.open(hostname, port);
 
-    if (result != ftp::command_result::ok)
+    if (!ftp_result)
     {
         return;
     }
@@ -197,9 +197,9 @@ void command_executor::open(const vector<string> & args)
     string username = utils::read_line("username: ");
     string password = utils::read_password("password: ");
 
-    result = ftp_client_.login(username, password);
+    ftp_result = ftp_client_.login(username, password);
 
-    if (result != ftp::command_result::ok)
+    if (!ftp_result)
     {
         return;
     }
@@ -228,9 +228,9 @@ void command_executor::user(const vector<string> & args)
         throw cmdline_exception("usage: user username");
     }
 
-    ftp::command_result result = ftp_client_.login(username, password);
+    bool ftp_result = ftp_client_.login(username, password);
 
-    if (result != ftp::command_result::ok)
+    if (!ftp_result)
     {
         return;
     }

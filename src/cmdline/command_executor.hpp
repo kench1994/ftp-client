@@ -85,11 +85,6 @@ private:
             std::cout << reply;
             std::cout.flush();
         }
-
-        void on_error(const std::string & error) override
-        {
-            std::cout << error << std::endl;
-        }
     };
 
     stdout_writer stdout_writer_;

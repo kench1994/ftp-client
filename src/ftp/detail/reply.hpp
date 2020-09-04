@@ -43,9 +43,9 @@ struct reply_t
     {
     }
 
-    bool is_negative() const
+    bool is_positive() const
     {
-        return status_code >= 400;
+        return status_code < 400;
     }
 
     std::uint16_t status_code;
