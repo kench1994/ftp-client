@@ -189,7 +189,7 @@ bool client::upload(const string & local_file, const string & remote_file)
 
         if (!file)
         {
-            throw ftp_exception("Cannot open file %1%.", local_file);
+            throw ftp_exception("Cannot open file '%1%'.", local_file);
         }
 
         optional<data_connection> data_connection = initiate_data_connection();

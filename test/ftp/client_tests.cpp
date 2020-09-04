@@ -489,7 +489,7 @@ TEST_F(FtpClientTest, UploadNonexistentFileTest)
     catch (const ftp_exception & ex)
     {
         catched = true;
-        EXPECT_STREQ(ex.what(), "Cannot open file nonexistent.");
+        EXPECT_STREQ(ex.what(), "Cannot open file 'nonexistent'.");
     }
 
     EXPECT_TRUE(catched);
