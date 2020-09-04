@@ -406,6 +406,9 @@ TEST_F(FtpClientTest, UploadTest)
     EXPECT_TRUE(client.binary());
     EXPECT_TRUE(client.upload("../ftp/test_data/war_and_peace.txt", "war_and_peace.txt"));
     EXPECT_TRUE(client.ls());
+    EXPECT_TRUE(client.mkdir("directory"));
+    EXPECT_TRUE(client.upload("../ftp/test_data/war_and_peace.txt", "directory/war_and_peace.txt"));
+    EXPECT_TRUE(client.ls("directory"));
     EXPECT_TRUE(client.close());
 
     /* Replace unpredictable data. */
@@ -426,6 +429,14 @@ TEST_F(FtpClientTest, UploadTest)
                        "125 Data connection already open. Transfer starting.\r\n"
                        "226 Transfer complete.\r\n"
                        "200 Type set to: Binary.\r\n"
+                       "229 Entering extended passive mode (|||1234|).\r\n"
+                       "125 Data connection already open. Transfer starting.\r\n"
+                       "226 Transfer complete.\r\n"
+                       "229 Entering extended passive mode (|||1234|).\r\n"
+                       "125 Data connection already open. Transfer starting.\r\n"
+                       "-rw-r--r-- 1 user staff 3359584 Aug 23 11:45 war_and_peace.txt\r\n"
+                       "226 Transfer complete.\r\n"
+                       "257 \"/directory\" directory created.\r\n"
                        "229 Entering extended passive mode (|||1234|).\r\n"
                        "125 Data connection already open. Transfer starting.\r\n"
                        "226 Transfer complete.\r\n"
