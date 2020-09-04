@@ -200,6 +200,25 @@ TEST_F(FtpClientTest, MkdirCommandTest)
                                           "221 Goodbye.\r\n");
 }
 
+TEST_F(FtpClientTest, MkdirDirectoryAlreadyExistsTest)
+{
+    test_ftp_observer ftp_observer;
+    ftp::client client(&ftp_observer);
+
+    ASSERT_TRUE(client.open("localhost", 2121));
+    ASSERT_TRUE(client.login("user", "password"));
+    ASSERT_TRUE(client.mkdir("directory"));
+    ASSERT_FALSE(client.mkdir("directory"));
+    ASSERT_TRUE(client.close());
+
+    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
+                                          "331 Username ok, send password.\r\n"
+                                          "230 Login successful.\r\n"
+                                          "257 \"/directory\" directory created.\r\n"
+                                          "550 File exists.\r\n"
+                                          "221 Goodbye.\r\n");
+}
+
 TEST_F(FtpClientTest, RmdirCommandTest)
 {
     test_ftp_observer ftp_observer;
