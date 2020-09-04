@@ -567,3 +567,30 @@ TEST_F(FtpClientTest, DownloadTest)
                        "226 Transfer complete.\r\n"
                        "221 Goodbye.\r\n");
 }
+
+TEST_F(FtpClientTest, DownloadNonexistentFileTest)
+{
+    test_ftp_observer ftp_observer;
+    ftp::client client(&ftp_observer);
+
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.binary());
+    EXPECT_FALSE(client.download("nonexistent", "downloads/nonexistent"));
+    EXPECT_TRUE(client.close());
+
+    /* Replace unpredictable data. */
+    string replies = ftp_observer.get_replies();
+
+    replies = regex_replace(replies,
+                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
+                            "229 Entering extended passive mode (|||1234|).");
+
+    ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
+                       "331 Username ok, send password.\r\n"
+                       "230 Login successful.\r\n"
+                       "200 Type set to: Binary.\r\n"
+                       "229 Entering extended passive mode (|||1234|).\r\n"
+                       "550 No such file or directory.\r\n"
+                       "221 Goodbye.\r\n");
+}
