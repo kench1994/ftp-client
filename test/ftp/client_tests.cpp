@@ -294,6 +294,23 @@ TEST_F(FtpClientTest, CdCommandTest)
                                           "221 Goodbye.\r\n");
 }
 
+TEST_F(FtpClientTest, CdNonexistentDirectoryTest)
+{
+    test_ftp_observer ftp_observer;
+    ftp::client client(&ftp_observer);
+
+    ASSERT_TRUE(client.open("localhost", 2121));
+    ASSERT_TRUE(client.login("user", "password"));
+    ASSERT_FALSE(client.cd("nonexistent"));
+    ASSERT_TRUE(client.close());
+
+    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
+                                          "331 Username ok, send password.\r\n"
+                                          "230 Login successful.\r\n"
+                                          "550 No such file or directory.\r\n"
+                                          "221 Goodbye.\r\n");
+}
+
 TEST_F(FtpClientTest, LsCommandTest)
 {
     test_ftp_observer ftp_observer;
