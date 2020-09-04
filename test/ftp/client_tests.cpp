@@ -149,7 +149,7 @@ TEST_F(FtpClientTest, LoginWrongPasswordTest)
                                           "221 Goodbye.\r\n");
 }
 
-TEST_F(FtpClientTest, NoopCommandTest)
+TEST_F(FtpClientTest, NoopTest)
 {
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
@@ -166,7 +166,7 @@ TEST_F(FtpClientTest, NoopCommandTest)
                                           "221 Goodbye.\r\n");
 }
 
-TEST_F(FtpClientTest, PwdCommandTest)
+TEST_F(FtpClientTest, PwdTest)
 {
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
@@ -183,7 +183,7 @@ TEST_F(FtpClientTest, PwdCommandTest)
                                           "221 Goodbye.\r\n");
 }
 
-TEST_F(FtpClientTest, MkdirCommandTest)
+TEST_F(FtpClientTest, MkdirTest)
 {
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
@@ -219,7 +219,7 @@ TEST_F(FtpClientTest, MkdirDirectoryAlreadyExistsTest)
                                           "221 Goodbye.\r\n");
 }
 
-TEST_F(FtpClientTest, RmdirCommandTest)
+TEST_F(FtpClientTest, RmdirTest)
 {
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
@@ -275,7 +275,7 @@ TEST_F(FtpClientTest, RmdirNonexistentDirectoryTest)
                                           "221 Goodbye.\r\n");
 }
 
-TEST_F(FtpClientTest, CdCommandTest)
+TEST_F(FtpClientTest, CdTest)
 {
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
@@ -311,7 +311,7 @@ TEST_F(FtpClientTest, CdNonexistentDirectoryTest)
                                           "221 Goodbye.\r\n");
 }
 
-TEST_F(FtpClientTest, LsCommandTest)
+TEST_F(FtpClientTest, LsTest)
 {
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
@@ -373,7 +373,7 @@ TEST_F(FtpClientTest, LsNonexistentDirectoryTest)
                        "221 Goodbye.\r\n");
 }
 
-TEST_F(FtpClientTest, BinaryCommandTest)
+TEST_F(FtpClientTest, BinaryTest)
 {
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
@@ -390,7 +390,7 @@ TEST_F(FtpClientTest, BinaryCommandTest)
                                           "221 Goodbye.\r\n");
 }
 
-TEST_F(FtpClientTest, UploadCommandTest)
+TEST_F(FtpClientTest, UploadTest)
 {
     test_ftp_observer ftp_observer;
     ftp::client client(&ftp_observer);
