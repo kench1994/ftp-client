@@ -1,0 +1,28 @@
+language: cpp
+dist: focal
+
+git:
+  depth: 1
+
+addons:
+  apt:
+    packages:
+    - libboost-all-dev
+    - libboost-tools-dev
+
+os:
+  - linux
+  - osx
+
+osx_image: xcode12
+
+compiler:
+  - clang
+  - gcc
+
+script:
+  - cmake .
+  - make
+  - cd test/bin
+  - ./cmdline_tests
+  - ./utils_tests
