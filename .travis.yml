@@ -26,3 +26,4 @@ script:
   - cd test/bin
   - ./cmdline_tests
   - ./utils_tests
+  - ./ftp_tests
