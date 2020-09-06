@@ -89,10 +89,6 @@ public:
     void unsubscribe(event_observer *observer);
 
 private:
-    void open_connection(const std::string & hostname, uint16_t port);
-
-    void close_connection();
-
     detail::reply_t send_command(const std::string & command);
 
     void send(const std::string & command);

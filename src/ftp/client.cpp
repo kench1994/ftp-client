@@ -57,7 +57,7 @@ bool client::open(const string & hostname, uint16_t port)
 {
     try
     {
-        open_connection(hostname, port);
+        control_connection_.open(hostname, port);
 
         reply_t reply = recv();
 
@@ -464,7 +464,7 @@ bool client::close()
 
         reply_t reply = send_command("QUIT");
 
-        close_connection();
+        control_connection_.close();
 
         return reply.is_positive();
     }
@@ -473,16 +473,6 @@ bool client::close()
         reset_connection();
         throw ftp_exception(ex);
     }
-}
-
-void client::open_connection(const string & hostname, uint16_t port)
-{
-    control_connection_.open(hostname, port);
-}
-
-void client::close_connection()
-{
-    control_connection_.close();
 }
 
 reply_t client::send_command(const string & command)
