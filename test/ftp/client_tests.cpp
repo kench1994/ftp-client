@@ -308,8 +308,7 @@ TEST_F(FtpClientTest, CdNonexistentDirectoryTest)
 
 TEST_F(FtpClientTest, LsTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    ftp::client client;
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
@@ -317,30 +316,6 @@ TEST_F(FtpClientTest, LsTest)
     EXPECT_TRUE(client.ls());
     EXPECT_TRUE(client.ls("directory"));
     EXPECT_TRUE(client.close());
-
-    /* Replace unpredictable data. */
-    string replies = ftp_observer.get_replies();
-
-    replies = regex_replace(replies,
-                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                                    "229 Entering extended passive mode (|||1234|).");
-
-    replies = regex_replace(replies,
-                            regex(R"(drwxr.*directory)"),
-                                    "drwxr-xr-x 2 user staff 64 Aug 23 11:45 directory");
-
-    ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
-                       "331 Username ok, send password.\r\n"
-                       "230 Login successful.\r\n"
-                       "257 \"/directory\" directory created.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "drwxr-xr-x 2 user staff 64 Aug 23 11:45 directory\r\n"
-                       "226 Transfer complete.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
-                       "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, LsNonexistentDirectoryTest)
@@ -387,54 +362,15 @@ TEST_F(FtpClientTest, BinaryTest)
 
 TEST_F(FtpClientTest, UploadTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    ftp::client client;
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
-    EXPECT_TRUE(client.ls());
     EXPECT_TRUE(client.binary());
     EXPECT_TRUE(client.upload("../ftp/test_data/war_and_peace.txt", "war_and_peace.txt"));
-    EXPECT_TRUE(client.ls());
     EXPECT_TRUE(client.mkdir("directory"));
     EXPECT_TRUE(client.upload("../ftp/test_data/war_and_peace.txt", "directory/war_and_peace.txt"));
-    EXPECT_TRUE(client.ls("directory"));
     EXPECT_TRUE(client.close());
-
-    /* Replace unpredictable data. */
-    string replies = ftp_observer.get_replies();
-
-    replies = regex_replace(replies,
-                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                                    "229 Entering extended passive mode (|||1234|).");
-
-    replies = regex_replace(replies,
-                            regex(R"(-rw-r--r--.* 3359584 .*war_and_peace.txt)"),
-                                    "-rw-r--r-- 1 user staff 3359584 Aug 23 11:45 war_and_peace.txt");
-
-    ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
-                       "331 Username ok, send password.\r\n"
-                       "230 Login successful.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
-                       "200 Type set to: Binary.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "-rw-r--r-- 1 user staff 3359584 Aug 23 11:45 war_and_peace.txt\r\n"
-                       "226 Transfer complete.\r\n"
-                       "257 \"/directory\" directory created.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "-rw-r--r-- 1 user staff 3359584 Aug 23 11:45 war_and_peace.txt\r\n"
-                       "226 Transfer complete.\r\n"
-                       "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
@@ -444,10 +380,8 @@ TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
-    EXPECT_TRUE(client.ls());
     EXPECT_TRUE(client.binary());
     EXPECT_FALSE(client.upload("../ftp/test_data/war_and_peace.txt", "nonexistent/war_and_peace.txt"));
-    EXPECT_TRUE(client.ls());
     EXPECT_TRUE(client.close());
 
     /* Replace unpredictable data. */
@@ -460,15 +394,9 @@ TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
                        "230 Login successful.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
                        "200 Type set to: Binary.\r\n"
                        "229 Entering extended passive mode (|||1234|).\r\n"
                        "550 No such file or directory.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
                        "221 Goodbye.\r\n");
 }
 
@@ -479,7 +407,6 @@ TEST_F(FtpClientTest, UploadNonexistentFileTest)
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
-    EXPECT_TRUE(client.ls());
 
     bool catched = false;
 
@@ -494,32 +421,17 @@ TEST_F(FtpClientTest, UploadNonexistentFileTest)
     }
 
     EXPECT_TRUE(catched);
-    EXPECT_TRUE(client.ls());
     EXPECT_TRUE(client.close());
 
-    /* Replace unpredictable data. */
-    string replies = ftp_observer.get_replies();
-
-    replies = regex_replace(replies,
-                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                                    "229 Entering extended passive mode (|||1234|).");
-
-    ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
-                       "331 Username ok, send password.\r\n"
-                       "230 Login successful.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
-                       "221 Goodbye.\r\n");
+    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
+                                          "331 Username ok, send password.\r\n"
+                                          "230 Login successful.\r\n"
+                                          "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, DownloadTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    ftp::client client;
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
@@ -527,25 +439,6 @@ TEST_F(FtpClientTest, DownloadTest)
     EXPECT_TRUE(client.upload("../ftp/test_data/war_and_peace.txt", "war_and_peace.txt"));
     EXPECT_TRUE(client.download("war_and_peace.txt", "downloads/war_and_peace.txt"));
     EXPECT_TRUE(client.close());
-
-    /* Replace unpredictable data. */
-    string replies = ftp_observer.get_replies();
-
-    replies = regex_replace(replies,
-                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                                    "229 Entering extended passive mode (|||1234|).");
-
-    ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
-                       "331 Username ok, send password.\r\n"
-                       "230 Login successful.\r\n"
-                       "200 Type set to: Binary.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
-                       "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, DownloadNonexistentFileTest)
@@ -577,8 +470,7 @@ TEST_F(FtpClientTest, DownloadNonexistentFileTest)
 
 TEST_F(FtpClientTest, DownloadFileAlreadyExistsTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    ftp::client client;
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
@@ -600,23 +492,4 @@ TEST_F(FtpClientTest, DownloadFileAlreadyExistsTest)
 
     EXPECT_TRUE(catched);
     EXPECT_TRUE(client.close());
-
-    /* Replace unpredictable data. */
-    string replies = ftp_observer.get_replies();
-
-    replies = regex_replace(replies,
-                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                                    "229 Entering extended passive mode (|||1234|).");
-
-    ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
-                       "331 Username ok, send password.\r\n"
-                       "230 Login successful.\r\n"
-                       "200 Type set to: Binary.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
-                       "221 Goodbye.\r\n");
 }
