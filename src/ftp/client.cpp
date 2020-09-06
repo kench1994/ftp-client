@@ -486,11 +486,6 @@ reply_t client::send_command(const string & command)
     return reply;
 }
 
-void client::send(const string & command)
-{
-    control_connection_.send(command);
-}
-
 reply_t client::recv()
 {
     reply_t reply = control_connection_.recv();
