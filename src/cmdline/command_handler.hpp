@@ -39,8 +39,6 @@ public:
     void handle(command command, const std::vector<std::string> & args);
 
 private:
-    static bool is_needed_connection(command command);
-
     void open(const std::vector<std::string> & args);
 
     void user(const std::vector<std::string> & args);

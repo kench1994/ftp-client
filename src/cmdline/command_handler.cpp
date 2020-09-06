@@ -42,11 +42,6 @@ command_handler::command_handler()
 
 void command_handler::handle(command command, const vector<string> & args)
 {
-    if (is_needed_connection(command) && !ftp_client_.is_open())
-    {
-        throw cmdline_exception("Not connected.");
-    }
-
     if (command == command::open)
     {
         open(args);
@@ -122,36 +117,6 @@ void command_handler::handle(command command, const vector<string> & args)
     else
     {
         throw cmdline_exception("Invalid command.");
-    }
-}
-
-bool command_handler::is_needed_connection(command command)
-{
-    switch (command)
-    {
-    case command::user:
-    case command::cd:
-    case command::ls:
-    case command::put:
-    case command::get:
-    case command::pwd:
-    case command::mkdir:
-    case command::rmdir:
-    case command::del:
-    case command::stat:
-    case command::syst:
-    case command::binary:
-    case command::size:
-    case command::noop:
-    case command::close:
-        return true;
-    case command::open:
-    case command::help:
-    case command::exit:
-        return false;
-    default:
-        assert(false);
-        return false;
     }
 }
 

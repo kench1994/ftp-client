@@ -87,6 +87,11 @@ bool client::login(const string & username, const string & password)
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         send("USER " + username);
 
         reply_t reply = recv();
@@ -118,6 +123,11 @@ bool client::cd(const string & remote_directory)
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         send("CWD " + remote_directory);
 
         reply_t reply = recv();
@@ -135,6 +145,11 @@ bool client::ls(const optional<string> & remote_directory)
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         string command;
 
         if (remote_directory)
@@ -174,6 +189,11 @@ bool client::upload(const string & local_file, const string & remote_file)
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         ifstream file(local_file, ios_base::binary);
 
         if (!file)
@@ -208,6 +228,11 @@ bool client::download(const string & remote_file, const string & local_file)
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         if (std::filesystem::exists(local_file))
         {
             throw ftp_exception("The file '%1%' already exists.", local_file);
@@ -247,6 +272,11 @@ bool client::pwd()
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         send("PWD");
 
         reply_t reply = recv();
@@ -264,6 +294,11 @@ bool client::mkdir(const string & directory_name)
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         send("MKD " + directory_name);
 
         reply_t reply = recv();
@@ -281,6 +316,11 @@ bool client::rmdir(const string & directory_name)
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         send("RMD " + directory_name);
 
         reply_t reply = recv();
@@ -298,6 +338,11 @@ bool client::rm(const string & remote_file)
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         send("DELE " + remote_file);
 
         reply_t reply = recv();
@@ -315,6 +360,11 @@ bool client::binary()
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         send("TYPE I");
 
         reply_t reply = recv();
@@ -332,6 +382,11 @@ bool client::size(const string & remote_file)
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         send("SIZE " + remote_file);
 
         reply_t reply = recv();
@@ -349,6 +404,11 @@ bool client::stat(const optional<string> & remote_file)
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         string command;
 
         if (remote_file)
@@ -377,6 +437,11 @@ bool client::system()
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         send("SYST");
 
         reply_t reply = recv();
@@ -394,6 +459,11 @@ bool client::noop()
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         send("NOOP");
 
         reply_t reply = recv();
@@ -411,6 +481,11 @@ bool client::close()
 {
     try
     {
+        if (!is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
         send("QUIT");
 
         reply_t reply = recv();
@@ -463,6 +538,11 @@ void client::reset_connection()
 
 unique_ptr<data_connection> client::establish_data_connection(const string & command)
 {
+    if (!is_open())
+    {
+        throw ftp_exception("Connection is not open.");
+    }
+
     send("EPSV");
 
     reply_t reply = recv();
