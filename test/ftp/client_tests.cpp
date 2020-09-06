@@ -128,6 +128,24 @@ TEST_F(FtpClientTest, OpenConnectionTest)
                                           "221 Goodbye.\r\n");
 }
 
+TEST_F(FtpClientTest, ConnectionIsNotOpenTest)
+{
+    ftp::client client;
+    bool catched = false;
+
+    try
+    {
+        client.ls();
+    }
+    catch (const ftp_exception & ex)
+    {
+        catched = true;
+        EXPECT_STREQ("Connection is not open.", ex.what());
+    }
+
+    EXPECT_TRUE(catched);
+}
+
 TEST_F(FtpClientTest, LoginTest)
 {
     test_ftp_observer ftp_observer;
