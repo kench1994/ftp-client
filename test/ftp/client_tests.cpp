@@ -240,35 +240,15 @@ TEST_F(FtpClientTest, RmdirTest)
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_TRUE(client.mkdir("directory"));
-    EXPECT_TRUE(client.ls());
     EXPECT_TRUE(client.rmdir("directory"));
-    EXPECT_TRUE(client.ls());
     EXPECT_TRUE(client.close());
 
-    /* Replace unpredictable data. */
-    string replies = ftp_observer.get_replies();
-
-    replies = regex_replace(replies,
-                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                                    "229 Entering extended passive mode (|||1234|).");
-
-    replies = regex_replace(replies,
-                            regex(R"(drwxr.*directory)"),
-                                    "drwxr-xr-x 2 user staff 64 Aug 23 11:45 directory");
-
-    ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
-                       "331 Username ok, send password.\r\n"
-                       "230 Login successful.\r\n"
-                       "257 \"/directory\" directory created.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "drwxr-xr-x 2 user staff 64 Aug 23 11:45 directory\r\n"
-                       "226 Transfer complete.\r\n"
-                       "250 Directory removed.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "125 Data connection already open. Transfer starting.\r\n"
-                       "226 Transfer complete.\r\n"
-                       "221 Goodbye.\r\n");
+    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
+                                          "331 Username ok, send password.\r\n"
+                                          "230 Login successful.\r\n"
+                                          "257 \"/directory\" directory created.\r\n"
+                                          "250 Directory removed.\r\n"
+                                          "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, RmdirNonexistentDirectoryTest)
