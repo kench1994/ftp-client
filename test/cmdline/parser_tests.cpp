@@ -35,53 +35,68 @@ using std::string;
 
 TEST(ParserTest, ParseCommandTest)
 {
-    EXPECT_EQ(parse_command("open ftp.cisco.com 21"),
-              pair(command::open, vector{"ftp.cisco.com"s, "21"s}));
+    EXPECT_EQ(pair(command::open, vector{"ftp.cisco.com"s, "21"s}),
+              parse_command("open ftp.cisco.com 21"));
 
-    EXPECT_EQ(parse_command("user anonymous"), pair(command::user, vector<string>{"anonymous"s}));
+    EXPECT_EQ(pair(command::user, vector<string>{"anonymous"s}),
+              parse_command("user anonymous"));
 
-    EXPECT_EQ(parse_command("cd ../home/dir/"), pair(command::cd, vector<string>{"../home/dir/"s}));
+    EXPECT_EQ(pair(command::cd, vector<string>{"../home/dir/"s}),
+              parse_command("cd ../home/dir/"));
 
-    EXPECT_EQ(parse_command("ls ."), pair(command::ls, vector<string>{"."s}));
+    EXPECT_EQ(pair(command::ls, vector<string>{"."s}),
+              parse_command("ls ."));
 
-    EXPECT_EQ(parse_command("put local_file remote_file"),
-              pair(command::put, vector{"local_file"s, "remote_file"s}));
+    EXPECT_EQ(pair(command::put, vector{"local_file"s, "remote_file"s}),
+              parse_command("put local_file remote_file"));
     
-    EXPECT_EQ(parse_command("get remote_file local_file"),
-              pair(command::get, vector{"remote_file"s, "local_file"s}));
+    EXPECT_EQ(pair(command::get, vector{"remote_file"s, "local_file"s}),
+              parse_command("get remote_file local_file"));
 
-    EXPECT_EQ(parse_command("get \"   filename.txt   \""),
-              pair(command::get, vector{"   filename.txt   "s}));
+    EXPECT_EQ(pair(command::get, vector{"   filename.txt   "s}),
+              parse_command("get \"   filename.txt   \""));
 
-    EXPECT_EQ(parse_command("get \"/public/dir 1/file_name.txt\" \"tmp/dir 2/file.txt\""),
-              pair(command::get, vector{"/public/dir 1/file_name.txt"s, "tmp/dir 2/file.txt"s}));
+    EXPECT_EQ(pair(command::get, vector{"/public/dir 1/file_name.txt"s, "tmp/dir 2/file.txt"s}),
+              parse_command("get \"/public/dir 1/file_name.txt\" \"tmp/dir 2/file.txt\""));
 
-    EXPECT_EQ(parse_command("get \"/ public / dir 1 /  file_name  \" \"tmp/dir 2/file\""),
-              pair(command::get, vector{"/ public / dir 1 /  file_name  "s, "tmp/dir 2/file"s}));
+    EXPECT_EQ(pair(command::get, vector{"/ public / dir 1 /  file_name  "s, "tmp/dir 2/file"s}),
+              parse_command("get \"/ public / dir 1 /  file_name  \" \"tmp/dir 2/file\""));
 
-    EXPECT_EQ(parse_command("pwd"), pair(command::pwd, vector<string>{}));
+    EXPECT_EQ(pair(command::pwd, vector<string>{}),
+              parse_command("pwd"));
 
-    EXPECT_EQ(parse_command("mkdir dir"), pair(command::mkdir, vector<string>{"dir"s}));
+    EXPECT_EQ(pair(command::mkdir, vector<string>{"dir"s}),
+              parse_command("mkdir dir"));
 
-    EXPECT_EQ(parse_command("rmdir dir"), pair(command::rmdir, vector<string>{"dir"s}));
+    EXPECT_EQ(pair(command::rmdir, vector<string>{"dir"s}),
+              parse_command("rmdir dir"));
 
-    EXPECT_EQ(parse_command("del file"), pair(command::del, vector<string>{"file"s}));
+    EXPECT_EQ(pair(command::del, vector<string>{"file"s}),
+              parse_command("del file"));
 
-    EXPECT_EQ(parse_command("stat"), pair(command::stat, vector<string>{}));
+    EXPECT_EQ(pair(command::stat, vector<string>{}),
+              parse_command("stat"));
 
-    EXPECT_EQ(parse_command("syst"), pair(command::syst, vector<string>{}));
+    EXPECT_EQ(pair(command::syst, vector<string>{}),
+              parse_command("syst"));
 
-    EXPECT_EQ(parse_command("binary"), pair(command::binary, vector<string>{}));
+    EXPECT_EQ(pair(command::binary, vector<string>{}),
+              parse_command("binary"));
 
-    EXPECT_EQ(parse_command("size filename"), pair(command::size, vector<string>{"filename"s}));
+    EXPECT_EQ(pair(command::size, vector<string>{"filename"s}),
+              parse_command("size filename"));
 
-    EXPECT_EQ(parse_command("noop"), pair(command::noop, vector<string>{}));
+    EXPECT_EQ(pair(command::noop, vector<string>{}),
+              parse_command("noop"));
 
-    EXPECT_EQ(parse_command("close"), pair(command::close, vector<string>{}));
+    EXPECT_EQ(pair(command::close, vector<string>{}),
+              parse_command("close"));
 
-    EXPECT_EQ(parse_command("help"), pair(command::help, vector<string>{}));
+    EXPECT_EQ(pair(command::help, vector<string>{}),
+              parse_command("help"));
 
-    EXPECT_EQ(parse_command("exit"), pair(command::exit, vector<string>{}));
+    EXPECT_EQ(pair(command::exit, vector<string>{}),
+              parse_command("exit"));
 }
 
 TEST(ParserTest, ParseInvalidCommandTest)
@@ -95,7 +110,7 @@ TEST(ParserTest, ParseInvalidCommandTest)
     catch (const cmdline_exception & ex)
     {
         catched = true;
-        ASSERT_STREQ(ex.what(), "Invalid command.");
+        ASSERT_STREQ("Invalid command.", ex.what());
     }
     catch (...)
     {
@@ -107,9 +122,9 @@ TEST(ParserTest, ParseInvalidCommandTest)
 
 TEST(ParserTest, ParseCaseInsensitiveCommandTest)
 {
-    EXPECT_EQ(parse_command("STAT"), pair(command::stat, vector<string>{}));
+    EXPECT_EQ(pair(command::stat, vector<string>{}), parse_command("STAT"));
 
-    EXPECT_EQ(parse_command("SysT"), pair(command::syst, vector<string>{}));
+    EXPECT_EQ(pair(command::syst, vector<string>{}), parse_command("SysT"));
 
-    EXPECT_EQ(parse_command("BiNaRy"), pair(command::binary, vector<string>{}));
+    EXPECT_EQ(pair(command::binary, vector<string>{}), parse_command("BiNaRy"));
 }
