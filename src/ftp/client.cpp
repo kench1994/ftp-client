@@ -487,7 +487,7 @@ void client::reset_connection()
 {
     try
     {
-        control_connection_.reset();
+        control_connection_.close();
     }
     catch (...)
     {
