@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "command_executor.hpp"
+#include "command_handler.hpp"
 #include "cmdline_exception.hpp"
 #include "utils/utils.hpp"
 #include <iostream>
@@ -35,18 +35,13 @@ using std::cin;
 using std::endl;
 using std::optional;
 
-command_executor::command_executor()
+command_handler::command_handler()
 {
     ftp_client_.subscribe(&stdout_writer_);
 }
 
-void command_executor::execute(command command, const vector<string> & args)
+void command_handler::handle(command command, const vector<string> & args)
 {
-    if (is_needed_connection(command) && !ftp_client_.is_open())
-    {
-        throw cmdline_exception("Not connected.");
-    }
-
     if (command == command::open)
     {
         open(args);
@@ -125,37 +120,7 @@ void command_executor::execute(command command, const vector<string> & args)
     }
 }
 
-bool command_executor::is_needed_connection(command command)
-{
-    switch (command)
-    {
-    case command::user:
-    case command::cd:
-    case command::ls:
-    case command::put:
-    case command::get:
-    case command::pwd:
-    case command::mkdir:
-    case command::rmdir:
-    case command::del:
-    case command::stat:
-    case command::syst:
-    case command::binary:
-    case command::size:
-    case command::noop:
-    case command::close:
-        return true;
-    case command::open:
-    case command::help:
-    case command::exit:
-        return false;
-    default:
-        assert(false);
-        return false;
-    }
-}
-
-void command_executor::open(const vector<string> & args)
+void command_handler::open(const vector<string> & args)
 {
     if (ftp_client_.is_open())
     {
@@ -208,7 +173,7 @@ void command_executor::open(const vector<string> & args)
     ftp_client_.binary();
 }
 
-void command_executor::user(const vector<string> & args)
+void command_handler::user(const vector<string> & args)
 {
     string username;
     string password;
@@ -239,7 +204,7 @@ void command_executor::user(const vector<string> & args)
     ftp_client_.binary();
 }
 
-void command_executor::cd(const vector<string> & args)
+void command_handler::cd(const vector<string> & args)
 {
     string remote_directory;
 
@@ -259,7 +224,7 @@ void command_executor::cd(const vector<string> & args)
     ftp_client_.cd(remote_directory);
 }
 
-void command_executor::ls(const vector<string> & args)
+void command_handler::ls(const vector<string> & args)
 {
     if (args.empty())
     {
@@ -275,7 +240,7 @@ void command_executor::ls(const vector<string> & args)
     }
 }
 
-void command_executor::put(const vector<string> & args)
+void command_handler::put(const vector<string> & args)
 {
     string local_file, remote_file;
 
@@ -302,7 +267,7 @@ void command_executor::put(const vector<string> & args)
     ftp_client_.upload(local_file, remote_file);
 }
 
-void command_executor::get(const vector<string> & args)
+void command_handler::get(const vector<string> & args)
 {
     string remote_file, local_file;
 
@@ -329,12 +294,12 @@ void command_executor::get(const vector<string> & args)
     ftp_client_.download(remote_file, local_file);
 }
 
-void command_executor::pwd()
+void command_handler::pwd()
 {
     ftp_client_.pwd();
 }
 
-void command_executor::mkdir(const vector<string> & args)
+void command_handler::mkdir(const vector<string> & args)
 {
     string directory_name;
 
@@ -354,7 +319,7 @@ void command_executor::mkdir(const vector<string> & args)
     ftp_client_.mkdir(directory_name);
 }
 
-void command_executor::rmdir(const vector<string> & args)
+void command_handler::rmdir(const vector<string> & args)
 {
     string directory_name;
 
@@ -374,7 +339,7 @@ void command_executor::rmdir(const vector<string> & args)
     ftp_client_.rmdir(directory_name);
 }
 
-void command_executor::del(const vector<string> & args)
+void command_handler::del(const vector<string> & args)
 {
     string remote_file;
 
@@ -394,12 +359,12 @@ void command_executor::del(const vector<string> & args)
     ftp_client_.rm(remote_file);
 }
 
-void command_executor::binary()
+void command_handler::binary()
 {
     ftp_client_.binary();
 }
 
-void command_executor::size(const vector<string> & args)
+void command_handler::size(const vector<string> & args)
 {
     string remote_file;
 
@@ -419,7 +384,7 @@ void command_executor::size(const vector<string> & args)
     ftp_client_.size(remote_file);
 }
 
-void command_executor::stat(const vector<string> & args)
+void command_handler::stat(const vector<string> & args)
 {
     if (args.empty())
     {
@@ -435,22 +400,22 @@ void command_executor::stat(const vector<string> & args)
     }
 }
 
-void command_executor::syst()
+void command_handler::syst()
 {
     ftp_client_.system();
 }
 
-void command_executor::noop()
+void command_handler::noop()
 {
     ftp_client_.noop();
 }
 
-void command_executor::close()
+void command_handler::close()
 {
     ftp_client_.close();
 }
 
-void command_executor::help()
+void command_handler::help()
 {
     cout <<
         "List of ftp commands:\n"
@@ -474,7 +439,7 @@ void command_executor::help()
         "  exit - exit program\n";
 }
 
-void command_executor::exit()
+void command_handler::exit()
 {
     if (ftp_client_.is_open())
     {

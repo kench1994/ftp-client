@@ -51,7 +51,7 @@ void cmdline_interface::run()
 
             auto [command, args] = parse_command(line);
 
-            command_executor_.execute(command, args);
+            command_handler_.handle(command, args);
 
             if (command == command::exit)
             {

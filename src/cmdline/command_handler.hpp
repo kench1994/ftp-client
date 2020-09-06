@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef FTP_CLIENT_COMMAND_EXECUTOR_HPP
-#define FTP_CLIENT_COMMAND_EXECUTOR_HPP
+#ifndef FTP_CLIENT_COMMAND_HANDLER_HPP
+#define FTP_CLIENT_COMMAND_HANDLER_HPP
 
 #include "command.hpp"
 #include "ftp/client.hpp"
@@ -31,16 +31,14 @@
 #include <vector>
 #include <iostream>
 
-class command_executor
+class command_handler
 {
 public:
-    command_executor();
+    command_handler();
 
-    void execute(command command, const std::vector<std::string> & args);
+    void handle(command command, const std::vector<std::string> & args);
 
 private:
-    static bool is_needed_connection(command command);
-
     void open(const std::vector<std::string> & args);
 
     void user(const std::vector<std::string> & args);
@@ -91,4 +89,4 @@ private:
     ftp::client ftp_client_;
 };
 
-#endif //FTP_CLIENT_COMMAND_EXECUTOR_HPP
+#endif //FTP_CLIENT_COMMAND_HANDLER_HPP
