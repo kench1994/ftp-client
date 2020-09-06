@@ -27,11 +27,11 @@
 
 TEST(UtilsTest, FormatTest)
 {
-    EXPECT_EQ(utils::format(""), "");
-    EXPECT_EQ(utils::format("string: %1%", "hello"), "string: hello");
-    EXPECT_EQ(utils::format("double: %1%", 27.9), "double: 27.9");
-    EXPECT_EQ(utils::format("integer: %1%", 42), "integer: 42");
-    EXPECT_EQ(utils::format("%1% %2% %3%", "hello", 27.9, 42), "hello 27.9 42");
+    EXPECT_EQ("", utils::format(""));
+    EXPECT_EQ("string: hello", utils::format("string: %1%", "hello"));
+    EXPECT_EQ("double: 27.9", utils::format("double: %1%", 27.9));
+    EXPECT_EQ("integer: 42", utils::format("integer: %1%", 42));
+    EXPECT_EQ("hello 27.9 42", utils::format("%1% %2% %3%", "hello", 27.9, 42));
 }
 
 struct custom_type
@@ -50,17 +50,17 @@ TEST(UtilsTest, FormatCustomTypeTest)
 {
     custom_type value {"hello", 27.9, 42};
 
-    EXPECT_EQ(utils::format("%1%", value), "hello 27.9 42");
+    EXPECT_EQ("hello 27.9 42", utils::format("%1%", value));
 }
 
 TEST(UtilsTest, GetFileNameTest)
 {
-    EXPECT_EQ(utils::get_filename(""), "");
-    EXPECT_EQ(utils::get_filename("file.ext"), "file.ext");
-    EXPECT_EQ(utils::get_filename("/dir/"), "");
-    EXPECT_EQ(utils::get_filename("/file.ext"), "file.ext");
-    EXPECT_EQ(utils::get_filename("/dir/file.ext"), "file.ext");
-    EXPECT_EQ(utils::get_filename("C:\\"), "");
-    EXPECT_EQ(utils::get_filename("C:\\dir\\"), "");
-    EXPECT_EQ(utils::get_filename("C:\\dir\\file.ext"), "file.ext");
+    EXPECT_EQ("", utils::get_filename(""));
+    EXPECT_EQ("file.ext", utils::get_filename("file.ext"));
+    EXPECT_EQ("", utils::get_filename("/dir/"));
+    EXPECT_EQ("file.ext", utils::get_filename("/file.ext"));
+    EXPECT_EQ("file.ext", utils::get_filename("/dir/file.ext"));
+    EXPECT_EQ("", utils::get_filename("C:\\"));
+    EXPECT_EQ("", utils::get_filename("C:\\dir\\"));
+    EXPECT_EQ("file.ext", utils::get_filename("C:\\dir\\file.ext"));
 }
