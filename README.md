@@ -1,5 +1,7 @@
 # File Transfer Protocol (FTP)
 
+<h3> OSS Builds Status: </h3>
+
 [![Build Status](https://travis-ci.org/deniskovalchuk/ftp-client.svg?branch=master)](https://travis-ci.org/deniskovalchuk/ftp-client)
 
 The File Transfer Protocol (FTP) is a standart network protocol used for the transfer of computer files between a client and server on a computer network.
