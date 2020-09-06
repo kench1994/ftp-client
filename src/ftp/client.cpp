@@ -146,20 +146,9 @@ bool client::ls(const optional<string> & remote_directory)
             command = "LIST";
         }
 
-        optional<data_connection> data_connection = establish_data_connection();
+        unique_ptr<data_connection> data_connection = establish_data_connection(command);
 
         if (!data_connection)
-        {
-            return false;
-        }
-
-        data_connection->open();
-
-        send(command);
-
-        reply_t reply = recv();
-
-        if (!reply.is_positive())
         {
             return false;
         }
@@ -170,7 +159,7 @@ bool client::ls(const optional<string> & remote_directory)
         /* Don't keep the data connection. */
         data_connection->close();
 
-        reply = recv();
+        reply_t reply = recv();
 
         return reply.is_positive();
     }
@@ -192,20 +181,9 @@ bool client::upload(const string & local_file, const string & remote_file)
             throw ftp_exception("Cannot open file %1%.", local_file);
         }
 
-        optional<data_connection> data_connection = establish_data_connection();
+        unique_ptr<data_connection> data_connection = establish_data_connection("STOR " + remote_file);
 
         if (!data_connection)
-        {
-            return false;
-        }
-
-        data_connection->open();
-
-        send("STOR " + remote_file);
-
-        reply_t reply = recv();
-
-        if (!reply.is_positive())
         {
             return false;
         }
@@ -215,7 +193,7 @@ bool client::upload(const string & local_file, const string & remote_file)
         /* Don't keep the data connection. */
         data_connection->close();
 
-        reply = recv();
+        reply_t reply = recv();
 
         return reply.is_positive();
     }
@@ -242,20 +220,9 @@ bool client::download(const string & remote_file, const string & local_file)
             throw ftp_exception("Cannot create file %1%.", local_file);
         }
 
-        optional<data_connection> data_connection = establish_data_connection();
+        unique_ptr<data_connection> data_connection = establish_data_connection("RETR " + remote_file);
 
         if (!data_connection)
-        {
-            return false;
-        }
-
-        data_connection->open();
-
-        send("RETR " + remote_file);
-
-        reply_t reply = recv();
-
-        if (!reply.is_positive())
         {
             return false;
         }
@@ -265,7 +232,7 @@ bool client::download(const string & remote_file, const string & local_file)
         /* Don't keep the data connection. */
         data_connection->close();
 
-        reply = recv();
+        reply_t reply = recv();
 
         return reply.is_positive();
     }
@@ -494,7 +461,7 @@ void client::reset_connection()
     }
 }
 
-optional<data_connection> client::establish_data_connection()
+unique_ptr<data_connection> client::establish_data_connection(const string & command)
 {
     send("EPSV");
 
@@ -502,7 +469,7 @@ optional<data_connection> client::establish_data_connection()
 
     if (!reply.is_positive())
     {
-        return nullopt;
+        return nullptr;
     }
 
     uint16_t port;
@@ -511,7 +478,20 @@ optional<data_connection> client::establish_data_connection()
         throw ftp_exception("Cannot parse server port from '%1%'.", reply.status_line);
     }
 
-    return make_optional<data_connection>(control_connection_.ip(), port);
+    unique_ptr<data_connection> connection = make_unique<data_connection>(control_connection_.ip(), port);
+
+    connection->open();
+
+    send(command);
+
+    reply = recv();
+
+    if (!reply.is_positive())
+    {
+        return nullptr;
+    }
+
+    return connection;
 }
 
 /* The text returned in response to the EPSV command MUST be:
