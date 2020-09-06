@@ -146,7 +146,7 @@ bool client::ls(const optional<string> & remote_directory)
             command = "LIST";
         }
 
-        optional<data_connection> data_connection = initiate_data_connection();
+        optional<data_connection> data_connection = establish_data_connection();
 
         if (!data_connection)
         {
@@ -192,7 +192,7 @@ bool client::upload(const string & local_file, const string & remote_file)
             throw ftp_exception("Cannot open file %1%.", local_file);
         }
 
-        optional<data_connection> data_connection = initiate_data_connection();
+        optional<data_connection> data_connection = establish_data_connection();
 
         if (!data_connection)
         {
@@ -242,7 +242,7 @@ bool client::download(const string & remote_file, const string & local_file)
             throw ftp_exception("Cannot create file %1%.", local_file);
         }
 
-        optional<data_connection> data_connection = initiate_data_connection();
+        optional<data_connection> data_connection = establish_data_connection();
 
         if (!data_connection)
         {
@@ -494,7 +494,7 @@ void client::reset_connection()
     }
 }
 
-optional<data_connection> client::initiate_data_connection()
+optional<data_connection> client::establish_data_connection()
 {
     send("EPSV");
 
