@@ -73,6 +73,17 @@ protected:
         }
     }
 
+    static string replaceUnpredictableData(const string & replies)
+    {
+        string result;
+
+        result = regex_replace(replies,
+                               regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
+                                       "229 Entering extended passive mode (|||1234|).");
+
+        return result;
+    }
+
 private:
     static const string m_downloadsDir;
     static const string m_ftpServerDir;
@@ -328,13 +339,7 @@ TEST_F(FtpClientTest, LsNonexistentDirectoryTest)
     EXPECT_FALSE(client.ls("nonexistent"));
     EXPECT_TRUE(client.close());
 
-    /* Replace unpredictable data. */
-    string replies = ftp_observer.get_replies();
-
-    replies = regex_replace(replies,
-                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                                    "229 Entering extended passive mode (|||1234|).");
-
+    string replies = replaceUnpredictableData(ftp_observer.get_replies());
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
                        "230 Login successful.\r\n"
@@ -384,13 +389,7 @@ TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
     EXPECT_FALSE(client.upload("../ftp/test_data/war_and_peace.txt", "nonexistent/war_and_peace.txt"));
     EXPECT_TRUE(client.close());
 
-    /* Replace unpredictable data. */
-    string replies = ftp_observer.get_replies();
-
-    replies = regex_replace(replies,
-                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                                    "229 Entering extended passive mode (|||1234|).");
-
+    string replies = replaceUnpredictableData(ftp_observer.get_replies());
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
                        "230 Login successful.\r\n"
@@ -452,13 +451,7 @@ TEST_F(FtpClientTest, DownloadNonexistentFileTest)
     EXPECT_FALSE(client.download("nonexistent", "downloads/nonexistent"));
     EXPECT_TRUE(client.close());
 
-    /* Replace unpredictable data. */
-    string replies = ftp_observer.get_replies();
-
-    replies = regex_replace(replies,
-                            regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                                    "229 Entering extended passive mode (|||1234|).");
-
+    string replies = replaceUnpredictableData(ftp_observer.get_replies());
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
                        "230 Login successful.\r\n"
