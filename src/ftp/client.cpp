@@ -92,16 +92,12 @@ bool client::login(const string & username, const string & password)
             throw ftp_exception("Connection is not open.");
         }
 
-        send("USER " + username);
-
-        reply_t reply = recv();
+        reply_t reply = send_command("USER " + username);
 
         if (reply.status_code == 331)
         {
             /* 331 User name okay, need password. */
-            send("PASS " + password);
-
-            reply = recv();
+            reply = send_command("PASS " + password);
         }
         else if (reply.status_code == 332)
         {
@@ -128,9 +124,7 @@ bool client::cd(const string & remote_directory)
             throw ftp_exception("Connection is not open.");
         }
 
-        send("CWD " + remote_directory);
-
-        reply_t reply = recv();
+        reply_t reply = send_command("CWD " + remote_directory);
 
         return reply.is_positive();
     }
@@ -277,9 +271,7 @@ bool client::pwd()
             throw ftp_exception("Connection is not open.");
         }
 
-        send("PWD");
-
-        reply_t reply = recv();
+        reply_t reply = send_command("PWD");
 
         return reply.is_positive();
     }
@@ -299,9 +291,7 @@ bool client::mkdir(const string & directory_name)
             throw ftp_exception("Connection is not open.");
         }
 
-        send("MKD " + directory_name);
-
-        reply_t reply = recv();
+        reply_t reply = send_command("MKD " + directory_name);
 
         return reply.is_positive();
     }
@@ -321,9 +311,7 @@ bool client::rmdir(const string & directory_name)
             throw ftp_exception("Connection is not open.");
         }
 
-        send("RMD " + directory_name);
-
-        reply_t reply = recv();
+        reply_t reply = send_command("RMD " + directory_name);
 
         return reply.is_positive();
     }
@@ -343,9 +331,7 @@ bool client::rm(const string & remote_file)
             throw ftp_exception("Connection is not open.");
         }
 
-        send("DELE " + remote_file);
-
-        reply_t reply = recv();
+        reply_t reply = send_command("DELE " + remote_file);
 
         return reply.is_positive();
     }
@@ -365,9 +351,7 @@ bool client::binary()
             throw ftp_exception("Connection is not open.");
         }
 
-        send("TYPE I");
-
-        reply_t reply = recv();
+        reply_t reply = send_command("TYPE I");
 
         return reply.is_positive();
     }
@@ -387,9 +371,7 @@ bool client::size(const string & remote_file)
             throw ftp_exception("Connection is not open.");
         }
 
-        send("SIZE " + remote_file);
-
-        reply_t reply = recv();
+        reply_t reply = send_command("SIZE " + remote_file);
 
         return reply.is_positive();
     }
@@ -420,9 +402,7 @@ bool client::stat(const optional<string> & remote_file)
             command = "STAT";
         }
 
-        send(command);
-
-        reply_t reply = recv();
+        reply_t reply = send_command(command);
 
         return reply.is_positive();
     }
@@ -442,9 +422,7 @@ bool client::system()
             throw ftp_exception("Connection is not open.");
         }
 
-        send("SYST");
-
-        reply_t reply = recv();
+        reply_t reply = send_command("SYST");
 
         return reply.is_positive();
     }
@@ -464,9 +442,7 @@ bool client::noop()
             throw ftp_exception("Connection is not open.");
         }
 
-        send("NOOP");
-
-        reply_t reply = recv();
+        reply_t reply = send_command("NOOP");
 
         return reply.is_positive();
     }
@@ -486,9 +462,7 @@ bool client::close()
             throw ftp_exception("Connection is not open.");
         }
 
-        send("QUIT");
-
-        reply_t reply = recv();
+        reply_t reply = send_command("QUIT");
 
         close_connection();
 
@@ -509,6 +483,17 @@ void client::open_connection(const string & hostname, uint16_t port)
 void client::close_connection()
 {
     control_connection_.close();
+}
+
+reply_t client::send_command(const string & command)
+{
+    control_connection_.send(command);
+
+    reply_t reply = control_connection_.recv();
+
+    report_reply(reply);
+
+    return reply;
 }
 
 void client::send(const string & command)
@@ -543,9 +528,7 @@ unique_ptr<data_connection> client::establish_data_connection(const string & com
         throw ftp_exception("Connection is not open.");
     }
 
-    send("EPSV");
-
-    reply_t reply = recv();
+    reply_t reply = send_command("EPSV");
 
     if (!reply.is_positive())
     {
@@ -562,9 +545,7 @@ unique_ptr<data_connection> client::establish_data_connection(const string & com
 
     connection->open();
 
-    send(command);
-
-    reply = recv();
+    reply = send_command(command);
 
     if (!reply.is_positive())
     {

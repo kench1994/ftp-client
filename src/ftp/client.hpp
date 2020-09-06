@@ -93,6 +93,8 @@ private:
 
     void close_connection();
 
+    detail::reply_t send_command(const std::string & command);
+
     void send(const std::string & command);
 
     detail::reply_t recv();
