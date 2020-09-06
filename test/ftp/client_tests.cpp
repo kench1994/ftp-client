@@ -113,8 +113,8 @@ private:
 
 TEST_F(FtpClientTest, OpenConnectionTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_FALSE(client.is_open());
 
@@ -124,8 +124,8 @@ TEST_F(FtpClientTest, OpenConnectionTest)
     EXPECT_TRUE(client.close());
     EXPECT_FALSE(client.is_open());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, ConnectionIsNotOpenTest)
@@ -148,104 +148,104 @@ TEST_F(FtpClientTest, ConnectionIsNotOpenTest)
 
 TEST_F(FtpClientTest, LoginTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "230 Login successful.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "230 Login successful.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, LoginNonexistentUserTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_FALSE(client.login("nonexistent", "password"));
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "530 Authentication failed.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "530 Authentication failed.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, LoginWrongPasswordTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_FALSE(client.login("user", "wrong password"));
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "530 Authentication failed.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "530 Authentication failed.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, NoopTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_TRUE(client.noop());
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "230 Login successful.\r\n"
-                                          "200 I successfully done nothin'.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "230 Login successful.\r\n"
+                                      "200 I successfully done nothin'.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, PwdTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_TRUE(client.pwd());
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "230 Login successful.\r\n"
-                                          "257 \"/\" is the current directory.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "230 Login successful.\r\n"
+                                      "257 \"/\" is the current directory.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, MkdirTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_TRUE(client.mkdir("directory"));
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "230 Login successful.\r\n"
-                                          "257 \"/directory\" directory created.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "230 Login successful.\r\n"
+                                      "257 \"/directory\" directory created.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, MkdirDirectoryAlreadyExistsTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
@@ -253,18 +253,18 @@ TEST_F(FtpClientTest, MkdirDirectoryAlreadyExistsTest)
     EXPECT_FALSE(client.mkdir("directory"));
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "230 Login successful.\r\n"
-                                          "257 \"/directory\" directory created.\r\n"
-                                          "550 File exists.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "230 Login successful.\r\n"
+                                      "257 \"/directory\" directory created.\r\n"
+                                      "550 File exists.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, RmdirTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
@@ -272,35 +272,35 @@ TEST_F(FtpClientTest, RmdirTest)
     EXPECT_TRUE(client.rmdir("directory"));
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "230 Login successful.\r\n"
-                                          "257 \"/directory\" directory created.\r\n"
-                                          "250 Directory removed.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "230 Login successful.\r\n"
+                                      "257 \"/directory\" directory created.\r\n"
+                                      "250 Directory removed.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, RmdirNonexistentDirectoryTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_FALSE(client.rmdir("nonexistent"));
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "230 Login successful.\r\n"
-                                          "550 No such file or directory.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "230 Login successful.\r\n"
+                                      "550 No such file or directory.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, CdTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
@@ -309,30 +309,30 @@ TEST_F(FtpClientTest, CdTest)
     EXPECT_TRUE(client.cd(".."));
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "230 Login successful.\r\n"
-                                          "257 \"/directory\" directory created.\r\n"
-                                          "250 \"/directory\" is the current directory.\r\n"
-                                          "250 \"/\" is the current directory.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "230 Login successful.\r\n"
+                                      "257 \"/directory\" directory created.\r\n"
+                                      "250 \"/directory\" is the current directory.\r\n"
+                                      "250 \"/\" is the current directory.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, CdNonexistentDirectoryTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_FALSE(client.cd("nonexistent"));
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "230 Login successful.\r\n"
-                                          "550 No such file or directory.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "230 Login successful.\r\n"
+                                      "550 No such file or directory.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, LsTest)
@@ -349,15 +349,15 @@ TEST_F(FtpClientTest, LsTest)
 
 TEST_F(FtpClientTest, LsNonexistentDirectoryTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_FALSE(client.ls("nonexistent"));
     EXPECT_TRUE(client.close());
 
-    string replies = replaceUnpredictableData(ftp_observer.get_replies());
+    string replies = replaceUnpredictableData(observer.get_replies());
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
                        "230 Login successful.\r\n"
@@ -368,19 +368,19 @@ TEST_F(FtpClientTest, LsNonexistentDirectoryTest)
 
 TEST_F(FtpClientTest, BinaryTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_TRUE(client.binary());
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "230 Login successful.\r\n"
-                                          "200 Type set to: Binary.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "230 Login successful.\r\n"
+                                      "200 Type set to: Binary.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, UploadTest)
@@ -398,8 +398,8 @@ TEST_F(FtpClientTest, UploadTest)
 
 TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
@@ -407,7 +407,7 @@ TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
     EXPECT_FALSE(client.upload("../ftp/test_data/war_and_peace.txt", "nonexistent/war_and_peace.txt"));
     EXPECT_TRUE(client.close());
 
-    string replies = replaceUnpredictableData(ftp_observer.get_replies());
+    string replies = replaceUnpredictableData(observer.get_replies());
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
                        "230 Login successful.\r\n"
@@ -419,8 +419,8 @@ TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
 
 TEST_F(FtpClientTest, UploadNonexistentFileTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
@@ -440,10 +440,10 @@ TEST_F(FtpClientTest, UploadNonexistentFileTest)
     EXPECT_TRUE(catched);
     EXPECT_TRUE(client.close());
 
-    ASSERT_EQ(ftp_observer.get_replies(), "220 FTP server is ready.\r\n"
-                                          "331 Username ok, send password.\r\n"
-                                          "230 Login successful.\r\n"
-                                          "221 Goodbye.\r\n");
+    ASSERT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
+                                      "331 Username ok, send password.\r\n"
+                                      "230 Login successful.\r\n"
+                                      "221 Goodbye.\r\n");
 }
 
 TEST_F(FtpClientTest, DownloadTest)
@@ -460,8 +460,8 @@ TEST_F(FtpClientTest, DownloadTest)
 
 TEST_F(FtpClientTest, DownloadNonexistentFileTest)
 {
-    test_ftp_observer ftp_observer;
-    ftp::client client(&ftp_observer);
+    test_ftp_observer observer;
+    ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
     EXPECT_TRUE(client.login("user", "password"));
@@ -469,7 +469,7 @@ TEST_F(FtpClientTest, DownloadNonexistentFileTest)
     EXPECT_FALSE(client.download("nonexistent", "downloads/nonexistent"));
     EXPECT_TRUE(client.close());
 
-    string replies = replaceUnpredictableData(ftp_observer.get_replies());
+    string replies = replaceUnpredictableData(observer.get_replies());
     ASSERT_EQ(replies, "220 FTP server is ready.\r\n"
                        "331 Username ok, send password.\r\n"
                        "230 Login successful.\r\n"
