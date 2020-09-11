@@ -31,6 +31,9 @@
 
 using std::regex;
 using std::string;
+using std::ifstream;
+using std::streamsize;
+using std::runtime_error;
 
 using ftp::ftp_exception;
 
@@ -85,6 +88,41 @@ protected:
         return result;
     }
 
+    static bool compareFiles(const string & path1, const string & path2)
+    {
+        ifstream f1(path1, ifstream::binary | ifstream::ate);
+        if (!f1)
+            throw runtime_error("Cannot open file: " + path1);
+
+        ifstream f2(path2, ifstream::binary | ifstream::ate);
+        if (!f2)
+            throw runtime_error("Cannot open file: " + path2);
+
+        if (f1.tellg() != f2.tellg())
+            return false;
+
+        f1.seekg(0);
+        f2.seekg(0);
+        while (!f1.eof())
+        {
+            const streamsize buffSize = 4096;
+            char buff1[buffSize];
+            char buff2[buffSize];
+
+            f1.read(buff1, buffSize);
+            if (f1.fail() && !f1.eof())
+                throw runtime_error("Cannot read data from file: " + path1);
+
+            f2.read(buff2, buffSize);
+            if (f2.fail() && !f2.eof())
+                throw runtime_error("Cannot read data from file: " + path2);
+
+            if (memcmp(buff1, buff2, f1.gcount()) != 0)
+                return false;
+        }
+
+        return true;
+    }
 private:
     static const string m_downloadsDir;
     static const string m_ftpServerDir;
@@ -395,6 +433,9 @@ TEST_F(FtpClientTest, UploadTest)
     EXPECT_TRUE(client.mkdir("directory"));
     EXPECT_TRUE(client.upload("../ftp/test_data/war_and_peace.txt", "directory/war_and_peace.txt"));
     EXPECT_TRUE(client.close());
+
+    EXPECT_TRUE(compareFiles("../ftp/test_data/war_and_peace.txt", "test_server/war_and_peace.txt"));
+    EXPECT_TRUE(compareFiles("../ftp/test_data/war_and_peace.txt", "test_server/directory/war_and_peace.txt"));
 }
 
 TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
@@ -457,6 +498,8 @@ TEST_F(FtpClientTest, DownloadTest)
     EXPECT_TRUE(client.upload("../ftp/test_data/war_and_peace.txt", "war_and_peace.txt"));
     EXPECT_TRUE(client.download("war_and_peace.txt", "downloads/war_and_peace.txt"));
     EXPECT_TRUE(client.close());
+
+    EXPECT_TRUE(compareFiles("../ftp/test_data/war_and_peace.txt", "downloads/war_and_peace.txt"));
 }
 
 TEST_F(FtpClientTest, DownloadNonexistentFileTest)
