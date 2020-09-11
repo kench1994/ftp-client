@@ -124,8 +124,8 @@ TEST_F(FtpClientTest, OpenConnectionTest)
     EXPECT_TRUE(client.close());
     EXPECT_FALSE(client.is_open());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, ConnectionIsNotOpenTest)
@@ -155,10 +155,10 @@ TEST_F(FtpClientTest, LoginTest)
     EXPECT_TRUE(client.login("user", "password"));
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "230 Login successful.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, LoginNonexistentUserTest)
@@ -170,10 +170,10 @@ TEST_F(FtpClientTest, LoginNonexistentUserTest)
     EXPECT_FALSE(client.login("nonexistent", "password"));
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "530 Authentication failed.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "530 Authentication failed.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, LoginWrongPasswordTest)
@@ -185,10 +185,10 @@ TEST_F(FtpClientTest, LoginWrongPasswordTest)
     EXPECT_FALSE(client.login("user", "wrong password"));
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "530 Authentication failed.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "530 Authentication failed.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, NoopTest)
@@ -201,11 +201,11 @@ TEST_F(FtpClientTest, NoopTest)
     EXPECT_TRUE(client.noop());
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "230 Login successful.\r\n"
-                                      "200 I successfully done nothin'.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "200 I successfully done nothin'.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, PwdTest)
@@ -218,11 +218,11 @@ TEST_F(FtpClientTest, PwdTest)
     EXPECT_TRUE(client.pwd());
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "230 Login successful.\r\n"
-                                      "257 \"/\" is the current directory.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "257 \"/\" is the current directory.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, MkdirTest)
@@ -235,11 +235,11 @@ TEST_F(FtpClientTest, MkdirTest)
     EXPECT_TRUE(client.mkdir("directory"));
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "230 Login successful.\r\n"
-                                      "257 \"/directory\" directory created.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "257 \"/directory\" directory created.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, MkdirDirectoryAlreadyExistsTest)
@@ -253,12 +253,12 @@ TEST_F(FtpClientTest, MkdirDirectoryAlreadyExistsTest)
     EXPECT_FALSE(client.mkdir("directory"));
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "230 Login successful.\r\n"
-                                      "257 \"/directory\" directory created.\r\n"
-                                      "550 File exists.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "257 \"/directory\" directory created.\r\n"
+              "550 File exists.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, RmdirTest)
@@ -272,12 +272,12 @@ TEST_F(FtpClientTest, RmdirTest)
     EXPECT_TRUE(client.rmdir("directory"));
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "230 Login successful.\r\n"
-                                      "257 \"/directory\" directory created.\r\n"
-                                      "250 Directory removed.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "257 \"/directory\" directory created.\r\n"
+              "250 Directory removed.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, RmdirNonexistentDirectoryTest)
@@ -290,11 +290,11 @@ TEST_F(FtpClientTest, RmdirNonexistentDirectoryTest)
     EXPECT_FALSE(client.rmdir("nonexistent"));
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "230 Login successful.\r\n"
-                                      "550 No such file or directory.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "550 No such file or directory.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, CdTest)
@@ -309,13 +309,13 @@ TEST_F(FtpClientTest, CdTest)
     EXPECT_TRUE(client.cd(".."));
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "230 Login successful.\r\n"
-                                      "257 \"/directory\" directory created.\r\n"
-                                      "250 \"/directory\" is the current directory.\r\n"
-                                      "250 \"/\" is the current directory.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "257 \"/directory\" directory created.\r\n"
+              "250 \"/directory\" is the current directory.\r\n"
+              "250 \"/\" is the current directory.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, CdNonexistentDirectoryTest)
@@ -328,11 +328,11 @@ TEST_F(FtpClientTest, CdNonexistentDirectoryTest)
     EXPECT_FALSE(client.cd("nonexistent"));
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "230 Login successful.\r\n"
-                                      "550 No such file or directory.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "550 No such file or directory.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, LsTest)
@@ -358,12 +358,12 @@ TEST_F(FtpClientTest, LsNonexistentDirectoryTest)
     EXPECT_TRUE(client.close());
 
     string replies = replaceUnpredictableData(observer.get_replies());
-    EXPECT_EQ(replies, "220 FTP server is ready.\r\n"
-                       "331 Username ok, send password.\r\n"
-                       "230 Login successful.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "550 No such file or directory.\r\n"
-                       "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "229 Entering extended passive mode (|||1234|).\r\n"
+              "550 No such file or directory.\r\n"
+              "221 Goodbye.\r\n", replies);
 }
 
 TEST_F(FtpClientTest, BinaryTest)
@@ -376,11 +376,11 @@ TEST_F(FtpClientTest, BinaryTest)
     EXPECT_TRUE(client.binary());
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "230 Login successful.\r\n"
-                                      "200 Type set to: Binary.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "200 Type set to: Binary.\r\n"
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, UploadTest)
@@ -408,13 +408,13 @@ TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
     EXPECT_TRUE(client.close());
 
     string replies = replaceUnpredictableData(observer.get_replies());
-    EXPECT_EQ(replies, "220 FTP server is ready.\r\n"
-                       "331 Username ok, send password.\r\n"
-                       "230 Login successful.\r\n"
-                       "200 Type set to: Binary.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "550 No such file or directory.\r\n"
-                       "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "200 Type set to: Binary.\r\n"
+              "229 Entering extended passive mode (|||1234|).\r\n"
+              "550 No such file or directory.\r\n"
+              "221 Goodbye.\r\n", replies);
 }
 
 TEST_F(FtpClientTest, UploadNonexistentFileTest)
@@ -434,16 +434,17 @@ TEST_F(FtpClientTest, UploadNonexistentFileTest)
     catch (const ftp_exception & ex)
     {
         catched = true;
-        EXPECT_STREQ(ex.what(), "Cannot open file 'nonexistent'.");
+        EXPECT_STREQ("Cannot open file 'nonexistent'.", ex.what());
     }
 
     EXPECT_TRUE(catched);
     EXPECT_TRUE(client.close());
 
-    EXPECT_EQ(observer.get_replies(), "220 FTP server is ready.\r\n"
-                                      "331 Username ok, send password.\r\n"
-                                      "230 Login successful.\r\n"
-                                      "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "221 Goodbye.\r\n",
+              observer.get_replies());
 }
 
 TEST_F(FtpClientTest, DownloadTest)
@@ -470,13 +471,13 @@ TEST_F(FtpClientTest, DownloadNonexistentFileTest)
     EXPECT_TRUE(client.close());
 
     string replies = replaceUnpredictableData(observer.get_replies());
-    EXPECT_EQ(replies, "220 FTP server is ready.\r\n"
-                       "331 Username ok, send password.\r\n"
-                       "230 Login successful.\r\n"
-                       "200 Type set to: Binary.\r\n"
-                       "229 Entering extended passive mode (|||1234|).\r\n"
-                       "550 No such file or directory.\r\n"
-                       "221 Goodbye.\r\n");
+    EXPECT_EQ("220 FTP server is ready.\r\n"
+              "331 Username ok, send password.\r\n"
+              "230 Login successful.\r\n"
+              "200 Type set to: Binary.\r\n"
+              "229 Entering extended passive mode (|||1234|).\r\n"
+              "550 No such file or directory.\r\n"
+              "221 Goodbye.\r\n", replies);
 }
 
 TEST_F(FtpClientTest, DownloadFileAlreadyExistsTest)
@@ -498,7 +499,7 @@ TEST_F(FtpClientTest, DownloadFileAlreadyExistsTest)
     catch (const ftp_exception & ex)
     {
         catched = true;
-        EXPECT_STREQ(ex.what(), "The file 'downloads/war_and_peace.txt' already exists.");
+        EXPECT_STREQ("The file 'downloads/war_and_peace.txt' already exists.", ex.what());
     }
 
     EXPECT_TRUE(catched);
