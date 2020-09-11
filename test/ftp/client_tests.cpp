@@ -123,6 +123,23 @@ protected:
 
         return true;
     }
+
+    class TestFtpObserver : public ftp::client::event_observer
+    {
+    public:
+        void on_reply(const string & reply) override
+        {
+            m_replies.append(reply);
+        }
+
+        const string & get_replies() const
+        {
+            return m_replies;
+        }
+
+    private:
+        string m_replies;
+    };
 private:
     static const string m_downloadsDir;
     static const string m_ftpServerDir;
@@ -133,26 +150,9 @@ const string FtpClientTest::m_downloadsDir = "downloads";
 const string FtpClientTest::m_ftpServerDir = "test_server";
 boost::process::child FtpClientTest::m_ftpServerProcess;
 
-class test_ftp_observer : public ftp::client::event_observer
-{
-public:
-    void on_reply(const string & reply) override
-    {
-        replies_.append(reply);
-    }
-
-    const string & get_replies() const
-    {
-        return replies_;
-    }
-
-private:
-    string replies_;
-};
-
 TEST_F(FtpClientTest, OpenConnectionTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_FALSE(client.is_open());
@@ -187,7 +187,7 @@ TEST_F(FtpClientTest, ConnectionIsNotOpenTest)
 
 TEST_F(FtpClientTest, LoginTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -202,7 +202,7 @@ TEST_F(FtpClientTest, LoginTest)
 
 TEST_F(FtpClientTest, LoginNonexistentUserTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -217,7 +217,7 @@ TEST_F(FtpClientTest, LoginNonexistentUserTest)
 
 TEST_F(FtpClientTest, LoginWrongPasswordTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -232,7 +232,7 @@ TEST_F(FtpClientTest, LoginWrongPasswordTest)
 
 TEST_F(FtpClientTest, NoopTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -249,7 +249,7 @@ TEST_F(FtpClientTest, NoopTest)
 
 TEST_F(FtpClientTest, PwdTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -266,7 +266,7 @@ TEST_F(FtpClientTest, PwdTest)
 
 TEST_F(FtpClientTest, MkdirTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -283,7 +283,7 @@ TEST_F(FtpClientTest, MkdirTest)
 
 TEST_F(FtpClientTest, MkdirDirectoryAlreadyExistsTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -302,7 +302,7 @@ TEST_F(FtpClientTest, MkdirDirectoryAlreadyExistsTest)
 
 TEST_F(FtpClientTest, RmdirTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -321,7 +321,7 @@ TEST_F(FtpClientTest, RmdirTest)
 
 TEST_F(FtpClientTest, RmdirNonexistentDirectoryTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -349,7 +349,7 @@ TEST_F(FtpClientTest, RmTest)
 
 TEST_F(FtpClientTest, RmNonexistentFileTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -366,7 +366,7 @@ TEST_F(FtpClientTest, RmNonexistentFileTest)
 
 TEST_F(FtpClientTest, CdTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -387,7 +387,7 @@ TEST_F(FtpClientTest, CdTest)
 
 TEST_F(FtpClientTest, CdNonexistentDirectoryTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -416,7 +416,7 @@ TEST_F(FtpClientTest, LsTest)
 
 TEST_F(FtpClientTest, LsNonexistentDirectoryTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -435,7 +435,7 @@ TEST_F(FtpClientTest, LsNonexistentDirectoryTest)
 
 TEST_F(FtpClientTest, BinaryTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -468,7 +468,7 @@ TEST_F(FtpClientTest, UploadTest)
 
 TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -489,7 +489,7 @@ TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
 
 TEST_F(FtpClientTest, UploadNonexistentFileTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
@@ -532,7 +532,7 @@ TEST_F(FtpClientTest, DownloadTest)
 
 TEST_F(FtpClientTest, DownloadNonexistentFileTest)
 {
-    test_ftp_observer observer;
+    TestFtpObserver observer;
     ftp::client client(&observer);
 
     EXPECT_TRUE(client.open("localhost", 2121));
