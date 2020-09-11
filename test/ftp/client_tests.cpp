@@ -443,8 +443,7 @@ TEST_F(FtpClientTest, UploadNonexistentFileTest)
     EXPECT_EQ("220 FTP server is ready.\r\n"
               "331 Username ok, send password.\r\n"
               "230 Login successful.\r\n"
-              "221 Goodbye.\r\n",
-              observer.get_replies());
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, DownloadTest)
