@@ -43,9 +43,9 @@ protected:
         std::filesystem::create_directory(m_ftpServerDir);
         boost::filesystem::path pythonPath = boost::process::search_path("python3");
 
-        /* Usage: python server.py port user password home_directory */
+        /* Usage: python server.py port home_directory */
         m_ftpServerProcess = boost::process::child(pythonPath, "../ftp/server/server.py",
-                                                   "2121", "user", "password", m_ftpServerDir);
+                                                   "2121", m_ftpServerDir);
 
         /* Wait for 2s to allow the server to start. */
         m_ftpServerProcess.wait_for(std::chrono::seconds(2));

@@ -27,14 +27,12 @@ from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
 
 def main():
-    if len(sys.argv) != 5:
-        print("Usage: server.py port user password home_directory")
+    if len(sys.argv) != 3:
+        print("Usage: server.py port home_directory")
         return
 
     port = sys.argv[1]
-    user = sys.argv[2]
-    password = sys.argv[3]
-    home_directory = sys.argv[4]
+    home_directory = sys.argv[2]
 
     # Add user with the following permissions:
     #   e - change directory (CWD, CDUP commands)
@@ -46,7 +44,7 @@ def main():
     #   m - create directory (MKD command)
     #   w - store a file to the server (STOR, STOU commands)
     authorizer = DummyAuthorizer()
-    authorizer.add_user(user, password, home_directory, perm = "elradfmw")
+    authorizer.add_user("user", "password", home_directory, perm = "elradfmw")
 
     handler = FTPHandler
     handler.authorizer = authorizer
