@@ -77,17 +77,6 @@ protected:
         }
     }
 
-    static string replaceUnpredictableData(const string & replies)
-    {
-        string result;
-
-        result = regex_replace(replies,
-                               regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                                       "229 Entering extended passive mode (|||1234|).");
-
-        return result;
-    }
-
     static bool compareFiles(const string & path1, const string & path2)
     {
         ifstream f1(path1, ifstream::binary | ifstream::ate);
@@ -122,6 +111,17 @@ protected:
         }
 
         return true;
+    }
+
+    static string replaceUnpredictableData(const string & replies)
+    {
+        string result;
+
+        result = regex_replace(replies,
+                               regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
+                                       "229 Entering extended passive mode (|||1234|).");
+
+        return result;
     }
 
     class TestFtpObserver : public ftp::client::event_observer
