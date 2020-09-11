@@ -129,7 +129,7 @@ protected:
     public:
         void on_reply(const string & reply) override
         {
-            m_replies.append(reply);
+            m_replies.append(replaceUnpredictableData(reply));
         }
 
         const string & get_replies() const
@@ -424,13 +424,12 @@ TEST_F(FtpClientTest, LsNonexistentDirectoryTest)
     EXPECT_FALSE(client.ls("nonexistent"));
     EXPECT_TRUE(client.close());
 
-    string replies = replaceUnpredictableData(observer.get_replies());
     EXPECT_EQ("220 FTP server is ready.\r\n"
               "331 Username ok, send password.\r\n"
               "230 Login successful.\r\n"
               "229 Entering extended passive mode (|||1234|).\r\n"
               "550 No such file or directory.\r\n"
-              "221 Goodbye.\r\n", replies);
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, BinaryTest)
@@ -477,14 +476,13 @@ TEST_F(FtpClientTest, UploadOnNonexistentPathTest)
     EXPECT_FALSE(client.upload("../ftp/test_data/war_and_peace.txt", "nonexistent/war_and_peace.txt"));
     EXPECT_TRUE(client.close());
 
-    string replies = replaceUnpredictableData(observer.get_replies());
     EXPECT_EQ("220 FTP server is ready.\r\n"
               "331 Username ok, send password.\r\n"
               "230 Login successful.\r\n"
               "200 Type set to: Binary.\r\n"
               "229 Entering extended passive mode (|||1234|).\r\n"
               "550 No such file or directory.\r\n"
-              "221 Goodbye.\r\n", replies);
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, UploadNonexistentFileTest)
@@ -541,14 +539,13 @@ TEST_F(FtpClientTest, DownloadNonexistentFileTest)
     EXPECT_FALSE(client.download("nonexistent", "downloads/nonexistent"));
     EXPECT_TRUE(client.close());
 
-    string replies = replaceUnpredictableData(observer.get_replies());
     EXPECT_EQ("220 FTP server is ready.\r\n"
               "331 Username ok, send password.\r\n"
               "230 Login successful.\r\n"
               "200 Type set to: Binary.\r\n"
               "229 Entering extended passive mode (|||1234|).\r\n"
               "550 No such file or directory.\r\n"
-              "221 Goodbye.\r\n", replies);
+              "221 Goodbye.\r\n", observer.get_replies());
 }
 
 TEST_F(FtpClientTest, DownloadFileAlreadyExistsTest)
