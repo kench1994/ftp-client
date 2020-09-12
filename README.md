@@ -42,7 +42,7 @@ FTP may run in active or passive mode, which determines how the data connection 
 <h2>Requirements</h2>
 
 * Compiler support for C++17
-* CMake 3.10
+* CMake 3.10 or newer
 * <a href="https://www.boost.org/users/history/version_1_67_0.html" target="_blank">Boost 1.67.0</a>
 * Python3 (only for tests)
 
