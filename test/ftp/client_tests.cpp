@@ -119,23 +119,17 @@ protected:
         return (... + (strings + string("\r\n")));
     }
 
-    static string replaceUnpredictableData(const string & replies)
-    {
-        string result;
-
-        result = regex_replace(replies,
-                               regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
-                                       "229 Entering extended passive mode (|||1234|).");
-
-        return result;
-    }
-
     class TestFtpObserver : public ftp::client::event_observer
     {
     public:
         void on_reply(const string & reply) override
         {
-            m_replies.append(replaceUnpredictableData(reply));
+            /* Replace unpredictable data. */
+            string result = regex_replace(reply,
+                                          regex(R"(229 Entering extended passive mode \(\|\|\|\d{1,5}\|\)\.)"),
+                                                  "229 Entering extended passive mode (|||1234|).");
+
+            m_replies.append(result);
         }
 
         const string & get_replies() const
