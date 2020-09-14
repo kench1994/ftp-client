@@ -591,3 +591,49 @@ TEST_F(FtpClientTest, DownloadFileAlreadyExistsTest)
     EXPECT_TRUE(catched);
     EXPECT_TRUE(client.close());
 }
+
+TEST_F(FtpClientTest, StatTest)
+{
+    ftp::client client;
+
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.stat());
+    EXPECT_TRUE(client.close());
+}
+
+TEST_F(FtpClientTest, StatDirectoryTest)
+{
+    TestFtpObserver observer;
+    ftp::client client(&observer);
+
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_TRUE(client.stat("."));
+    EXPECT_TRUE(client.close());
+
+    EXPECT_EQ(CRLF("220 FTP server is ready.",
+                   "331 Username ok, send password.",
+                   "230 Login successful.",
+                   "213-Status of \"/\":",
+                   "213 End of status.",
+                   "221 Goodbye."),
+              observer.get_replies());
+}
+
+TEST_F(FtpClientTest, StatNonexistentFileTest)
+{
+    TestFtpObserver observer;
+    ftp::client client(&observer);
+
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.login("user", "password"));
+    EXPECT_FALSE(client.stat("nonexistent"));
+    EXPECT_TRUE(client.close());
+
+    EXPECT_EQ(CRLF("220 FTP server is ready.",
+                   "331 Username ok, send password.",
+                   "230 Login successful.",
+                   "550 No such file or directory.",
+                   "221 Goodbye."),
+              observer.get_replies());
+}
