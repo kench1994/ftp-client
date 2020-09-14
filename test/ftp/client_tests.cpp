@@ -637,3 +637,19 @@ TEST_F(FtpClientTest, StatNonexistentFileTest)
                    "221 Goodbye."),
               observer.get_replies());
 }
+
+TEST_F(FtpClientTest, SystemTest)
+{
+    TestFtpObserver observer;
+    ftp::client client(&observer);
+
+    EXPECT_TRUE(client.open("localhost", 2121));
+    EXPECT_TRUE(client.system());
+    EXPECT_TRUE(client.close());
+
+    /* pyftpdlib responds '215 UNIX Type: L8' regardless of the system type. */
+    EXPECT_EQ(CRLF("220 FTP server is ready.",
+                   "215 UNIX Type: L8",
+                   "221 Goodbye."),
+              observer.get_replies());
+}
