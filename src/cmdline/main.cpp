@@ -22,46 +22,46 @@
  * SOFTWARE.
  */
 
-#include "cmdline_interface.hpp"
+#include "ftp/client.hpp"
 #include <iostream>
+#include <regex>
 
-using std::cerr;
-using std::cin;
-using std::endl;
-using std::istream;
-using std::exception;
+using std::regex;
+using std::string;
+using std::ifstream;
+using std::streamsize;
+using std::runtime_error;
+
+class FtpObserver : public ftp::client::event_observer
+{
+    public:
+        void on_reply(const string & reply) override
+        {
+            /* Replace unpredictable data. */
+            string result = regex_replace(reply,
+                                            regex(R"(229 Entering extended passive mode /(/|/|/|/d{1,5}/|/)/.)"),
+                                                    "229 Entering extended passive mode (|||1234|).");
+            std::cout << result << std::endl;
+            m_replies.append(result);
+        }
+
+        const string & get_replies() const
+        {
+            return m_replies;
+        }
+
+    private:
+        string m_replies;
+};
 
 int main(int argc, char *argv[])
 {
-    cin.exceptions(cin.exceptions() | istream::failbit | istream::badbit);
+    FtpObserver observer;
+    ftp::client client(&observer);
 
-    try
-    {
-        cmdline_interface cmdline;
-        cmdline.run();
-    }
-    catch (const istream::failure & ex)
-    {
-        if (cin.eof())
-        {
-            return EXIT_SUCCESS;
-        }
-        else
-        {
-            cerr << ex.what() << endl;
-            return EXIT_FAILURE;
-        }
-    }
-    catch (const exception & ex)
-    {
-        cerr << ex.what() << endl;
-        return EXIT_FAILURE;
-    }
-    catch (...)
-    {
-        cerr << "Unknown error." << endl;
-        return EXIT_FAILURE;
-    }
-
+    client.open("localhost", 20182);
+    client.login("server12345", "server12345");
+    client.upload("/home/rhel/Downloads/gcc-8.5.0.tar.gz", "war_and_peace.txt");
+    getchar();
     return EXIT_SUCCESS;
 }
