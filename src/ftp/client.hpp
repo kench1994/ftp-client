@@ -62,6 +62,8 @@ public:
 
     bool upload(const std::string & local_file, const std::string & remote_file);
 
+    bool upload_cache(detail::data_connection* pDataConn, const char* pszBuffer, std::size_t uBufferSize);
+
     bool download(const std::string & remote_file, const std::string & local_file);
 
     bool pwd();
@@ -88,6 +90,7 @@ public:
 
     void unsubscribe(event_observer *observer);
 
+    std::unique_ptr<detail::data_connection> prepare_upload(const std::string & remote_file);
 private:
     detail::reply_t send_command(const std::string & command);
 

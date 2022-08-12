@@ -48,6 +48,8 @@ public:
 
     void send(std::ifstream & file);
 
+    void send(const char* pszBuffer, std::size_t uBufferSize);
+
     void recv(std::ofstream & file);
 
     std::string recv();

@@ -129,6 +129,18 @@ void data_connection::send(ifstream & file)
     }
 }
 
+void data_connection::send(const char* pszBuffer, std::size_t uBufferSize)
+{
+    boost::system::error_code ec;
+
+    boost::asio::write(socket_, boost::asio::buffer(pszBuffer, uBufferSize), ec);
+
+    if (ec)
+    {
+        throw connection_exception(ec, "Cannot send data over data connection");
+    }
+}
+
 void data_connection::recv(ofstream & file)
 {
     boost::system::error_code ec;

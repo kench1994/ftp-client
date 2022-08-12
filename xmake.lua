@@ -3,7 +3,7 @@ toolchain("gcc-8.5.0")
     set_sdkdir("/usr/local/gcc-8.5.0")
 toolchain_end()
 
-add_rules("mode.debug")
+add_rules("mode.debug", "mode.release")
 set_languages("c11", "cxx17")
 set_toolchains("gcc-8.5.0")
     

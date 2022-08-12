@@ -218,6 +218,46 @@ bool client::upload(const string & local_file, const string & remote_file)
     }
 }
 
+bool client::upload_cache(detail::data_connection* pDataConn, const char* pszBuffer, std::size_t uBufferSize)
+{
+    try
+    {
+        if (!is_open() || !pDataConn->is_open())
+        {
+            throw ftp_exception("Connection is not open.");
+        }
+
+        pDataConn->send(pszBuffer, uBufferSize);
+        //flush??
+        pDataConn->close();
+        reply_t reply = recv();
+
+        return reply.is_positive();
+    }
+    catch (const connection_exception & ex)
+    {
+        reset_connection();
+        throw ftp_exception(ex);
+    }
+}
+
+std::unique_ptr<detail::data_connection> client::prepare_upload(const std::string & remote_file)
+{
+    if (!is_open())
+    {
+        throw ftp_exception("Connection is not open.");
+    }
+
+    unique_ptr<data_connection> data_connection = establish_data_connection("STOR " + remote_file);
+
+    if (!data_connection)
+    {
+        return nullptr;
+    }
+
+    return data_connection;
+}
+
 bool client::download(const string & remote_file, const string & local_file)
 {
     try
