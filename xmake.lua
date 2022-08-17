@@ -1,11 +1,11 @@
-toolchain("gcc-8.5.0")
-    set_kind("standalone")
-    set_sdkdir("/usr/local/gcc-8.5.0")
-toolchain_end()
+-- toolchain("gcc-8.5.0")
+--     set_kind("standalone")
+--     set_sdkdir("/usr/local/gcc-8.5.0")
+-- toolchain_end()
 
 add_rules("mode.debug", "mode.release")
 set_languages("c11", "cxx17")
-set_toolchains("gcc-8.5.0")
+--set_toolchains("gcc-8.5.0")
     
 if is_os("windows") then
     set_config("arch", "x86")

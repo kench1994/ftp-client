@@ -28,7 +28,7 @@
 #include <boost/asio/read_until.hpp>
 #include <boost/asio/write.hpp>
 #include <boost/lexical_cast/try_lexical_convert.hpp>
-
+#include <iostream>
 namespace ftp::detail
 {
 
@@ -54,23 +54,13 @@ control_connection::control_connection()
 
 void control_connection::open(const string & hostname, uint16_t port)
 {
-    boost::asio::ip::tcp::resolver resolver(io_context_);
     boost::system::error_code ec;
-
-    boost::asio::ip::tcp::resolver::results_type endpoints =
-            resolver.resolve(hostname, to_string(port), ec);
-
-    if (ec)
-    {
-        throw connection_exception(ec, "Cannot open connection");
-    }
-
-    boost::asio::connect(socket_, endpoints, ec);
-
+    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address_v6::from_string("fe80::1205:14e1:f17a:8b8a%ens33"), 20182);
+    socket_.connect(endpoint, ec);
     if (ec)
     {
         boost::system::error_code ignored;
-
+        std::cerr << ec.message() << std::endl;
         /* If the connect fails, and the socket was automatically opened,
          * the socket is not returned to the closed state.
          *

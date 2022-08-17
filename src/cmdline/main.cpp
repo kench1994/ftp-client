@@ -94,8 +94,7 @@ typedef struct tagFtpSession{
 }FtpSession;
 
 constexpr unsigned int TERM_CNT = 500;
-constexpr unsigned int FILE_BLOCK = 400;
-
+constexpr unsigned int FILE_BLOCK = 400;///1600;
 
 void parallel_work(uint64_t ullTaskCnt, const std::function<void(uint64_t, uint64_t)>& fnWork) {
 	//硬件并发能力
@@ -145,12 +144,14 @@ int main(int argc, char *argv[])
     }
 
     {
+        //todo:抽象成类
+        //区间begin，end 区间任务 lambda
         auto session_prepare_work = [&hashmapFtps](uint64_t begin, uint64_t end) {
             for (auto i = begin; i < end; i++) {
                 auto *pFtpSession = hashmapFtps.at(i).get();
                 auto *pFtpClient = pFtpSession->spFtpClient.get();
 
-                if(pFtpClient->open("127.0.0.1", 20182) && pFtpClient->login("server12345", "server12345"))
+                if(pFtpClient->open("fe80::1205:14e1:f17a:8b8a", 20182) && pFtpClient->login("server12345", "server12345"))
                     continue;
                 std::cerr << "failed!" << std::endl;
             }
@@ -186,7 +187,11 @@ int main(int argc, char *argv[])
 
 			if (FILE_BLOCK == pFtpSession->uDoneCnt)
 				return;
-
+            if(!pFtpSession->spDataConn)
+            {
+                ++pFtpSession->uDoneCnt;
+                return;
+            }
             auto *pDataConn = pFtpSession->spDataConn.get();
             auto *pFtpClient = pFtpSession->spFtpClient.get();
 
@@ -198,6 +203,8 @@ int main(int argc, char *argv[])
                 if(pFtpClient->upload_cache(pDataConn, "\r\n", strlen("\r\n")))
                 {
                     printf("客户端 %0d 发送完成\n", i + 1);
+
+                    pFtpClient->close();
                     return;
                 }
                 std::cerr << "failed!" << std::endl;
