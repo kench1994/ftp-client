@@ -55,7 +55,11 @@ control_connection::control_connection()
 void control_connection::open(const string & hostname, uint16_t port)
 {
     boost::system::error_code ec;
-    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address_v6::from_string("fe80::1205:14e1:f17a:8b8a%ens33"), 20182);
+    //TODO: ipv6 address support
+    //"fe80::1205:14e1:f17a:8b8a%ens33"
+    //boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address_v4::from_string("fe80::1205:14e1:f17a:8b8a%ens33"), 20182);
+
+    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address_v4::from_string(hostname), 20182);
     socket_.connect(endpoint, ec);
     if (ec)
     {

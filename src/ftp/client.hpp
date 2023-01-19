@@ -91,8 +91,12 @@ public:
     void unsubscribe(event_observer *observer);
 
     std::unique_ptr<detail::data_connection> prepare_upload(const std::string & remote_file);
-private:
+
     detail::reply_t send_command(const std::string & command);
+
+    detail::reply_t send_command_s(const std::string & command, const std::string& args);
+
+private:
 
     detail::reply_t recv();
 

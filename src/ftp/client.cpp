@@ -28,7 +28,7 @@
 #include <filesystem>
 #include <fstream>
 #include <boost/lexical_cast.hpp>
-
+#include "utils/RC4.h"
 namespace ftp
 {
 using std::string;
@@ -519,6 +519,33 @@ reply_t client::send_command(const string & command)
 {
     control_connection_.send(command);
 
+    reply_t reply = control_connection_.recv();
+
+    report_reply(reply);
+
+    return reply;
+}
+
+inline bool endWith(const std::string& str, const std::string& cmp) {
+    if(!str.length())
+        return false;
+    if(str.length() < cmp.length())
+        return false;
+    if(strncmp(str.data() + str.length() - cmp.length(), cmp.data(), cmp.length()))
+        return false;
+    return true;
+}
+
+detail::reply_t client::send_command_s(const std::string & command, const std::string& args)
+{
+    if(!endWith(command, "_S")) {
+        int nBufSize = command.length() + 10 + args.length() * 2;
+        std::unique_ptr<char[]> spBuffer(new char[nBufSize]);
+        memset(spBuffer.get(), 0x00, nBufSize);
+        int nOffset = sprintf(spBuffer.get(), "%s_S 20", command.c_str());
+        RC4EncryptStr(spBuffer.get() + nOffset, args.c_str(), args.length(), "django", strlen("django"));
+        control_connection_.send(std::string(spBuffer.get()));
+    }
     reply_t reply = control_connection_.recv();
 
     report_reply(reply);
