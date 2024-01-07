@@ -42,6 +42,8 @@ public:
 
     void open(const std::string & hostname, uint16_t port);
 
+    void open_v6(const std::string & hostname, uint16_t port);
+
     bool is_open() const;
 
     void close();

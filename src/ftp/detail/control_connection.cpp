@@ -55,11 +55,30 @@ control_connection::control_connection()
 void control_connection::open(const string & hostname, uint16_t port)
 {
     boost::system::error_code ec;
+
+    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address_v4::from_string(hostname), port);
+    socket_.connect(endpoint, ec);
+    if (ec)
+    {
+        boost::system::error_code ignored;
+        std::cerr << ec.message() << std::endl;
+        /* If the connect fails, and the socket was automatically opened,
+         * the socket is not returned to the closed state.
+         *
+         * https://www.boost.org/doc/libs/1_70_0/doc/html/boost_asio/reference/basic_stream_socket/connect/overload2.html
+         */
+        socket_.close(ignored);
+
+        throw connection_exception(ec, "Cannot open connection");
+    }
+}
+
+void control_connection::open_v6(const std::string & hostname, uint16_t port)
+{
+    boost::system::error_code ec;
     //TODO: ipv6 address support
     //"fe80::1205:14e1:f17a:8b8a%ens33"
-    //boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address_v4::from_string("fe80::1205:14e1:f17a:8b8a%ens33"), 20182);
-
-    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address_v4::from_string(hostname), 20182);
+    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address_v4::from_string(hostname), port);
     socket_.connect(endpoint, ec);
     if (ec)
     {
@@ -135,10 +154,10 @@ reply_t control_connection::recv()
 
     status_line = read_line();
 
-    if (!try_parse_status_code(status_line, status_code))
-    {
-        throw connection_exception("Invalid server reply: %1%", status_line);
-    }
+    // if (!try_parse_status_code(status_line, status_code))
+    // {
+    //     throw connection_exception("Invalid server reply: %1%", status_line);
+    // }
 
     /* Thus the format for multi-line replies is that the first line
      * will begin with the exact required reply code, followed

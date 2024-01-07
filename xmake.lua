@@ -27,7 +27,7 @@ target("ftp-client")
               "src/ftp/detail/*.cpp",
               "src/utils/*.cpp")
     add_syslinks("pthread", "stdc++fs")
-
+	add_rpathdirs(".")
     -- 自动生成 compile_commands.json 帮助代码补全跳转
     after_build(function (target)
         import("core.base.task")

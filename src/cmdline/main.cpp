@@ -23,6 +23,7 @@
  */
 
 #include "ftp/client.hpp"
+#include "ftp/ftp_exception.hpp"
 #include <boost/shared_array.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
@@ -32,50 +33,138 @@
 #include <iostream>
 #include <memory>
 #include <thread>
+#include <vector>
 #include "utils/RC4.h"
-// class FtpSession : public ftp::client::event_observer
-// {
-//     public:
-
-//         void on_reply(const std::string & reply) override
-//         {
-//             /* Replace unpredictable data. */
-//             //std::string result = regex_replace(reply,\
-//                                             regex(R"(229 Entering extended passive mode /(/|/|/|/d{1,5}/|/)/.)"),\
-//                                                     "229 Entering extended passive mode (|||1234|).");
-//             //m_replies.append(result);
-//         }
-
-//         const std::string & get_replies() const
-//         {
-//             return m_replies;
-//         }
-
-//     private:
-//         std::string m_replies;
-
-//         std::unique_ptr<ftp::client> spFtpClient;
-
-//         std::unique_ptr<ftp::detail::data_connection> spDataConn;
-// };
 
 int main()
 {
-    auto spFtpClient = std::make_unique<ftp::client>();
-    if(!spFtpClient->open("192.168.152.178", 20182) && !spFtpClient->login("server12345", "server12345")) {
-        fprintf(stdout, "Ftp Client Initial Failed!\n");
-        return 1;
-    }
-    fprintf(stdout, "Ftp Client Initial Success!\n");
+	try
+	{
+		std::string server = "192.168.5.246", port = "20182";//"221.12.123.50"
+		// printf("输入连接ip:");
+		// std::cin >> server;
+		// printf("\n输入连接端口:");
+		// std::cin >> port;
+		std::vector<std::shared_ptr<ftp::client>> vClienes;
+		for(auto i = 0; i < 500; i++)
+		{
+			auto spFtpClient = std::make_shared<ftp::client>();
+			if (!spFtpClient->open(server, atoi(port.c_str())) || !spFtpClient->login("server12345", "server12345"))
+			{
+				fprintf(stdout, "Ftp Client Initial Failed!\n");
+				return 1;
+			}
+			fprintf(stdout, "Ftp Client Initial Success!\n");
+			vClienes.push_back(spFtpClient);
 
-    auto reply = spFtpClient->send_command_s("MLST", "18/C7635AFB-9F1C-4A9E-88DD-5A0836A0CD39/76CA946B9A6EE0D2CDE263A0E578EBE9_370692");
-    
-    std::unique_ptr<char[]> spPlainText(new char[reply.status_line.length()]);
-    memset(spPlainText.get(), 0x00, reply.status_line.length());
-    RC4DecryptStr(spPlainText.get(), reply.status_line.c_str() + 2, reply.status_line.length() - 2, "django", strlen("django"));
-    std::cout << spPlainText.get() << std::endl;
-    getchar();
-    return 0;
+			auto reply = spFtpClient->send_command_s("EPSV_S", "");
+			std::cout << reply.status_line << std::endl;
+			std::unique_ptr<char[]> spPlainText(new char[reply.status_line.length()]);
+			memset(spPlainText.get(), 0x00, reply.status_line.length());
+			auto& token = spFtpClient->getToken();
+			RC4DecryptStr(spPlainText.get(), 
+				reply.status_line.c_str() + 2, reply.status_line.length() - 3, 
+				token.c_str(), token.length()
+			);
+			std::string ss = spPlainText.get();
+			std::cout << ss << std::endl;
+		}
+		/*
+		while (1)
+		{
+			std::string strHolder;
+			std::cin >> strHolder;
+			if ("q" == strHolder)
+				break;
+			else if (0 == strcasecmp("USER", strHolder.c_str()))
+			{
+				auto reply = spFtpClient->send_command_s("USER_S", "server12345");
+				{
+					std::unique_ptr<char[]> spPlainText(new char[reply.status_line.length()]);
+					memset(spPlainText.get(), 0x00, reply.status_line.length());
+					RC4DecryptStr(spPlainText.get(), reply.status_line.c_str() + 2, reply.status_line.length() - 3, "tipray", strlen("tipray"));
+					std::cout << "USER结果:" << spPlainText.get() << std::endl;
+				}
+				reply = spFtpClient->send_command_s("PASS_S", "server12345");
+				{
+					std::unique_ptr<char[]> spPlainText(new char[reply.status_line.length()]);
+					memset(spPlainText.get(), 0x00, reply.status_line.length());
+					RC4DecryptStr(spPlainText.get(), reply.status_line.c_str() + 2, reply.status_line.length() - 3, "tipray", strlen("tipray"));
+					std::cout << "PASS结果:" << spPlainText.get() << std::endl;
+				}
+			}
+			else if (0 == strcasecmp("DELE", strHolder.c_str()))
+			{
+				std::string strData;
+				std::cout << "请输入需要删除的文件的GUID:";
+				std::cin >> strData;
+				auto reply = spFtpClient->send_command_s("DELE_S", strData);
+				{
+					std::unique_ptr<char[]> spPlainText(new char[reply.status_line.length()]);
+					memset(spPlainText.get(), 0x00, reply.status_line.length());
+					RC4DecryptStr(spPlainText.get(), reply.status_line.c_str() + 2, reply.status_line.length() - 3, "tipray", strlen("tipray"));
+					std::cout << "删除结果:" << spPlainText.get() << std::endl;
+				}
+			}
+			else if (0 == strncasecmp("MLST", strHolder.c_str(), 4))
+			{
+				std::string strData;
+				std::cout << "请输入需要查询的文件的GUID:";
+				std::cin >> strData;
+				auto reply = spFtpClient->send_command_s(strHolder, strData);
+				{
+					std::cout << reply.status_line<< std::endl;
+					std::unique_ptr<char[]> spPlainText(new char[reply.status_line.length()]);
+					memset(spPlainText.get(), 0x00, reply.status_line.length());
+					auto& token = spFtpClient->getToken();
+					RC4DecryptStr(spPlainText.get(), 
+						reply.status_line.c_str() + 2, reply.status_line.length() - 3, 
+						token.c_str(), token.length()
+					);
+					std::cout << "查询结果:" << spPlainText.get() << std::endl;
+				}
+			}
+			else if (0 == strncasecmp("EPSV", strHolder.c_str(), 4))
+			{
+				auto reply = spFtpClient->send_command_s("EPSV_S", "");
+				std::cout << reply.status_line << std::endl;
+				std::unique_ptr<char[]> spPlainText(new char[reply.status_line.length()]);
+				memset(spPlainText.get(), 0x00, reply.status_line.length());
+				auto& token = spFtpClient->getToken();
+				RC4DecryptStr(spPlainText.get(), 
+					reply.status_line.c_str() + 2, reply.status_line.length() - 3, 
+					token.c_str(), token.length()
+				);
+				std::string ss = spPlainText.get();
+				std::cout << ss << std::endl;
+			}
+			else if (0 == strncasecmp("STOR", strHolder.c_str(), 4))
+			{
+				auto res = spFtpClient->prepare_upload("1.txt");
+			}
+
+			// else if("a" == strHolder)
+			// {
+			// 	spFtpClient->login("server12345", "server12345");
+			// }
+			// else if("l" == strHolder)
+			// {
+			// 	auto reply = spFtpClient->send_command_s("MLST", "18/C7635AFB-9F1C-4A9E-88DD-5A0836A0CD39/76CA946B9A6EE0D2CDE263A0E578EBE9_370692");
+
+			// 	std::unique_ptr<char[]> spPlainText(new char[reply.status_line.length()]);
+			// 	memset(spPlainText.get(), 0x00, reply.status_line.length());
+			// 	RC4DecryptStr(spPlainText.get(), reply.status_line.c_str() + 2, reply.status_line.length() - 2, "tipray", strlen("tipray"));
+			// 	std::cout << spPlainText.get() << std::endl;
+			// }
+			// auto res = spFtpClient->prepare_upload("1.txt");
+		}
+		*/
+	}
+	catch(const ftp::ftp_exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	return 0;
 }
 
 // class AsioThreadPool
@@ -107,8 +196,6 @@ int main()
 // 	boost::asio::io_service::work m_to_work;
 // };
 
-
-
 // constexpr unsigned int TERM_CNT = 500;
 // constexpr unsigned int FILE_BLOCK = 400;///1600;
 
@@ -117,7 +204,6 @@ int main()
 // 	auto const uRealTrdCnt = std::thread::hardware_concurrency();
 // 	//每个线程分配任务数
 // 	uint64_t const ulTaskCntPerTrd = ullTaskCnt / uRealTrdCnt;
-
 
 // 	uint64_t ullBeginPos = 0, ullEndpos = 0;
 // 	std::vector<std::thread> vTrdWorkers(uRealTrdCnt - 1);
@@ -131,10 +217,9 @@ int main()
 // 	}
 
 // 	fnWork(ullEndpos, ullTaskCnt);
-// 	//等待子线程完成  
+// 	//等待子线程完成
 // 	std::for_each(vTrdWorkers.begin(), vTrdWorkers.end(), std::mem_fn(&std::thread::join));
 // }
-
 
 // int main(int argc, char *argv[])
 // {
@@ -182,7 +267,7 @@ int main()
 //             for (auto i = begin; i < end; i++) {
 //                 auto *pFtpSession = hashmapFtps.at(i).get();
 //                 auto *pFtpClient = pFtpSession->spFtpClient.get();
-                
+
 //                 auto spDataConn = std::move(pFtpClient->prepare_upload(std::to_string(i).append(".txt")));
 //                 if(spDataConn){
 //                     pFtpSession->spDataConn = std::move(spDataConn);
@@ -237,10 +322,9 @@ int main()
 // 			continue;
 // 		}
 // 		i++;
-		
+
 // 		//
 // 	}
-
 
 //     getchar();
 //     return EXIT_SUCCESS;

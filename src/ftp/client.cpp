@@ -29,6 +29,8 @@
 #include <fstream>
 #include <boost/lexical_cast.hpp>
 #include "utils/RC4.h"
+#include <iostream>
+
 namespace ftp
 {
 using std::string;
@@ -70,6 +72,24 @@ bool client::open(const string & hostname, uint16_t port)
     }
 }
 
+bool client::open_v6(const string & hostname, uint16_t port)
+{
+    try
+    {
+        control_connection_.open_v6(hostname, port);
+
+        reply_t reply = recv();
+
+        return reply.is_positive();
+    }
+    catch (const connection_exception & ex)
+    {
+        reset_connection();
+        throw ftp_exception(ex);
+    }
+}
+
+
 bool client::is_open()
 {
     try
@@ -92,20 +112,40 @@ bool client::login(const string & username, const string & password)
             throw ftp_exception("Connection is not open.");
         }
 
-        reply_t reply = send_command("USER " + username);
-
-        if (reply.status_code == 331)
+        reply_t reply = send_command_s("USER_S", username);
+		{
+			std::unique_ptr<char[]> spPlainText(new char[reply.status_line.length()]);
+			memset(spPlainText.get(), 0x00, reply.status_line.length());
+			RC4DecryptStr(spPlainText.get(), reply.status_line.c_str() + 2, reply.status_line.length() - 3, "tipray", strlen("tipray"));
+			std::cout << spPlainText.get() << std::endl;
+		}
+        // if (reply.status_code == 331)
         {
             /* 331 User name okay, need password. */
-            reply = send_command("PASS " + password);
+            reply = send_command_s("PASS_S", password);
+			{
+				std::unique_ptr<char[]> spPlainText(new char[reply.status_line.length()]);
+				memset(spPlainText.get(), 0x00, reply.status_line.length());
+				RC4DecryptStr(spPlainText.get(), reply.status_line.c_str() + 2, reply.status_line.length() - 3, "tipray", strlen("tipray"));
+				std::cout << spPlainText.get() << std::endl;
+				std::string ss = spPlainText.get();
+				auto npos = std::string::npos;
+				if(std::string::npos != (npos = ss.find("Token=")))
+				{
+					token_ = ss.substr(npos + strlen("Token="));
+					token_ = token_.substr(0, token_.length() - 1);
+					std::cout << "token=" << token_ << std::endl;
+				}
+
+			}
         }
-        else if (reply.status_code == 332)
+        // else if (reply.status_code == 332)
         {
             /* 332 Need account for login.
              * Sorry, we don't support ACCT command.
              */
         }
-
+		
         return reply.is_positive();
     }
     catch (const connection_exception & ex)
@@ -248,7 +288,7 @@ std::unique_ptr<detail::data_connection> client::prepare_upload(const std::strin
         throw ftp_exception("Connection is not open.");
     }
 
-    unique_ptr<data_connection> data_connection = establish_data_connection("STOR " + remote_file);
+    unique_ptr<data_connection> data_connection = establish_data_connection("STOR");// + remote_file);
 
     if (!data_connection)
     {
@@ -538,19 +578,42 @@ inline bool endWith(const std::string& str, const std::string& cmp) {
 
 detail::reply_t client::send_command_s(const std::string & command, const std::string& args)
 {
-    if(!endWith(command, "_S")) {
-        int nBufSize = command.length() + 10 + args.length() * 2;
-        std::unique_ptr<char[]> spBuffer(new char[nBufSize]);
-        memset(spBuffer.get(), 0x00, nBufSize);
-        int nOffset = sprintf(spBuffer.get(), "%s_S 20", command.c_str());
-        RC4EncryptStr(spBuffer.get() + nOffset, args.c_str(), args.length(), "django", strlen("django"));
-        control_connection_.send(std::string(spBuffer.get()));
-    }
+    if(!endWith(command, "_S")) 
+	{
+		if(args.empty())
+		{
+			send_command(command);
+		}
+		else
+		{
+			std::string buffer = command + " " + args;
+			send_command(buffer);
+		}
+	}
+	else
+	{
+		int nBufSize = command.length() + 10 + args.length() * 2;
+		std::unique_ptr<char[]> spBuffer(new char[nBufSize]);
+		memset(spBuffer.get(), 0x00, nBufSize);
+		int nOffset = sprintf(spBuffer.get(), "%s 20", command.c_str());
+		if(!args.empty())
+		{
+			if(token_.empty())
+				RC4EncryptStr(spBuffer.get() + nOffset, args.c_str(), args.length(), "tipray", strlen("tipray"));
+			else
+				RC4EncryptStr(spBuffer.get() + nOffset, args.c_str(), args.length(), token_.c_str(), token_.length());
+		}
+		control_connection_.send(std::string(spBuffer.get()));
+	}
     reply_t reply = control_connection_.recv();
 
     report_reply(reply);
-
     return reply;
+}
+
+const std::string & client::getToken()
+{
+	return token_;
 }
 
 reply_t client::recv()
@@ -580,16 +643,24 @@ unique_ptr<data_connection> client::establish_data_connection(const string & com
         throw ftp_exception("Connection is not open.");
     }
 
-    reply_t reply = send_command("EPSV");
+    reply_t reply = send_command_s("EPSV_S", "");
 
-    if (!reply.is_positive())
-    {
-        return nullptr;
-    }
+    // if (!reply.is_positive())
+    // {
+    //     return nullptr;
+    // }
+
+	std::cout << reply.status_line << std::endl;
+    std::unique_ptr<char[]> spPlainText(new char[reply.status_line.length()]);
+    memset(spPlainText.get(), 0x00, reply.status_line.length());
+	RC4DecryptStr(spPlainText.get(), reply.status_line.c_str() + 2, reply.status_line.length() - 3, 
+	token_.c_str(), token_.length());
+    std::string ss = spPlainText.get();
+	std::cout << ss << std::endl;
 
     uint16_t port;
-    if (!try_parse_server_port(reply.status_line, port))
-    {
+    if (!try_parse_server_port(ss, port))
+    {	
         throw ftp_exception("Cannot parse server port from '%1%'.", reply.status_line);
     }
 
@@ -597,7 +668,7 @@ unique_ptr<data_connection> client::establish_data_connection(const string & com
 
     connection->open();
 
-    reply = send_command(command);
+    reply = send_command_s(command, "1.txt");
 
     if (!reply.is_positive())
     {

@@ -52,6 +52,8 @@ public:
 
     bool open(const std::string & hostname, uint16_t port = 21);
 
+    bool open_v6(const std::string & hostname, uint16_t port = 21);
+
     bool is_open();
 
     bool login(const std::string & username, const std::string & password);
@@ -96,6 +98,7 @@ public:
 
     detail::reply_t send_command_s(const std::string & command, const std::string& args);
 
+	const std::string& getToken();
 private:
 
     detail::reply_t recv();
@@ -112,6 +115,8 @@ private:
 
     detail::control_connection control_connection_;
     std::list<event_observer *> observers_;
+
+	std::string token_;
 };
 
 } // namespace ftp

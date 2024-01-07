@@ -26,6 +26,7 @@
 #include "connection_exception.hpp"
 #include <boost/asio/read.hpp>
 #include <boost/asio/write.hpp>
+#include <iostream>
 
 namespace ftp::detail
 {
@@ -59,7 +60,7 @@ void data_connection::open()
     if (ec)
     {
         boost::system::error_code ignored;
-
+		std::cout << ec.message() << std::endl;
         /* If the connect fails, and the socket was automatically opened,
          * the socket is not returned to the closed state.
          *
